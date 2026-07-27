@@ -1,125 +1,94 @@
-# PCCTH Automate Code Review — React + Vite Prototype
+# PCCTH Automate Code Review — Frontend
 
-> การ rework ของ **`pccth_code_review_web-dev`** (เดิมเป็น **Angular 18**) ให้เป็น **React + Vite**
-> เวอร์ชันนี้เป็น **prototype** เน้น UI/โครงสร้างหน้า และใช้ **mock data** (ยังไม่ต่อ backend API)
+## Requirements
 
----
+| ตัว     | เวอร์ชัน                                                       |
+| ------- | -------------------------------------------------------------- |
+| Node    | 20.19+ หรือ 22.12+                                             |
+| npm     | 10+                                                            |
+| Backend | `pccth_code_review_service` รันอยู่ที่ `http://localhost:8080` |
 
-## เป้าหมายของ Prototype นี้
-
-1. เก็บ **look & feel** ของแอปเดิมไว้ (ธีมสี, dark mode, layout, การ์ด, ตาราง)
-2. วางโครงสร้าง **React + Vite** ที่แยกส่วนชัดเจน (routing, layout, pages, data, theme)
-3. ครอบคลุมหน้าหลัก: Dashboard, Repositories, Scan History, Issues, Analytics, Generate Report, Settings, Login
-4. มีเอกสาร markdown ใน [`docs/`](docs/) ที่อ้างอิงโค้ดของแอปเดิม เพื่อเทียบและเข้าใจการทำงาน
-
-> ⚠️ โปรเจกต์เดิม `pccth_code_review_web-dev` **ไม่ถูกแก้ไข** — ใช้เป็น reference เท่านั้น
-
----
-
-## Quick Start
+## Quick start
 
 ```bash
-# 1. เข้าโฟลเดอร์
-cd code-review-web
-
-# 2. ติดตั้ง dependencies
 npm install
-
-# 3. รัน dev server
-npm run dev
-
-# 4. build production
-npm run build && npm run preview
+copy .env.example .env      # สำหรับตอนจะ Deploy ให้เเปลี่ยน Pathอย่าลืม CMD
+Copy-Item .env.example .env #  PowerShell
+npm run dev               # เปิด http://localhost:5173
 ```
 
-> หมายเหตุ: แอปเดิมใช้พอร์ต `4200` (Angular). ถ้าพอร์ตชนกัน Vite จะเลือกพอร์ตว่างให้อัตโนมัติ
+backend เปิด CORS ให้แค่ port `5173` เท่านั้น ตอน dev อย่าเปลี่ยน port
 
----
+## Scripts
 
-## Tech Stack
+| คำสั่ง            | ทำอะไร                                |
+| ----------------- | ------------------------------------- |
+| `npm run dev`     | รัน dev server แก้โค้ดแล้วเห็นผลทันที |
+| `npm run build`   | เช็ค type แล้ว build ลง `dist/`       |
+| `npm run preview` | เปิดดูของที่ build แล้ว               |
+| `npm run lint`    | ตรวจโค้ดด้วย ESLint                   |
+| `npm test`        | รัน unit test                         |
 
-| ส่วน | เดิม (Angular) | ใหม่ (Prototype) |
-|------|----------------|------------------|
-| Framework | Angular 18 | React 18 |
-| Build tool | Angular CLI / Webpack | Vite 5 |
-| Routing | `@angular/router` | `react-router-dom` v6 |
-| State | RxJS `BehaviorSubject` (SharedDataService) | React state / Context (prototype) |
-| Charts | ng-apexcharts | **react-apexcharts** (กราฟจริง, ปรับตาม dark/light) |
-| Icons | Bootstrap Icons | Bootstrap Icons |
-| i18n | @ngx-translate | **react-i18next** (EN/TH ใช้ `en.json`/`th.json` เดิม) |
-
----
-
-## โครงสร้างโปรเจกต์
+## Structure
 
 ```
-code-review-web/
-├── index.html
-├── package.json
-├── vite.config.js
-├── public/
-│   └── logo.svg
-├── docs/                     # 📄 เอกสารอ้างอิงแอปเดิม (ดูด้านล่าง)
-│   ├── 00-overview.md
-│   ├── 01-original-app-reference.md
-│   ├── 02-design-system.md
-│   ├── 03-page-mapping.md
-│   └── 04-migration-notes.md
-└── src/
-    ├── main.jsx              # entry point (โหลด i18n + theme)
-    ├── App.jsx               # routing (พอร์ตจาก app.routes.ts) — 21 เส้นทาง
-    ├── i18n.js               # react-i18next config (แทน @ngx-translate)
-    ├── context/
-    │   └── ThemeContext.jsx  # dark/light toggle (พอร์ตจาก app.component.ts)
-    ├── components/
-    │   ├── Layout.jsx        # พอร์ตจาก layout.component
-    │   ├── Sidebar.jsx       # พอร์ตจาก navbar.component
-    │   ├── LanguageSwitcher.jsx
-    │   └── charts.jsx        # wrapper react-apexcharts (Donut/Radial/Line/Bar)
-    ├── pages/                # 21 หน้า (ดู docs/03-page-mapping.md)
-    │   ├── Login / Register / ForgotPassword
-    │   ├── Dashboard
-    │   ├── Repositories / AddRepository / RepositoryDetail
-    │   ├── ScanHistory / ScanResult / LogViewer
-    │   ├── Issues / IssueDetail / Assignment
-    │   ├── Analytics / SecurityDashboard / TechnicalDebt
-    │   ├── GenerateReport / ReportHistory
-    │   └── Settings / NotificationSetting / UserManagement
-    ├── data/
-    │   └── mockData.js       # ข้อมูลจำลอง (shape ตาม interface เดิม)
-    ├── locales/
-    │   ├── en.json           # คัดลอกจาก assets/i18n/en.json เดิม
-    │   └── th.json           # คัดลอกจาก assets/i18n/th.json เดิม
-    └── styles/
-        ├── theme.css         # ตัวแปรสี (ยกมาจาก styles.css เดิม 1:1)
-        └── global.css        # layout & component styling
+src/
+  main.tsx          จุดเริ่มของแอป โหลดธีมกับภาษาแล้วสั่ง render
+  App.tsx           ครอบ provider ทั้งหมด (query, toast, router)
+  router.tsx        รวม route ทุกหน้าไว้ที่เดียว
+
+  assets/           รูปภาพ โลโก้ ที่ import เข้าโค้ด
+  locales/          ไฟล์แปลภาษา en.json / th.json
+  styles/           สีธีม ตัวแปร CSS และ animation
+
+  pages/            หน้าเว็บ 1 route = 1 ไฟล์
+  layouts/          โครงหน้าหลัง login (sidebar + topbar)
+  routes/           ตัวกันทาง เช็ค login / เช็ค role ก่อนเข้าหน้า
+
+  features/         แยกตามงาน 1 โฟลเดอร์ = 1 เรื่อง
+    <ชื่องาน>/
+      api/          ฟังก์ชันยิง backend
+      hooks/        ห่อ api ให้หน้าเว็บเรียกง่าย จัดการ loading/error ให้
+      components/   UI ที่ใช้เฉพาะงานนี้
+      lib/          การคำนวณของงานนี้ ไม่เกี่ยวกับ UI
+      types.ts      หน้าตาข้อมูลของงานนี้
+
+  components/       UI ที่ใช้ข้ามงาน
+    common/         ปุ่ม ฟอร์ม modal ทั่วไป
+    charts/         กราฟ
+
+  hooks/            hook ที่ใช้หลายงานพร้อมกัน ไม่ใช่ของงานไหนงานเดียว
+  lib/              ของกลางที่ไม่ใช่ UI (ยิง API, auth, realtime, ธีม, ภาษา)
+  types/            type ที่ใช้ข้ามงาน
 ```
 
----
+## ข้อกำหนดของแต่ละส่วน
 
-## เอกสารอ้างอิง (docs/)
+**features/** — ของใครของมัน
+งานหนึ่งเรื่องเก็บไว้ที่เดียวจบ อยากรู้เรื่อง scan เปิดโฟลเดอร์ `scan/` อ่านที่เดียวครบ
+ห้าม feature เรียกหากันเอง ถ้า 2 feature ต้องใช้ข้อมูลร่วมกัน ให้ `pages/` เป็นคนดึงมาต่อกัน
 
-เอกสารเหล่านี้เขียนเพื่อให้เห็น **ตัวอย่างและการทำงานของแอปเดิม** พร้อมชี้ path ไฟล์จริงในโปรเจกต์ `pccth_code_review_web-dev`:
+**api/ กับ hooks/** — แยกกันคนละชั้น
+`api/` ยิง backend อย่างเดียว ไม่รู้จัก React
+`hooks/` ห่อ `api/` อีกที จัดการ loading / error / cache ให้หน้าเว็บ
+หน้าเว็บเรียก `hooks/` เท่านั้น ไม่เรียก `api/` ตรง
 
-| ไฟล์ | เนื้อหา |
-|------|---------|
-| [docs/00-overview.md](docs/00-overview.md) | ภาพรวม แอปเดิมทำอะไร, feature หลัก |
-| [docs/01-original-app-reference.md](docs/01-original-app-reference.md) | โครงสร้าง Angular, routes, components, services + โค้ดตัวอย่างจริง |
-| [docs/02-design-system.md](docs/02-design-system.md) | ธีมสี, CSS variables, dark mode, badge/สถานะ |
-| [docs/03-page-mapping.md](docs/03-page-mapping.md) | ตารางเทียบ หน้า Angular ↔ ไฟล์ React |
-| [docs/04-migration-notes.md](docs/04-migration-notes.md) | สิ่งที่ต้องทำต่อเพื่อให้เป็น production (ต่อ API, state, charts) |
+**components/ กับ hooks/ ข้างนอก** — ย้ายขึ้นมาเมื่อมีคนใช้จริง 2 เจ้า
+เริ่มจากเก็บไว้ใน feature ก่อนเสมอ พอ feature ที่สองต้องใช้จริงค่อยย้ายขึ้นมา
+อย่าย้ายขึ้นมาเพราะ "คิดว่าน่าจะได้ใช้อีก"
 
----
+**lib/** — ห้ามเรียก features/
+`lib/` เป็นชั้นล่างสุด ถ้ามันเรียก `features/` จะกลายเป็นวนกลับ (circular)
+`types/` มีไว้เพราะเหตุนี้ เอา type ที่ `lib/` ต้องใช้มาไว้ตรงกลาง
 
-## สถานะ (Prototype scope)
+**pages/** — เป็นคนประกอบ ไม่ใช่คนคิด
+หน้าเว็บมีหน้าที่จัดวางกับเรียก hook เท่านั้น
+ถ้าเริ่มมีสูตรคำนวณยาว ๆ ให้ย้ายไป `features/<ชื่องาน>/lib/`
 
-| ทำแล้ว ✅ | ยังไม่ทำ (เฟสถัดไป) ⏳ |
-|-----------|------------------------|
-| App shell (sidebar + layout + theme toggle) | ต่อ Backend API จริง (`http://localhost:8080`) |
-| Dark / Light mode | Auth (JWT, guards, refresh token) |
-| **21 หน้า** + mock data | State management (แทน SharedDataService) |
-| ธีม/สไตล์ ตรงกับของเดิม | Export PDF/Excel/Word/PPT จริง |
-| Routing ครบตาม app.routes.ts | WebSocket (real-time scan/noti) |
-| **กราฟจริง** (react-apexcharts, ปรับ dark/light) | Landing page, reset/verify email |
-| **i18n EN/TH** (react-i18next + language switcher) | modal มอบหมาย / เปรียบเทียบสแกน |
-```
+**กฎรวมทุกไฟล์**
+
+- TypeScript strict ห้ามใช้ `any`
+- ข้อความที่ผู้ใช้เห็นต้องผ่าน i18n ครบทั้ง `en` และ `th`
+- ทุกที่ที่ยิง API ต้องมีทั้งตอนโหลดและตอน error
+
+
