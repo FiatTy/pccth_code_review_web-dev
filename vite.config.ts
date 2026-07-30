@@ -17,5 +17,8 @@ export default defineConfig({
   },
   test: {
     include: ['src/**/*.test.ts'],
+    env: {
+      TZ: 'Asia/Bangkok',
+    },
   },
 });
