@@ -253,9 +253,11 @@ export function DashboardPage() {
       </div>
 
       <div className="grid gap-4 lg:grid-cols-3">
-        <section className="rounded-xl border border-border bg-surface lg:col-span-2">
-          <div className="flex items-center justify-between border-b border-border px-5 py-4">
-            <h2 className="text-sm font-semibold text-fg">{t('DASHBOARD.RECENT_ACTIVITY')}</h2>
+        <section className="overflow-hidden rounded-2xl border border-border bg-surface shadow-sm lg:col-span-2">
+          <div className="flex items-center justify-between card-header border-b border-border px-5 py-3.5">
+            <h2 className="text-sm font-semibold text-fg">
+              {t('DASHBOARD.RECENT_ACTIVITY')}
+            </h2>
             <Link to="/scanhistory" className="text-xs font-medium text-primary hover:underline">
               {t('DASHBOARD.VIEW_ALL')}
             </Link>
@@ -281,9 +283,11 @@ export function DashboardPage() {
           )}
         </section>
 
-        <section className="rounded-xl border border-border bg-surface">
-          <div className="border-b border-border px-5 py-4">
-            <h2 className="text-sm font-semibold text-fg">{t('DASHBOARD.PROJECT_TYPES')}</h2>
+        <section className="overflow-hidden rounded-2xl border border-border bg-surface shadow-sm">
+          <div className="card-header border-b border-border px-5 py-3.5">
+            <h2 className="text-sm font-semibold text-fg">
+              {t('DASHBOARD.PROJECT_TYPES')}
+            </h2>
           </div>
           {repos.length === 0 ? (
             <p className="px-5 py-10 text-center text-sm text-muted">
@@ -326,8 +330,8 @@ export function DashboardPage() {
         </section>
       </div>
 
-      <section className="mt-4 rounded-xl border border-border bg-surface">
-        <div className="flex flex-wrap items-baseline justify-between gap-2 border-b border-border px-5 py-4">
+      <section className="mt-4 overflow-hidden rounded-2xl border border-border bg-surface shadow-sm">
+        <div className="flex flex-wrap items-center justify-between gap-2 card-header border-b border-border px-5 py-3.5">
           <h2 className="text-sm font-semibold text-fg">{t('DASHBOARD.QUALITY_TRENDS')}</h2>
           <p className="text-xs text-muted">{t('DASHBOARD.TREND_SUBTITLE')}</p>
         </div>
@@ -351,8 +355,8 @@ export function DashboardPage() {
         </div>
       </section>
 
-      <section className="mt-4 rounded-xl border border-border bg-surface">
-        <div className="flex items-center justify-between border-b border-border px-5 py-4">
+      <section className="mt-4 overflow-hidden rounded-2xl border border-border bg-surface shadow-sm">
+        <div className="card-header flex items-center justify-between border-b border-border px-5 py-3.5">
           <h2 className="text-sm font-semibold text-fg">{t('DASHBOARD.TOP_ISSUES')}</h2>
           <Link to="/issue" className="text-xs font-medium text-primary hover:underline">
             {t('DASHBOARD.VIEW_ALL')}

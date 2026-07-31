@@ -92,7 +92,7 @@ export function AnalysisPage() {
 
       <div className="grid gap-4 lg:grid-cols-2">
         <section className="rounded-xl border border-border bg-surface">
-          <div className="flex items-center gap-2 border-b border-border px-5 py-4">
+          <div className="flex items-center gap-2 card-header border-b border-border px-5 py-4">
             <Flame size={15} className="text-danger" />
             <h2 className="text-sm font-semibold text-fg">{t('ANALYTICS.TOP_SECURITY_ISSUES')}</h2>
           </div>
@@ -109,7 +109,7 @@ export function AnalysisPage() {
         </section>
 
         <section className="rounded-xl border border-border bg-surface">
-          <div className="flex items-center gap-2 border-b border-border px-5 py-4">
+          <div className="flex items-center gap-2 card-header border-b border-border px-5 py-4">
             <Clock size={15} className="text-warning" />
             <h2 className="text-sm font-semibold text-fg">{t('ANALYTICS.TOP_TECHNICAL_DEBT')}</h2>
           </div>

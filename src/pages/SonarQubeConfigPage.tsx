@@ -184,7 +184,7 @@ function SectionCard({
 }) {
   return (
     <section className="rounded-xl border border-border bg-surface">
-      <div className="border-b border-border px-5 py-4">
+      <div className="card-header border-b border-border px-5 py-4">
         <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.15em] text-faint">
           {eyebrow}
         </p>

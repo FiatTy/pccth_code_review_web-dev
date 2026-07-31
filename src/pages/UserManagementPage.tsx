@@ -243,7 +243,7 @@ export function UserManagementPage() {
                   ].map((key) => (
                     <th
                       key={key}
-                      className="px-5 py-3 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-faint"
+                      className="px-5 py-3 font-mono text-xs font-semibold uppercase tracking-[0.14em] text-muted"
                     >
                       {t(key)}
                     </th>
@@ -330,7 +330,7 @@ export function UserManagementPage() {
             onClick={closeModal}
           />
           <div className="relative w-full max-w-md rounded-xl border border-border bg-surface shadow-xl">
-            <div className="flex items-center justify-between border-b border-border px-5 py-4">
+            <div className="flex items-center justify-between card-header border-b border-border px-5 py-4">
               <h2 className="text-sm font-semibold text-fg">
                 {t(isEditing ? 'USER_MGT.UPDATE_USER' : 'USER_MGT.ADD_USER')}
               </h2>

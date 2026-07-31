@@ -346,7 +346,7 @@ export function IssueDetailPage() {
       <div className="grid items-start gap-4 lg:grid-cols-3">
         <div className="space-y-4 lg:col-span-2">
           <section className="rounded-xl border border-border bg-surface">
-            <div className="border-b border-border px-5 py-4">
+            <div className="card-header border-b border-border px-5 py-4">
               <h2 className="text-sm font-semibold text-fg">{t('ISSUE_DETAIL.DESC_ANALYSIS')}</h2>
             </div>
             <div className="space-y-4 px-5 py-5">
@@ -433,7 +433,7 @@ export function IssueDetailPage() {
           </section>
 
           <section className="rounded-xl border border-border bg-surface">
-            <div className="flex items-center gap-2 border-b border-border px-5 py-4">
+            <div className="flex items-center gap-2 card-header border-b border-border px-5 py-4">
               <MessageSquare size={15} className="text-primary" />
               <h2 className="text-sm font-semibold text-fg">{t('ISSUE_DETAIL.COMMENTS')}</h2>
               <span className="font-mono text-[11px] text-faint">{issue.comments.length}</span>

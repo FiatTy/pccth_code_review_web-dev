@@ -60,7 +60,7 @@ function SectionCard({
 }) {
   return (
     <section className="rounded-xl border border-border bg-surface">
-      <div className="flex items-center gap-2.5 border-b border-border px-5 py-4">
+      <div className="flex items-center gap-2.5 card-header border-b border-border px-5 py-4">
         <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-surface-2 text-muted">
           <Icon size={15} />
         </span>

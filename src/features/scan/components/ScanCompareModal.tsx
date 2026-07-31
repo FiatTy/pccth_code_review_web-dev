@@ -167,7 +167,7 @@ export function ScanCompareModal({ scans, onClose }: ScanCompareModalProps) {
               <caption className="sr-only">{t('SCAN.COMPARE_TABLE_CAPTION')}</caption>
               <thead>
                 <tr className="border-b border-border">
-                  <th className="py-2 font-mono text-[10px] font-semibold uppercase tracking-wide text-faint">
+                  <th className="py-2 font-mono text-xs font-semibold uppercase tracking-wide text-muted">
                     {t('SCAN.COL_METRIC')}
                   </th>
                   {ordered.map((scan) => (
@@ -180,7 +180,7 @@ export function ScanCompareModal({ scans, onClose }: ScanCompareModalProps) {
                       </span>
                     </th>
                   ))}
-                  <th className="py-2 text-right font-mono text-[10px] font-semibold uppercase tracking-wide text-faint">
+                  <th className="py-2 text-right font-mono text-xs font-semibold uppercase tracking-wide text-muted">
                     {t('SCAN.COL_CHANGE')}
                   </th>
                 </tr>

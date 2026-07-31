@@ -285,22 +285,22 @@ export function ScanHistoryPage() {
                   <th className="w-10 px-4 py-3">
                     <span className="sr-only">{t('SCAN.COL_SELECT')}</span>
                   </th>
-                  <th className="px-4 py-3 font-mono text-[10px] font-semibold uppercase tracking-wide text-faint">
+                  <th className="px-4 py-3 font-mono text-xs font-semibold uppercase tracking-wide text-muted">
                     {t('SCAN.COL_DATE_TIME')}
                   </th>
-                  <th className="px-4 py-3 font-mono text-[10px] font-semibold uppercase tracking-wide text-faint">
+                  <th className="px-4 py-3 font-mono text-xs font-semibold uppercase tracking-wide text-muted">
                     {t('SCAN.COL_PROJECT')}
                   </th>
-                  <th className="px-4 py-3 font-mono text-[10px] font-semibold uppercase tracking-wide text-faint">
+                  <th className="px-4 py-3 font-mono text-xs font-semibold uppercase tracking-wide text-muted">
                     {t('SCAN.COL_GRADE')}
                   </th>
-                  <th className="px-4 py-3 text-right font-mono text-[10px] font-semibold uppercase tracking-wide text-faint">
+                  <th className="px-4 py-3 text-right font-mono text-xs font-semibold uppercase tracking-wide text-muted">
                     {t('SCAN.COL_ISSUES')}
                   </th>
-                  <th className="px-4 py-3 text-center font-mono text-[10px] font-semibold uppercase tracking-wide text-faint">
+                  <th className="px-4 py-3 text-center font-mono text-xs font-semibold uppercase tracking-wide text-muted">
                     {t('SCAN.COL_LOG')}
                   </th>
-                  <th className="px-4 py-3 text-center font-mono text-[10px] font-semibold uppercase tracking-wide text-faint">
+                  <th className="px-4 py-3 text-center font-mono text-xs font-semibold uppercase tracking-wide text-muted">
                     {t('SCAN.COL_RESULT')}
                   </th>
                 </tr>

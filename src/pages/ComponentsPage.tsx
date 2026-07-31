@@ -40,7 +40,7 @@ function Spec({ name, file, usedBy, children }: SpecProps) {
 
   return (
     <section className="overflow-hidden rounded-xl border border-border bg-surface">
-      <header className="flex flex-wrap items-center gap-x-3 gap-y-1 border-b border-border px-5 py-3.5">
+      <header className="flex flex-wrap items-center gap-x-3 gap-y-1 card-header border-b border-border px-5 py-3.5">
         <h2 className="text-sm font-semibold text-fg">{name}</h2>
         <button
           type="button"

@@ -359,7 +359,7 @@ export function RepositoryDetailPage() {
                       ].map((key) => (
                         <th
                           key={key}
-                          className="px-5 py-3 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-faint"
+                          className="px-5 py-3 font-mono text-xs font-semibold uppercase tracking-[0.14em] text-muted"
                         >
                           {t(key)}
                         </th>
@@ -452,7 +452,7 @@ export function RepositoryDetailPage() {
                     ].map((key) => (
                       <th
                         key={key}
-                        className="px-5 py-3 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-faint"
+                        className="px-5 py-3 font-mono text-xs font-semibold uppercase tracking-[0.14em] text-muted"
                       >
                         {t(key)}
                       </th>

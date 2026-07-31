@@ -173,7 +173,7 @@ export function IssuesPage() {
     'h-10 rounded-lg border border-border bg-surface px-3 text-sm text-fg outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/25';
 
   const headCell =
-    'px-4 py-3 font-mono text-[10px] font-semibold uppercase tracking-wide text-faint';
+    'px-4 py-3 font-mono text-xs font-semibold uppercase tracking-wide text-muted';
 
   return (
     <div>

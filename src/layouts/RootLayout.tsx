@@ -175,7 +175,7 @@ export function RootLayout() {
           </button>
         </div>
 
-        <nav className="flex-1 space-y-6 overflow-y-auto px-3 py-5">
+        <nav className="scroll-slim flex-1 space-y-6 overflow-y-auto px-3 py-5">
           {NAV_SECTIONS.map((section) => {
             const items = section.items.filter((item) => !item.adminOnly || isAdmin);
             if (items.length === 0) {

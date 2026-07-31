@@ -57,7 +57,7 @@ export function AssignmentsPage() {
   );
 
   const headCell =
-    'px-5 py-3 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-faint';
+    'px-5 py-3 font-mono text-xs font-semibold uppercase tracking-[0.14em] text-muted';
 
   return (
     <div>

@@ -79,7 +79,7 @@ function IssueTable({ title, issues, tone }: { title: string; issues: Issue[]; t
 
   return (
     <section className="overflow-hidden rounded-xl border border-border bg-surface">
-      <div className="flex items-center gap-2 border-b border-border px-5 py-4">
+      <div className="flex items-center gap-2 card-header border-b border-border px-5 py-4">
         <span className={`h-2 w-2 rounded-full ${tone}`} />
         <h2 className="text-sm font-semibold text-fg">{title}</h2>
       </div>
@@ -99,7 +99,7 @@ function IssueTable({ title, issues, tone }: { title: string; issues: Issue[]; t
                   ].map((key) => (
                     <th
                       key={key}
-                      className="px-5 py-3 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-faint"
+                      className="px-5 py-3 font-mono text-xs font-semibold uppercase tracking-[0.14em] text-muted"
                     >
                       {t(key)}
                     </th>
@@ -455,7 +455,7 @@ export function LogViewerPage() {
       )}
 
       <section className="mb-4 overflow-hidden rounded-xl border border-border bg-surface">
-        <div className="border-b border-border px-5 py-4">
+        <div className="card-header border-b border-border px-5 py-4">
           <h2 className="text-sm font-semibold text-fg">{t('LOG_VIEWER.OVERALL_GATES')}</h2>
         </div>
         <div className="overflow-x-auto">
@@ -470,7 +470,7 @@ export function LogViewerPage() {
                 ].map((key) => (
                   <th
                     key={key}
-                    className="px-5 py-3 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-faint"
+                    className="px-5 py-3 font-mono text-xs font-semibold uppercase tracking-[0.14em] text-muted"
                   >
                     {t(key)}
                   </th>
@@ -514,7 +514,7 @@ export function LogViewerPage() {
       </div>
 
       <section className="overflow-hidden rounded-xl border border-border bg-surface">
-        <div className="flex items-center gap-2 border-b border-border px-5 py-4">
+        <div className="flex items-center gap-2 card-header border-b border-border px-5 py-4">
           <Terminal size={15} className="text-primary" />
           <h2 className="text-sm font-semibold text-fg">
             {t('LOG_VIEWER.DETAILED_ANALYSIS_LOGS')}

@@ -337,7 +337,7 @@ export function ScanResultPage() {
       </div>
 
       <section className="overflow-hidden rounded-xl border border-border bg-surface">
-        <div className="border-b border-border px-5 py-4">
+        <div className="card-header border-b border-border px-5 py-4">
           <h2 className="text-sm font-semibold text-fg">{t('SCAN_RESULT.OVERALL_GATES')}</h2>
         </div>
         <div className="overflow-x-auto">
@@ -352,7 +352,7 @@ export function ScanResultPage() {
                 ].map((key) => (
                   <th
                     key={key}
-                    className="px-5 py-3 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-faint"
+                    className="px-5 py-3 font-mono text-xs font-semibold uppercase tracking-[0.14em] text-muted"
                   >
                     {t(key)}
                   </th>

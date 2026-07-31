@@ -173,7 +173,7 @@ export function NotificationSettingsPage() {
       ) : null}
 
       <section className="max-w-3xl rounded-xl border border-border bg-surface">
-        <div className="flex items-center justify-between border-b border-border px-5 py-4">
+        <div className="flex items-center justify-between card-header border-b border-border px-5 py-4">
           <div>
             <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.15em] text-faint">
               {t('NOTIFICATION_SETTINGS.TYPES')}

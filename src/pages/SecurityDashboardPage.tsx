@@ -145,7 +145,7 @@ export function SecurityDashboardPage() {
 
       <div className="grid gap-4 lg:grid-cols-3">
         <section className="rounded-xl border border-border bg-surface lg:col-span-1">
-          <div className="border-b border-border px-5 py-4">
+          <div className="card-header border-b border-border px-5 py-4">
             <h2 className="text-sm font-semibold text-fg">
               {t('SECURITY_DASHBOARD.VULNERABILITIES_BY_SEVERITY')}
             </h2>
@@ -185,7 +185,7 @@ export function SecurityDashboardPage() {
         </section>
 
         <section className="rounded-xl border border-border bg-surface lg:col-span-1">
-          <div className="border-b border-border px-5 py-4">
+          <div className="card-header border-b border-border px-5 py-4">
             <h2 className="text-sm font-semibold text-fg">
               {t('SECURITY_DASHBOARD.OWASP_COVERAGE')}
             </h2>
@@ -206,13 +206,13 @@ export function SecurityDashboardPage() {
         </section>
 
         <section className="rounded-xl border border-border bg-surface lg:col-span-1">
-          <div className="flex items-center gap-2 border-b border-border px-5 py-4">
+          <div className="flex items-center gap-2 card-header border-b border-border px-5 py-4">
             <Flame size={15} className="text-danger" />
             <h2 className="text-sm font-semibold text-fg">
               {t('SECURITY_DASHBOARD.HOT_SECURITY_ISSUES')}
             </h2>
           </div>
-          <div className="px-5 py-5">
+          <div className="scroll-slim max-h-[440px] overflow-y-auto px-5 py-5">
             <BarList
               items={metrics.hotIssues.map((issue) => ({
                 label: issue.name,
@@ -226,7 +226,7 @@ export function SecurityDashboardPage() {
       </div>
 
       <section className="mt-4 rounded-xl border border-border bg-surface">
-        <div className="flex flex-wrap items-baseline justify-between gap-2 border-b border-border px-5 py-4">
+        <div className="flex flex-wrap items-baseline justify-between gap-2 card-header border-b border-border px-5 py-4">
           <h2 className="text-sm font-semibold text-fg">{t('SECURITY_DASHBOARD.TREND_TITLE')}</h2>
           <p className="text-xs text-muted">{t('SECURITY_DASHBOARD.TREND_SUBTITLE')}</p>
         </div>

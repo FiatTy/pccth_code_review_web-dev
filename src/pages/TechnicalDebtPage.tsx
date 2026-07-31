@@ -88,7 +88,7 @@ export function TechnicalDebtPage() {
 
   const isLoading = scansQuery.isLoading || repositoriesQuery.isLoading;
   const headCell =
-    'px-5 py-3 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-faint';
+    'px-5 py-3 font-mono text-xs font-semibold uppercase tracking-[0.14em] text-muted';
 
   if (isLoading) {
     return (
@@ -151,13 +151,13 @@ export function TechnicalDebtPage() {
 
       <div className="mb-4 grid gap-4 lg:grid-cols-2">
         <section className="rounded-xl border border-border bg-surface">
-          <div className="flex items-center gap-2 border-b border-border px-5 py-4">
+          <div className="flex items-center gap-2 card-header border-b border-border px-5 py-4">
             <TrendingDown size={15} className="text-primary" />
             <h2 className="text-sm font-semibold text-fg">
               {t('TECHNICAL_DEBT.DEBT_DISTRIBUTION_BY_PROJECT')}
             </h2>
           </div>
-          <div className="px-5 py-5">
+          <div className="scroll-slim max-h-[250px] overflow-y-auto px-5 py-5">
             <BarList
               items={projectDebts.map((project) => ({
                 label: project.name,
@@ -170,7 +170,7 @@ export function TechnicalDebtPage() {
         </section>
 
         <section className="rounded-xl border border-border bg-surface">
-          <div className="flex items-center gap-2 border-b border-border px-5 py-4">
+          <div className="flex items-center gap-2 card-header border-b border-border px-5 py-4">
             <Layers size={15} className="text-accent" />
             <h2 className="text-sm font-semibold text-fg">
               {t('TECHNICAL_DEBT.DEBT_BY_CATEGORY')}
@@ -191,7 +191,7 @@ export function TechnicalDebtPage() {
       </div>
 
       <section className="mb-4 rounded-xl border border-border bg-surface">
-        <div className="flex flex-wrap items-baseline justify-between gap-2 border-b border-border px-5 py-4">
+        <div className="flex flex-wrap items-baseline justify-between gap-2 card-header border-b border-border px-5 py-4">
           <h2 className="text-sm font-semibold text-fg">{t('TECHNICAL_DEBT.TREND_TITLE')}</h2>
           <p className="text-xs text-muted">{t('TECHNICAL_DEBT.DEBT_TREND_MONTHLY')}</p>
         </div>
@@ -214,7 +214,7 @@ export function TechnicalDebtPage() {
       </section>
 
       <section className="overflow-hidden rounded-xl border border-border bg-surface">
-        <div className="flex items-center justify-between gap-2 border-b border-border px-5 py-4">
+        <div className="flex items-center justify-between gap-2 card-header border-b border-border px-5 py-4">
           <h2 className="text-sm font-semibold text-fg">{t('TECHNICAL_DEBT.TOP_DEBT_PROJECT')}</h2>
           <button
             type="button"
