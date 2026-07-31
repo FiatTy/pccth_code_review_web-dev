@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { PageHeader } from '@/components/common/PageHeader';
 import { FIELD_INPUT_CLASS, FormField } from '@/components/common/FormField';
+import { SelectField } from '@/components/common/SelectField';
 import { useToast } from '@/lib/toast/toast-context';
 import {
   useCreateUser,
@@ -426,18 +427,13 @@ export function UserManagementPage() {
                 label={t('SETTING.USER.ROLE')}
                 error={submitted && !modalUser.role ? t('USER_MGT.ROLE_REQUIRED') : ''}
               >
-                <select
+                <SelectField
                   id="role"
                   className={FIELD_INPUT_CLASS}
                   value={modalUser.role}
-                  onChange={(event) => patchModal({ role: event.target.value as UserInfo['role'] })}
-                >
-                  {ROLES.map((role) => (
-                    <option key={role} value={role}>
-                      {role}
-                    </option>
-                  ))}
-                </select>
+                  onChange={(next) => patchModal({ role: next as UserInfo['role'] })}
+                  options={ROLES.map((role) => ({ value: role, label: role }))}
+                />
               </FormField>
             </div>
 

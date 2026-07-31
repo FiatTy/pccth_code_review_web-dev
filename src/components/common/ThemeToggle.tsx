@@ -21,9 +21,13 @@ export function ThemeToggle() {
       onClick={toggle}
       title={label}
       aria-label={label}
-      className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-border text-muted transition-colors hover:text-fg active:scale-95"
+      className="group inline-flex h-9 w-9 items-center justify-center rounded-full border border-border bg-surface/60 text-muted shadow-sm backdrop-blur transition-all duration-200 hover:border-border-strong hover:text-primary active:scale-95"
     >
-      {isDark ? <Sun size={16} /> : <Moon size={16} />}
+      {isDark ? (
+        <Sun size={16} className="transition-transform duration-300 group-hover:rotate-45" />
+      ) : (
+        <Moon size={16} className="transition-transform duration-300 group-hover:-rotate-12" />
+      )}
     </button>
   );
 }

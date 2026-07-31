@@ -106,7 +106,7 @@ export function TechnicalDebtPage() {
         actions={
           <Link
             to="/generatereport"
-            className="inline-flex h-10 items-center gap-2 rounded-lg border border-border px-4 text-sm font-medium text-fg transition-colors hover:bg-surface-2"
+            className="brand-gradient-bg inline-flex h-11 items-center gap-2 rounded-xl px-4 text-sm font-semibold text-primary-fg shadow-lg shadow-primary/25 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-primary/35 active:scale-[0.99]"
           >
             <FileText size={15} />
             {t('TECHNICAL_DEBT.GENERATE_DEBT_REPORT')}
@@ -115,9 +115,9 @@ export function TechnicalDebtPage() {
       />
 
       <div className="mb-4 grid gap-3 sm:grid-cols-2">
-        <div className="rounded-xl border border-border bg-surface p-5">
+        <div className="hover-lift rounded-2xl border border-border bg-surface p-5 shadow-sm">
           <div className="flex items-center justify-between">
-            <span className="font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-faint">
+            <span className="text-[13px] font-medium uppercase tracking-[0.08em] text-muted">
               {t('TECHNICAL_DEBT.TOTAL_DEBT')}
             </span>
             <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-warning/12 text-warning">
@@ -134,9 +134,9 @@ export function TechnicalDebtPage() {
           </p>
         </div>
 
-        <div className="rounded-xl border border-border bg-surface p-5">
+        <div className="hover-lift rounded-2xl border border-border bg-surface p-5 shadow-sm">
           <div className="flex items-center justify-between">
-            <span className="font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-faint">
+            <span className="text-[13px] font-medium uppercase tracking-[0.08em] text-muted">
               {t('TECHNICAL_DEBT.ESTIMATED_COST')}
             </span>
             <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary-subtle text-primary">

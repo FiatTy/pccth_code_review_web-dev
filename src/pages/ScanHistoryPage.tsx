@@ -13,6 +13,8 @@ import {
   ScrollText,
 } from 'lucide-react';
 import { PageHeader } from '@/components/common/PageHeader';
+import { DateField } from '@/components/common/DateField';
+import { SelectField } from '@/components/common/SelectField';
 import { SkeletonTable } from '@/components/common/Skeleton';
 import { ScanCompareModal } from '@/features/scan/components/ScanCompareModal';
 import { useScanHistory } from '@/features/scan/hooks/useScanHistory';
@@ -147,62 +149,59 @@ export function ScanHistoryPage() {
   }
 
   const selectClass =
-    'h-10 rounded-lg border border-border bg-surface px-3 text-sm text-fg outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/25';
+    'h-11 rounded-xl border border-border bg-surface px-3.5 text-sm text-fg shadow-sm outline-none transition hover:border-border-strong focus:border-primary focus:ring-4 focus:ring-primary/15';
 
   return (
     <div>
       <PageHeader title={t('SCAN.TITLE')} subtitle={t('SCAN.SUBTITLE')} />
 
-      <div className="mb-5 flex flex-wrap items-end gap-3 rounded-xl border border-border bg-surface p-4">
+      <div className="mb-6 flex flex-wrap items-end gap-3 rounded-2xl border border-border bg-surface p-5 shadow-sm">
         <label className="flex flex-col gap-1">
           <span className="font-mono text-[10px] uppercase tracking-wide text-faint">
             {t('SCAN.PROJECT')}
           </span>
-          <select
+          <SelectField
             value={project}
-            onChange={(event) => {
-              setProject(event.target.value);
+            onChange={(next) => {
+              setProject(next);
               setPage(1);
             }}
-            className={selectClass}
-          >
-            <option value="all">{t('SCAN.ALL_PROJECTS')}</option>
-            {projects.map((name) => (
-              <option key={name} value={name}>
-                {name}
-              </option>
-            ))}
-          </select>
+            className={`${selectClass} min-w-44`}
+            options={[
+              { value: 'all', label: t('SCAN.ALL_PROJECTS') },
+              ...projects.map((name) => ({ value: name, label: name })),
+            ]}
+          />
         </label>
 
         <label className="flex flex-col gap-1">
           <span className="font-mono text-[10px] uppercase tracking-wide text-faint">
             {t('SCAN.SCAN_STATUS')}
           </span>
-          <select
+          <SelectField
             value={status}
-            onChange={(event) => {
-              setStatus(event.target.value as StatusFilter);
+            onChange={(next) => {
+              setStatus(next as StatusFilter);
               setPage(1);
             }}
-            className={selectClass}
-          >
-            <option value="all">{t('SCAN.ALL')}</option>
-            <option value="SUCCESS">{t('SCAN.COMPLETED')}</option>
-            <option value="FAILED">{t('SCAN.FAILED')}</option>
-            <option value="PENDING">{t('SCAN.PENDING')}</option>
-          </select>
+            className={`${selectClass} min-w-40`}
+            options={[
+              { value: 'all', label: t('SCAN.ALL') },
+              { value: 'SUCCESS', label: t('SCAN.COMPLETED') },
+              { value: 'FAILED', label: t('SCAN.FAILED') },
+              { value: 'PENDING', label: t('SCAN.PENDING') },
+            ]}
+          />
         </label>
 
         <label className="flex flex-col gap-1">
           <span className="font-mono text-[10px] uppercase tracking-wide text-faint">
             {t('SCAN.START_DATE')}
           </span>
-          <input
-            type="date"
+          <DateField
             value={startDate}
-            onChange={(event) => {
-              setStartDate(event.target.value);
+            onChange={(next) => {
+              setStartDate(next);
               setPage(1);
             }}
             className={selectClass}
@@ -213,11 +212,10 @@ export function ScanHistoryPage() {
           <span className="font-mono text-[10px] uppercase tracking-wide text-faint">
             {t('SCAN.END_DATE')}
           </span>
-          <input
-            type="date"
+          <DateField
             value={endDate}
-            onChange={(event) => {
-              setEndDate(event.target.value);
+            onChange={(next) => {
+              setEndDate(next);
               setPage(1);
             }}
             className={selectClass}
@@ -227,7 +225,7 @@ export function ScanHistoryPage() {
         <button
           type="button"
           onClick={resetFilters}
-          className="inline-flex h-10 items-center gap-1.5 rounded-lg border border-border px-3.5 text-sm font-medium text-muted transition-colors hover:bg-surface-2 hover:text-fg"
+          className="inline-flex h-11 items-center gap-1.5 rounded-xl border border-border bg-surface px-4 text-sm font-medium text-muted shadow-sm transition-all hover:border-border-strong hover:text-fg active:scale-[0.99]"
         >
           <RefreshCw size={14} />
           {t('SCAN.CLEAR_FILTER')}
@@ -243,7 +241,7 @@ export function ScanHistoryPage() {
             type="button"
             onClick={() => setShowCompare(true)}
             disabled={selectedIds.length < 2}
-            className="inline-flex h-10 items-center gap-1.5 rounded-lg bg-primary px-3.5 text-sm font-semibold text-primary-fg transition hover:bg-primary-hover active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50"
+            className="brand-gradient-bg inline-flex h-11 items-center gap-1.5 rounded-xl px-4 text-sm font-semibold text-primary-fg shadow-lg shadow-primary/25 transition-all hover:-translate-y-0.5 hover:shadow-primary/35 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none disabled:hover:translate-y-0"
           >
             <GitCompare size={14} />
             {t('SCAN.COMPARE_SCANS')}
@@ -254,26 +252,32 @@ export function ScanHistoryPage() {
       {isPending ? (
         <SkeletonTable rows={6} columns={6} />
       ) : isError ? (
-        <div className="flex flex-col items-center justify-center rounded-xl border border-border bg-surface py-16 text-center">
-          <AlertTriangle size={28} className="text-danger" />
-          <p className="mt-3 text-sm text-muted">{t('COMMON.ERROR')}</p>
+        <div className="flex flex-col items-center justify-center rounded-2xl border border-border bg-surface py-20 text-center shadow-sm">
+          <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-danger/10 text-danger ring-1 ring-inset ring-danger/20">
+            <AlertTriangle size={28} />
+          </div>
+          <p className="mt-5 text-sm text-muted">{t('COMMON.ERROR')}</p>
           <button
             type="button"
             onClick={() => refetch()}
-            className="mt-4 inline-flex items-center gap-2 rounded-lg border border-border px-4 py-2 text-sm font-medium text-fg transition-colors hover:bg-surface-2"
+            className="mt-5 inline-flex items-center gap-2 rounded-xl border border-border bg-surface px-4 py-2.5 text-sm font-medium text-fg shadow-sm transition-all hover:border-border-strong active:scale-[0.99]"
           >
             <RefreshCw size={14} className={isFetching ? 'animate-spin' : undefined} />
             {t('COMMON.RESET')}
           </button>
         </div>
       ) : filtered.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border bg-surface py-16 text-center">
-          <ScanLine size={30} className="text-faint" />
-          <h3 className="mt-4 text-sm font-semibold text-fg">{t('SCAN.NO_SCANS_FOUND')}</h3>
-          <p className="mt-1 max-w-sm text-sm text-muted">{t('SCAN.NO_SCANS_FOUND_DESC')}</p>
+        <div className="flex flex-col items-center justify-center rounded-2xl border border-border bg-surface py-20 text-center shadow-sm">
+          <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary/10 text-primary ring-1 ring-inset ring-primary/20">
+            <ScanLine size={28} />
+          </div>
+          <h3 className="mt-5 text-base font-semibold text-fg">{t('SCAN.NO_SCANS_FOUND')}</h3>
+          <p className="mt-1.5 max-w-sm text-sm leading-relaxed text-muted">
+            {t('SCAN.NO_SCANS_FOUND_DESC')}
+          </p>
         </div>
       ) : (
-        <div className="overflow-hidden rounded-xl border border-border bg-surface">
+        <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full min-w-[720px] text-sm">
               <thead>

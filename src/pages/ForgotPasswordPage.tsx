@@ -1,9 +1,11 @@
 import { useState, type FormEvent } from 'react';
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { ArrowRight, Loader2, Mail, MailCheck } from 'lucide-react';
+import { Mail, MailCheck } from 'lucide-react';
 import { AuthShell } from '@/features/auth/components/AuthShell';
 import { AuthField } from '@/features/auth/components/AuthField';
+import { AuthSubmitButton } from '@/features/auth/components/AuthSubmitButton';
+import { AuthAlert } from '@/features/auth/components/AuthAlert';
 import { useForgotPassword } from '@/features/auth/hooks/useForgotPassword';
 
 const EMAIL_PATTERN = /^[^@\s]+@[^@\s]+\.[a-zA-Z]{2,}$/;
@@ -60,12 +62,7 @@ export function ForgotPasswordPage() {
       ) : (
         <form onSubmit={handleSubmit} noValidate className="space-y-5">
           {forgotPassword.isError ? (
-            <div
-              role="alert"
-              className="rounded-lg border border-danger/30 bg-danger/10 px-3.5 py-2.5 text-sm text-danger"
-            >
-              {t('FORGOT_PASSWORD.SNACK_ERROR')}
-            </div>
+            <AuthAlert>{t('FORGOT_PASSWORD.SNACK_ERROR')}</AuthAlert>
           ) : null}
 
           <AuthField
@@ -84,23 +81,9 @@ export function ForgotPasswordPage() {
             error={submitted && emailErrorKey ? t(emailErrorKey) : null}
           />
 
-          <button
-            type="submit"
-            disabled={forgotPassword.isPending}
-            className="group inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-primary text-sm font-semibold text-primary-fg shadow-sm transition hover:bg-primary-hover active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-70"
-          >
-            {forgotPassword.isPending ? (
-              <Loader2 size={16} className="animate-spin" />
-            ) : (
-              <>
-                {t('FORGOT_PASSWORD.SEND_RESET_LINK')}
-                <ArrowRight
-                  size={16}
-                  className="transition-transform group-hover:translate-x-0.5"
-                />
-              </>
-            )}
-          </button>
+          <AuthSubmitButton pending={forgotPassword.isPending}>
+            {t('FORGOT_PASSWORD.SEND_RESET_LINK')}
+          </AuthSubmitButton>
         </form>
       )}
     </AuthShell>

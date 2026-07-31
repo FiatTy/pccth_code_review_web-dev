@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { FIELD_INPUT_CLASS, FormField } from '@/components/common/FormField';
+import { SelectField } from '@/components/common/SelectField';
 import { useUsers } from '@/features/user/hooks/useUsers';
 
 interface UserSelectProps {
@@ -21,20 +22,15 @@ export function UserSelect({ id, value, onChange, error }: UserSelectProps) {
       label={t('ISSUE_MODAL.ASSIGN_TO')}
       error={error || (unavailable ? t('ISSUE_MODAL.USER_LIST_UNAVAILABLE') : undefined)}
     >
-      <select
+      <SelectField
         id={id}
         className={FIELD_INPUT_CLASS}
         value={value}
         disabled={isPending || unavailable}
-        onChange={(event) => onChange(event.target.value)}
-      >
-        <option value="">{isPending ? t('COMMON.LOADING') : t('ISSUE_MODAL.SELECT_USER')}</option>
-        {users.map((user) => (
-          <option key={user.id} value={user.id}>
-            {user.username}
-          </option>
-        ))}
-      </select>
+        onChange={onChange}
+        placeholder={isPending ? t('COMMON.LOADING') : t('ISSUE_MODAL.SELECT_USER')}
+        options={users.map((user) => ({ value: user.id, label: user.username }))}
+      />
     </FormField>
   );
 }

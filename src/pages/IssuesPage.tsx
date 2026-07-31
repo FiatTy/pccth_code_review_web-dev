@@ -14,6 +14,7 @@ import {
   Waves,
 } from 'lucide-react';
 import { PageHeader } from '@/components/common/PageHeader';
+import { SelectField } from '@/components/common/SelectField';
 import { SkeletonTable } from '@/components/common/Skeleton';
 import { useIssues } from '@/features/issue/hooks/useIssues';
 import { AssignIssueModal } from '@/features/issue/components/AssignIssueModal';
@@ -179,63 +180,63 @@ export function IssuesPage() {
       <PageHeader title={t('ISSUE.TITLE_MGT')} subtitle={t('ISSUE.TABLE_CAPTION')} />
 
       <div className="mb-5 flex flex-wrap items-center gap-2 rounded-xl border border-border bg-surface p-4">
-        <select
+        <SelectField
           value={type}
-          onChange={(event) => {
-            setType(event.target.value);
+          onChange={(next) => {
+            setType(next);
             setPage(1);
           }}
-          className={selectClass}
-        >
-          <option value="all">{t('ISSUE.ALL_TYPES')}</option>
-          <option value="BUG">{t('ISSUE.BUG')}</option>
-          <option value="VULNERABILITY">{t('ISSUE.SECURITY')}</option>
-          <option value="CODE_SMELL">{t('ISSUE.CODE_SMELL')}</option>
-        </select>
-        <select
+          className={`${selectClass} min-w-40`}
+          options={[
+            { value: 'all', label: t('ISSUE.ALL_TYPES') },
+            { value: 'BUG', label: t('ISSUE.BUG') },
+            { value: 'VULNERABILITY', label: t('ISSUE.SECURITY') },
+            { value: 'CODE_SMELL', label: t('ISSUE.CODE_SMELL') },
+          ]}
+        />
+        <SelectField
           value={severity}
-          onChange={(event) => {
-            setSeverity(event.target.value);
+          onChange={(next) => {
+            setSeverity(next);
             setPage(1);
           }}
-          className={selectClass}
-        >
-          <option value="all">{t('ISSUE.ALL_SEVERITY')}</option>
-          <option value="BLOCKER">{t('ISSUE.BLOCKER')}</option>
-          <option value="CRITICAL">{t('ISSUE.CRITICAL')}</option>
-          <option value="MAJOR">{t('ISSUE.MAJOR')}</option>
-          <option value="MINOR">{t('ISSUE.MINOR')}</option>
-          <option value="INFO">{t('ISSUE.INFO')}</option>
-        </select>
-        <select
+          className={`${selectClass} min-w-40`}
+          options={[
+            { value: 'all', label: t('ISSUE.ALL_SEVERITY') },
+            { value: 'BLOCKER', label: t('ISSUE.BLOCKER') },
+            { value: 'CRITICAL', label: t('ISSUE.CRITICAL') },
+            { value: 'MAJOR', label: t('ISSUE.MAJOR') },
+            { value: 'MINOR', label: t('ISSUE.MINOR') },
+            { value: 'INFO', label: t('ISSUE.INFO') },
+          ]}
+        />
+        <SelectField
           value={status}
-          onChange={(event) => {
-            setStatus(event.target.value);
+          onChange={(next) => {
+            setStatus(next);
             setPage(1);
           }}
-          className={selectClass}
-        >
-          <option value="all">{t('ISSUE.ALL_STATUS')}</option>
-          <option value="OPEN">{t('ISSUE.OPEN')}</option>
-          <option value="IN_PROGRESS">{t('ISSUE.IN_PROGRESS')}</option>
-          <option value="DONE">{t('ISSUE.RESOLVED')}</option>
-          <option value="REJECT">{t('ISSUE.CLOSED')}</option>
-        </select>
-        <select
+          className={`${selectClass} min-w-40`}
+          options={[
+            { value: 'all', label: t('ISSUE.ALL_STATUS') },
+            { value: 'OPEN', label: t('ISSUE.OPEN') },
+            { value: 'IN_PROGRESS', label: t('ISSUE.IN_PROGRESS') },
+            { value: 'DONE', label: t('ISSUE.RESOLVED') },
+            { value: 'REJECT', label: t('ISSUE.CLOSED') },
+          ]}
+        />
+        <SelectField
           value={project}
-          onChange={(event) => {
-            setProject(event.target.value);
+          onChange={(next) => {
+            setProject(next);
             setPage(1);
           }}
-          className={selectClass}
-        >
-          <option value="all">{t('ISSUE.ALL_PROJECTS')}</option>
-          {projects.map((name) => (
-            <option key={name} value={name}>
-              {name}
-            </option>
-          ))}
-        </select>
+          className={`${selectClass} min-w-44`}
+          options={[
+            { value: 'all', label: t('ISSUE.ALL_PROJECTS') },
+            ...projects.map((name) => ({ value: name, label: name })),
+          ]}
+        />
 
         <div className="relative ml-auto w-full sm:w-56">
           <Search

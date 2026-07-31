@@ -1,9 +1,11 @@
 import { useState, type FormEvent } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { ArrowRight, Eye, EyeOff, Loader2, Lock, Mail } from 'lucide-react';
+import { Eye, EyeOff, Lock, Mail } from 'lucide-react';
 import { AuthShell } from '@/features/auth/components/AuthShell';
 import { AuthField } from '@/features/auth/components/AuthField';
+import { AuthSubmitButton } from '@/features/auth/components/AuthSubmitButton';
+import { AuthAlert } from '@/features/auth/components/AuthAlert';
 import { useLogin } from '@/features/auth/hooks/useLogin';
 import { useAuth } from '@/lib/auth/auth-context';
 
@@ -77,14 +79,7 @@ export function LoginPage() {
       }
     >
       <form onSubmit={handleSubmit} noValidate className="space-y-5">
-        {login.isError ? (
-          <div
-            role="alert"
-            className="rounded-lg border border-danger/30 bg-danger/10 px-3.5 py-2.5 text-sm text-danger"
-          >
-            {t('LOGIN.ERROR_GENERIC')}
-          </div>
-        ) : null}
+        {login.isError ? <AuthAlert>{t('LOGIN.ERROR_GENERIC')}</AuthAlert> : null}
 
         <AuthField
           id="email"
@@ -127,20 +122,7 @@ export function LoginPage() {
           }
         />
 
-        <button
-          type="submit"
-          disabled={login.isPending}
-          className="group inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-primary text-sm font-semibold text-primary-fg shadow-sm transition hover:bg-primary-hover active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-70"
-        >
-          {login.isPending ? (
-            <Loader2 size={16} className="animate-spin" />
-          ) : (
-            <>
-              {t('AUTH.LOGIN_BUTTON')}
-              <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
-            </>
-          )}
-        </button>
+        <AuthSubmitButton pending={login.isPending}>{t('AUTH.LOGIN_BUTTON')}</AuthSubmitButton>
       </form>
     </AuthShell>
   );

@@ -58,7 +58,7 @@ function MetricTile({
   return (
     <div className="rounded-xl border border-border bg-surface p-5">
       <div className="flex items-center justify-between">
-        <span className="font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-faint">
+        <span className="text-[13px] font-medium uppercase tracking-[0.08em] text-muted">
           {label}
         </span>
         <span className={`flex h-8 w-8 items-center justify-center rounded-lg ${tone}`}>

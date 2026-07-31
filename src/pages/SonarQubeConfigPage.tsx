@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { PageHeader } from '@/components/common/PageHeader';
 import { FIELD_INPUT_CLASS, FormField } from '@/components/common/FormField';
+import { SelectField } from '@/components/common/SelectField';
 import { Switch } from '@/components/common/Switch';
 import { useAuth } from '@/lib/auth/auth-context';
 import { useToast } from '@/lib/toast/toast-context';
@@ -607,18 +608,16 @@ export function SonarQubeConfigPage() {
                   </div>
 
                   <FormField id="springJdkVersion" label={t('SONARQUBE_CONFIG.JDK_VERSION')}>
-                    <select
+                    <SelectField
                       id="springJdkVersion"
                       className={FIELD_INPUT_CLASS}
-                      value={form.springJdkVersion}
-                      onChange={(event) => update({ springJdkVersion: Number(event.target.value) })}
-                    >
-                      {JDK_VERSIONS.map((version) => (
-                        <option key={version} value={version}>
-                          {version}
-                        </option>
-                      ))}
-                    </select>
+                      value={String(form.springJdkVersion)}
+                      onChange={(next) => update({ springJdkVersion: Number(next) })}
+                      options={JDK_VERSIONS.map((version) => ({
+                        value: String(version),
+                        label: String(version),
+                      }))}
+                    />
                   </FormField>
                 </div>
               </div>

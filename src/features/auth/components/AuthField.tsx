@@ -1,4 +1,4 @@
-import type { LucideIcon } from 'lucide-react';
+import { AlertCircle, type LucideIcon } from 'lucide-react';
 import type { ReactNode } from 'react';
 
 interface AuthFieldProps {
@@ -33,17 +33,21 @@ export function AuthField({
   children,
 }: AuthFieldProps) {
   return (
-    <div>
+    <div className={error ? 'field-shake' : undefined}>
       <label
         htmlFor={id}
-        className="mb-1.5 block font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-muted"
+        className={`mb-2 block font-mono text-[11px] font-semibold uppercase tracking-[0.14em] transition-colors ${
+          error ? 'text-danger' : 'text-muted'
+        }`}
       >
         {label}
       </label>
-      <div className="relative">
+      <div className="group relative">
         <Icon
-          size={16}
-          className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-faint"
+          size={17}
+          className={`pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 transition-colors ${
+            error ? 'text-danger' : 'text-faint group-focus-within:text-primary'
+          }`}
         />
         <input
           id={id}
@@ -56,17 +60,22 @@ export function AuthField({
           maxLength={maxLength}
           inputMode={inputMode}
           aria-invalid={error ? true : undefined}
-          className={`h-11 w-full rounded-lg border bg-surface pl-10 text-sm text-fg outline-none transition placeholder:text-faint focus:ring-2 ${
-            trailing ? 'pr-10' : 'pr-3'
+          className={`h-12 w-full rounded-xl border bg-surface pl-11 text-[15px] text-fg shadow-sm outline-none transition placeholder:text-faint focus:ring-4 ${
+            trailing ? 'pr-11' : 'pr-3.5'
           } ${
             error
-              ? 'border-danger focus:border-danger focus:ring-danger/20'
-              : 'border-border focus:border-primary focus:ring-primary/25'
+              ? 'border-danger bg-danger/[0.05] ring-4 ring-danger/10 focus:border-danger focus:ring-danger/25'
+              : 'border-border hover:border-border-strong focus:border-primary focus:ring-primary/15'
           }`}
         />
         {trailing}
       </div>
-      {error ? <p className="mt-1.5 text-xs text-danger">{error}</p> : null}
+      {error ? (
+        <p className="mt-2 flex items-center gap-1.5 text-[13px] font-medium text-danger animate-[scan-log-line_260ms_ease-out_both]">
+          <AlertCircle size={14} className="shrink-0" />
+          {error}
+        </p>
+      ) : null}
       {children}
     </div>
   );

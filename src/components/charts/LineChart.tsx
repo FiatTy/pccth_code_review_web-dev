@@ -1,6 +1,22 @@
+import { useId } from 'react';
+import { useChartReveal } from './useChartReveal';
+
 export interface LinePoint {
   label: string;
   value: number;
+}
+
+interface Pt {
+  x: number;
+  y: number;
+}
+
+/** Straight-line (polyline) path with crisp corners. */
+function buildLinePath(points: Pt[]): string {
+  if (points.length === 0) {
+    return '';
+  }
+  return points.map((p, index) => `${index === 0 ? 'M' : 'L'}${p.x},${p.y}`).join(' ');
 }
 
 export interface LineSeries {
@@ -37,6 +53,8 @@ export function LineChart({
   maxValue,
   emptyLabel,
 }: LineChartProps) {
+  const shown = useChartReveal();
+  const uid = useId().replace(/:/g, '');
   const length = Math.max(0, ...series.map((line) => line.points.length));
 
   if (length === 0) {
@@ -88,6 +106,8 @@ export function LineChart({
               y2={y}
               stroke="var(--color-border)"
               strokeWidth={1}
+              strokeDasharray={index === 0 ? undefined : '2 5'}
+              opacity={index === 0 ? 1 : 0.7}
             />
             <text
               x={PADDING_X - 8}
@@ -118,17 +138,35 @@ export function LineChart({
         ) : null,
       )}
 
-      {series.map((line) => {
+      {series.map((line, seriesIndex) => {
         if (line.points.length === 0) {
           return null;
         }
-        const path = line.points
-          .map((point, index) => `${index === 0 ? 'M' : 'L'}${xOf(index)},${yOf(point.value)}`)
-          .join(' ');
-        const area = `${path} L${xOf(line.points.length - 1)},${yOf(0)} L${xOf(0)},${yOf(0)} Z`;
+        const coords = line.points.map((point, index) => ({
+          x: xOf(index),
+          y: yOf(point.value),
+        }));
+        const path = buildLinePath(coords);
+        const area = `${path} L${coords[coords.length - 1].x},${yOf(0)} L${coords[0].x},${yOf(0)} Z`;
+        const lineDelay = seriesIndex * 180;
+        const gradientId = `${uid}-area-${seriesIndex}`;
         return (
           <g key={line.name}>
-            <path d={area} fill={line.color} opacity={0.1} />
+            <defs>
+              <linearGradient id={gradientId} x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor={line.color} stopOpacity={0.28} />
+                <stop offset="100%" stopColor={line.color} stopOpacity={0} />
+              </linearGradient>
+            </defs>
+            <path
+              d={area}
+              fill={`url(#${gradientId})`}
+              opacity={shown ? 1 : 0}
+              style={{
+                transition: 'opacity 700ms ease',
+                transitionDelay: `${lineDelay + 250}ms`,
+              }}
+            />
             <path
               d={path}
               fill="none"
@@ -136,16 +174,30 @@ export function LineChart({
               strokeWidth={2}
               strokeLinecap="round"
               strokeLinejoin="round"
+              pathLength={1}
+              strokeDasharray={1}
+              strokeDashoffset={shown ? 0 : 1}
+              style={{
+                transition: 'stroke-dashoffset 1100ms cubic-bezier(0.16, 1, 0.3, 1)',
+                transitionDelay: `${lineDelay}ms`,
+              }}
             />
-            {line.points.map((point, index) => (
+            {coords.map((coord, index) => (
               <circle
-                key={point.label + index}
-                cx={xOf(index)}
-                cy={yOf(point.value)}
-                r={2.5}
+                key={line.points[index].label + index}
+                cx={coord.x}
+                cy={coord.y}
+                r={3}
                 fill={line.color}
+                stroke="var(--color-surface)"
+                strokeWidth={1.5}
+                opacity={shown ? 1 : 0}
+                style={{
+                  transition: 'opacity 260ms ease',
+                  transitionDelay: `${lineDelay + 900 + index * 25}ms`,
+                }}
               >
-                <title>{`${line.name} · ${point.label}: ${point.value}${suffix}`}</title>
+                <title>{`${line.name} · ${line.points[index].label}: ${line.points[index].value}${suffix}`}</title>
               </circle>
             ))}
           </g>

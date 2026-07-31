@@ -18,6 +18,7 @@ import {
 } from 'lucide-react';
 import { PageHeader } from '@/components/common/PageHeader';
 import { FIELD_INPUT_CLASS, FormField } from '@/components/common/FormField';
+import { SelectField } from '@/components/common/SelectField';
 import { useToast } from '@/lib/toast/toast-context';
 import { useRepositories, useDeleteRepository } from '@/features/repository/hooks/useRepositories';
 import {
@@ -311,23 +312,21 @@ export function RepositoryFormPage() {
                 label={t('REPOSITORY.PROJECT_TYPE')}
                 error={touched.projectType ? errors.projectType : ''}
               >
-                <select
+                <SelectField
                   id="projectType"
                   className={FIELD_INPUT_CLASS}
                   disabled={isEditMode}
                   value={form.projectType}
-                  onChange={(event) => update({ projectType: event.target.value as ProjectType })}
-                  onBlur={() => markTouched('projectType')}
-                >
-                  <option value="" disabled>
-                    {t('REPOSITORY.SELECT_FRAMEWORK')}
-                  </option>
-                  {PROJECT_TYPES.map((type) => (
-                    <option key={type.value} value={type.value}>
-                      {type.label}
-                    </option>
-                  ))}
-                </select>
+                  onChange={(next) => {
+                    update({ projectType: next as ProjectType });
+                    markTouched('projectType');
+                  }}
+                  placeholder={t('REPOSITORY.SELECT_FRAMEWORK')}
+                  options={PROJECT_TYPES.map((type) => ({
+                    value: type.value,
+                    label: type.label,
+                  }))}
+                />
               </FormField>
 
               <FormField

@@ -4,6 +4,8 @@ import { useTranslation } from 'react-i18next';
 import { AlertTriangle, Eye, EyeOff, Loader2, Lock, ShieldCheck } from 'lucide-react';
 import { AuthShell } from '@/features/auth/components/AuthShell';
 import { AuthField } from '@/features/auth/components/AuthField';
+import { AuthSubmitButton } from '@/features/auth/components/AuthSubmitButton';
+import { AuthAlert } from '@/features/auth/components/AuthAlert';
 import { useResetPassword } from '@/features/auth/hooks/useResetPassword';
 import { useValidateResetToken } from '@/features/auth/hooks/useValidateResetToken';
 
@@ -141,12 +143,7 @@ export function ResetPasswordPage() {
     body = (
       <form onSubmit={handleSubmit} noValidate className="space-y-5">
         {resetPasswordMutation.isError ? (
-          <div
-            role="alert"
-            className="rounded-lg border border-danger/30 bg-danger/10 px-3.5 py-2.5 text-sm text-danger"
-          >
-            {t('RESET_PASSWORD.ERROR_GENERIC')}
-          </div>
+          <AuthAlert>{t('RESET_PASSWORD.ERROR_GENERIC')}</AuthAlert>
         ) : null}
 
         <AuthField
@@ -193,17 +190,9 @@ export function ResetPasswordPage() {
           }
         />
 
-        <button
-          type="submit"
-          disabled={resetPasswordMutation.isPending}
-          className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-primary text-sm font-semibold text-primary-fg shadow-sm transition hover:bg-primary-hover active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-70"
-        >
-          {resetPasswordMutation.isPending ? (
-            <Loader2 size={16} className="animate-spin" />
-          ) : (
-            t('RESET_PASSWORD.CONFIRM_BUTTON')
-          )}
-        </button>
+        <AuthSubmitButton pending={resetPasswordMutation.isPending} showArrow={false}>
+          {t('RESET_PASSWORD.CONFIRM_BUTTON')}
+        </AuthSubmitButton>
       </form>
     );
   } else {
@@ -215,7 +204,7 @@ export function ResetPasswordPage() {
         <button
           type="button"
           onClick={goBack}
-          className="inline-flex h-11 w-full items-center justify-center rounded-lg bg-primary text-sm font-semibold text-primary-fg shadow-sm transition hover:bg-primary-hover active:scale-[0.99]"
+          className="auth-submit group inline-flex h-12 w-full items-center justify-center rounded-xl text-[15px] font-semibold text-primary-fg shadow-lg shadow-primary/25 transition-all hover:shadow-primary/35 active:scale-[0.99]"
         >
           {t('RESET_PASSWORD.REQUEST_NEW_LINK')}
         </button>

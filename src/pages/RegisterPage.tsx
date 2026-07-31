@@ -2,9 +2,11 @@ import { useState, type FormEvent } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
-import { AtSign, Check, Circle, Eye, EyeOff, Loader2, Lock, Phone, User } from 'lucide-react';
+import { AtSign, Check, Circle, Eye, EyeOff, Lock, Phone, User } from 'lucide-react';
 import { AuthShell } from '@/features/auth/components/AuthShell';
 import { AuthField } from '@/features/auth/components/AuthField';
+import { AuthSubmitButton } from '@/features/auth/components/AuthSubmitButton';
+import { AuthAlert } from '@/features/auth/components/AuthAlert';
 import { useRegister } from '@/features/auth/hooks/useRegister';
 import { useAuth } from '@/lib/auth/auth-context';
 import { getPasswordRules } from '@/lib/password-rules';
@@ -190,14 +192,7 @@ export function RegisterPage() {
       }
     >
       <form onSubmit={handleSubmit} noValidate className="space-y-5">
-        {genericError ? (
-          <div
-            role="alert"
-            className="rounded-lg border border-danger/30 bg-danger/10 px-3.5 py-2.5 text-sm text-danger"
-          >
-            {t('REGISTER.ERROR_GENERIC')}
-          </div>
-        ) : null}
+        {genericError ? <AuthAlert>{t('REGISTER.ERROR_GENERIC')}</AuthAlert> : null}
 
         <AuthField
           id="username"
@@ -295,17 +290,9 @@ export function RegisterPage() {
           error={submitted && confirmErrorKey ? t(confirmErrorKey) : null}
         />
 
-        <button
-          type="submit"
-          disabled={registerMutation.isPending}
-          className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-primary text-sm font-semibold text-primary-fg shadow-sm transition hover:bg-primary-hover active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-70"
-        >
-          {registerMutation.isPending ? (
-            <Loader2 size={16} className="animate-spin" />
-          ) : (
-            t('REGISTER.BUTTON')
-          )}
-        </button>
+        <AuthSubmitButton pending={registerMutation.isPending}>
+          {t('REGISTER.BUTTON')}
+        </AuthSubmitButton>
       </form>
     </AuthShell>
   );

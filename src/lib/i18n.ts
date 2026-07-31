@@ -8,6 +8,19 @@ export const SUPPORTED_LANGUAGES = ['en', 'th'] as const;
 export type SupportedLanguage = (typeof SUPPORTED_LANGUAGES)[number];
 export const LANGUAGE_STORAGE_KEY = 'app_lang';
 
+/**
+ * Keeps <html lang> in sync with the active language so locale-dependent
+ * browser UI — native date pickers, `<input type="date">` formatting, spell
+ * check — follows the app language (e.g. Thai calendar when switched to TH).
+ */
+function syncDocumentLang(lng?: string): void {
+  if (typeof document !== 'undefined') {
+    document.documentElement.lang = lng ?? i18n.resolvedLanguage ?? 'en';
+  }
+}
+
+i18n.on('languageChanged', syncDocumentLang);
+
 void i18n
   .use(LanguageDetector)
   .use(initReactI18next)
@@ -26,6 +39,7 @@ void i18n
     interpolation: {
       escapeValue: false,
     },
-  });
+  })
+  .then(() => syncDocumentLang());
 
 export default i18n;

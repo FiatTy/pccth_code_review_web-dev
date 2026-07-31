@@ -41,7 +41,8 @@ export function AuthStatus({
       </div>
 
       <div className="flex flex-1 items-center justify-center px-6 pb-16">
-        <div className="w-full max-w-md rounded-2xl border border-border bg-surface p-8 text-center shadow-sm">
+        <div className="auth-card relative w-full max-w-md overflow-hidden rounded-2xl border border-border bg-surface p-8 text-center">
+          <span aria-hidden className="auth-card-accent absolute inset-x-0 top-0 h-[3px]" />
           <div
             className={`mx-auto flex h-16 w-16 items-center justify-center rounded-full ${TONE_CLASS[tone]}`}
           >

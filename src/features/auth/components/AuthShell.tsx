@@ -91,13 +91,15 @@ export function AuthShell({
         </div>
       </aside>
 
-      <div className="flex min-h-screen flex-col">
-        <div className="flex items-center justify-between px-6 py-5 lg:px-10">
+      <div className="auth-panel relative flex min-h-screen flex-col">
+        <div className="relative z-10 flex items-center justify-between px-6 py-5 lg:px-10">
           <Link
             to="/"
-            className="inline-flex items-center gap-1 text-sm text-muted transition-colors hover:text-fg"
+            className="group inline-flex items-center gap-2 rounded-full border border-border bg-surface/70 py-1.5 pl-1.5 pr-4 text-sm font-medium text-muted shadow-sm backdrop-blur transition-all duration-200 hover:border-border-strong hover:text-fg hover:shadow-md"
           >
-            <ChevronLeft size={16} />
+            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-surface-2 text-faint transition-all duration-200 group-hover:-translate-x-0.5 group-hover:bg-primary group-hover:text-primary-fg group-hover:shadow-sm group-hover:shadow-primary/40">
+              <ChevronLeft size={15} strokeWidth={2.5} />
+            </span>
             {t('AUTH.BACK_HOME', 'Back to home')}
           </Link>
           <div className="flex items-center gap-2">
@@ -106,9 +108,9 @@ export function AuthShell({
           </div>
         </div>
 
-        <div className="flex flex-1 items-center justify-center px-6 pb-12 lg:px-10">
-          <div className="w-full max-w-sm">
-            <div className="mb-8 flex items-center gap-2.5 lg:hidden">
+        <div className="relative z-10 flex flex-1 items-center justify-center px-6 pb-12 lg:px-10">
+          <div className="w-full max-w-md">
+            <div className="mb-7 flex items-center justify-center gap-2.5 lg:hidden">
               <img
                 src={logoUrl}
                 alt=""
@@ -125,12 +127,22 @@ export function AuthShell({
               </div>
             </div>
 
-            <h1 className="text-2xl font-semibold tracking-tight text-fg">{formTitle}</h1>
-            {formSubtitle ? <p className="mt-1.5 text-sm text-muted">{formSubtitle}</p> : null}
+            <div className="auth-card relative overflow-hidden rounded-2xl border border-border bg-surface p-7 sm:p-9">
+              <span aria-hidden className="auth-card-accent absolute inset-x-0 top-0 h-[3px]" />
 
-            <div className="mt-8">{children}</div>
+              <div className="mb-8">
+                <h1 className="text-[26px] font-semibold leading-tight tracking-tight text-fg">
+                  {formTitle}
+                </h1>
+                {formSubtitle ? (
+                  <p className="mt-2 text-sm leading-relaxed text-muted">{formSubtitle}</p>
+                ) : null}
+              </div>
 
-            {footer ? <div className="mt-8">{footer}</div> : null}
+              {children}
+
+              {footer ? <div className="mt-8">{footer}</div> : null}
+            </div>
           </div>
         </div>
       </div>

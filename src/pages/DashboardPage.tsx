@@ -61,9 +61,9 @@ function StatCard({
   tone: string;
 }) {
   return (
-    <div className="rounded-xl border border-border bg-surface p-5">
+    <div className="hover-lift rounded-2xl border border-border bg-surface p-5 shadow-sm">
       <div className="flex items-center justify-between">
-        <span className="font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-faint">
+        <span className="text-[13px] font-medium uppercase tracking-[0.08em] text-muted">
           {label}
         </span>
         <span className={`flex h-8 w-8 items-center justify-center rounded-lg ${tone}`}>
@@ -240,12 +240,12 @@ export function DashboardPage() {
           return (
             <div
               key={card.label}
-              className="flex items-center gap-3 rounded-xl border border-border bg-surface px-4 py-3.5"
+              className="hover-lift flex items-center gap-3 rounded-2xl border border-border bg-surface px-4 py-3.5 shadow-sm"
             >
               <Icon size={18} className={card.tone} />
               <div>
-                <p className="text-lg font-semibold text-fg">{card.value}</p>
-                <p className="text-[11px] uppercase tracking-wide text-faint">{card.label}</p>
+                <p className="text-xl font-semibold text-fg">{card.value}</p>
+                <p className="text-[13px] font-medium text-muted">{card.label}</p>
               </div>
             </div>
           );

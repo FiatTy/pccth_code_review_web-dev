@@ -43,7 +43,7 @@ function MetricTile({
   return (
     <div className="rounded-xl border border-border bg-surface p-5">
       <div className="flex items-center justify-between">
-        <span className="font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-faint">
+        <span className="text-[13px] font-medium uppercase tracking-[0.08em] text-muted">
           {label}
         </span>
         <span className={`flex h-8 w-8 items-center justify-center rounded-lg ${tone}`}>
@@ -210,7 +210,7 @@ export function ScanResultPage() {
         <div className="flex flex-wrap items-center gap-2">
           <Link
             to="/generatereport"
-            className="inline-flex h-10 items-center gap-2 rounded-lg border border-border px-4 text-sm font-medium text-fg transition-colors hover:bg-surface-2"
+            className="brand-gradient-bg inline-flex h-11 items-center gap-2 rounded-xl px-4 text-sm font-semibold text-primary-fg shadow-lg shadow-primary/25 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-primary/35 active:scale-[0.99]"
           >
             <Download size={15} />
             {t('SCAN_RESULT.DOWNLOAD')}

@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 
 export const FIELD_INPUT_CLASS =
-  'h-10 w-full rounded-lg border border-border bg-surface px-3 text-sm text-fg outline-none transition placeholder:text-faint focus:border-primary focus:ring-2 focus:ring-primary/25 read-only:bg-surface-2/60 disabled:cursor-not-allowed disabled:bg-surface-2/60 disabled:text-muted';
+  'h-11 w-full rounded-xl border border-border bg-surface px-3.5 text-sm text-fg shadow-sm outline-none transition placeholder:text-faint hover:border-border-strong focus:border-primary focus:ring-4 focus:ring-primary/15 read-only:bg-surface-2/60 read-only:shadow-none disabled:cursor-not-allowed disabled:bg-surface-2/60 disabled:text-muted disabled:shadow-none';
 
 interface FormFieldProps {
   id: string;

@@ -257,7 +257,8 @@
     "WARNING": "คำเตือน",
     "INFO": "ข้อเสนอแนะ",
     "SWITCH_LIGHT": "เปลี่ยนเป็นโหมดสว่าง",
-    "SWITCH_DARK": "เปลี่ยนเป็นโหมดมืด"
+    "SWITCH_DARK": "เปลี่ยนเป็นโหมดมืด",
+    "DATE_PLACEHOLDER": "วว/ดด/ปปปป"
   },
   "LANDING": {
     "HERO_SUBTITLE_1": "การปรับปรุงคุณภาพโค้ดอัตโนมัติ:",
@@ -271,6 +272,12 @@
     "DASHBOARD": "แดชบอร์ด",
     "DASHBOARD_DESC": "แสดงภาพรวมคุณภาพของโปรเจกต์ให้เห็นภาพชัดเจน",
     "NOTIFICATIONS_4_LEVELS": "การแจ้งเตือน 4 ระดับ",
+    "NOTIFICATIONS_EYEBROW": "รู้ทุกความเคลื่อนไหว",
+    "NOTIFICATIONS_SUBTITLE": "ทุกการสแกนแจ้งเตือนคุณด้วยสีที่ชัดเจน แยกระดับความสำคัญ",
+    "NOTIF_SUCCESS_DESC": "สแกนผ่าน Quality Gate",
+    "NOTIF_INFO_DESC": "กำลังวิเคราะห์อยู่",
+    "NOTIF_WARNING_DESC": "มีบางจุดที่ควรตรวจสอบ",
+    "NOTIF_ERROR_DESC": "Quality Gate ไม่ผ่าน",
     "CTA_TITLE": "เริ่มต้นการตรวจสอบโค้ดแบบอัตโนมัติของคุณวันนี้",
     "CTA_DESC": "รวดเร็ว แม่นยำ และโปร่งใสเพื่อคุณภาพของโค้ด",
     "GET_STARTED": "เริ่มต้นใช้งาน"

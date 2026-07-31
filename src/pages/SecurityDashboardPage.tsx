@@ -115,9 +115,9 @@ export function SecurityDashboardPage() {
       />
 
       <div className="mb-4 grid gap-3 sm:grid-cols-2">
-        <div className="rounded-xl border border-border bg-surface p-5">
+        <div className="hover-lift rounded-2xl border border-border bg-surface p-5 shadow-sm">
           <div className="flex items-center justify-between">
-            <span className="font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-faint">
+            <span className="text-[13px] font-medium uppercase tracking-[0.08em] text-muted">
               {t('SECURITY_DASHBOARD.SECURITY_SCORE')}
             </span>
             <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary-subtle text-primary">
@@ -127,8 +127,8 @@ export function SecurityDashboardPage() {
           <p className="mt-3 text-3xl font-semibold tracking-tight text-fg">{metrics.score}</p>
         </div>
 
-        <div className="rounded-xl border border-border bg-surface p-5">
-          <span className="font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-faint">
+        <div className="hover-lift rounded-2xl border border-border bg-surface p-5 shadow-sm">
+          <span className="text-[13px] font-medium uppercase tracking-[0.08em] text-muted">
             {t('SECURITY_DASHBOARD.RISK_LEVEL')}
           </span>
           <p className="mt-3">
@@ -244,7 +244,7 @@ export function SecurityDashboardPage() {
                   },
                   {
                     name: t('SECURITY_DASHBOARD.TREND_HOTSPOTS'),
-                    color: 'var(--color-warning)',
+                    color: 'var(--color-info)',
                     points: hotspotTrend,
                   },
                 ]}
@@ -256,7 +256,7 @@ export function SecurityDashboardPage() {
                   {t('SECURITY_DASHBOARD.TREND_VULNERABILITIES')}
                 </span>
                 <span className="flex items-center gap-1.5 text-xs text-muted">
-                  <span className="h-2 w-2 rounded-full bg-warning" />
+                  <span className="h-2 w-2 rounded-full bg-info" />
                   {t('SECURITY_DASHBOARD.TREND_HOTSPOTS')}
                 </span>
               </div>

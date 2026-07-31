@@ -56,8 +56,8 @@
 
 @theme inline {
   --font-sans:
-    ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans Thai', 'Helvetica Neue',
-    Arial, sans-serif;
+    'Inter', 'IBM Plex Sans Thai', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
+    'Noto Sans Thai', 'Helvetica Neue', Arial, sans-serif;
   --font-mono: ui-monospace, 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
 
   --color-bg: var(--bg);
@@ -198,6 +198,180 @@
     vertical-align: -0.15em;
     background: currentColor;
     animation: scan-caret 1s steps(2, end) infinite;
+  }
+
+  /* Auth (login/register) modern surface */
+  .auth-panel {
+    background: radial-gradient(
+        90% 70% at 100% 0%,
+        color-mix(in oklab, var(--primary) 8%, transparent),
+        transparent 55%
+      ),
+      radial-gradient(
+        70% 60% at 0% 100%,
+        color-mix(in oklab, var(--accent) 6%, transparent),
+        transparent 55%
+      );
+  }
+
+  .auth-card {
+    box-shadow:
+      0 1px 2px color-mix(in oklab, var(--fg) 6%, transparent),
+      0 18px 44px -14px color-mix(in oklab, var(--fg) 16%, transparent);
+  }
+
+  .auth-card-accent {
+    background: linear-gradient(90deg, transparent, var(--primary), var(--accent), transparent);
+  }
+
+  .auth-submit {
+    position: relative;
+    isolation: isolate;
+    background: linear-gradient(
+      135deg,
+      var(--primary),
+      color-mix(in oklab, var(--primary) 64%, #0b3b38)
+    );
+  }
+
+  .auth-submit:hover:not(:disabled) {
+    background: linear-gradient(
+      135deg,
+      var(--primary-hover),
+      color-mix(in oklab, var(--primary) 74%, #0b3b38)
+    );
+  }
+
+  /* Premium running conic border on hover (theme colors: primary + accent) */
+  .auth-submit::before {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 14px;
+    padding: 2.5px;
+    background: conic-gradient(
+      from var(--auth-angle),
+      var(--accent),
+      var(--primary),
+      color-mix(in oklab, var(--primary) 65%, #ffffff),
+      var(--accent),
+      color-mix(in oklab, var(--accent) 60%, #ffffff),
+      var(--primary),
+      var(--accent)
+    );
+    -webkit-mask:
+      linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    filter: drop-shadow(0 0 5px color-mix(in oklab, var(--primary) 45%, transparent));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+  }
+
+  .auth-submit:hover:not(:disabled)::before {
+    opacity: 1;
+    animation: auth-angle-spin 2.4s linear infinite;
+  }
+
+  .field-shake {
+    animation: field-shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+  }
+
+  /* Premium subtle hover for cards — gentle lift + soft shadow, no bounce */
+  .hover-lift {
+    transition:
+      transform 220ms cubic-bezier(0.16, 1, 0.3, 1),
+      box-shadow 220ms cubic-bezier(0.16, 1, 0.3, 1),
+      border-color 220ms ease;
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-3px);
+    border-color: var(--border-strong);
+    box-shadow:
+      0 1px 2px color-mix(in oklab, var(--fg) 5%, transparent),
+      0 12px 28px -10px color-mix(in oklab, var(--fg) 18%, transparent);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hover-lift {
+      transition: none;
+    }
+    .hover-lift:hover {
+      transform: none;
+    }
+  }
+
+  /* Landing / marketing surfaces (theme colors only) */
+  .brand-gradient-bg {
+    background: linear-gradient(135deg, var(--primary), color-mix(in oklab, var(--primary) 60%, #0b3b38));
+  }
+
+  .brand-gradient-bg:hover {
+    background: linear-gradient(
+      135deg,
+      var(--primary-hover),
+      color-mix(in oklab, var(--primary) 72%, #0b3b38)
+    );
+  }
+
+  .brand-text-gradient {
+    background: linear-gradient(115deg, var(--primary), var(--accent) 92%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .hero-grid {
+    background-image:
+      linear-gradient(to right, color-mix(in oklab, var(--fg) 6%, transparent) 1px, transparent 1px),
+      linear-gradient(to bottom, color-mix(in oklab, var(--fg) 6%, transparent) 1px, transparent 1px);
+    background-size: 46px 46px;
+    -webkit-mask-image: radial-gradient(72% 62% at 50% -6%, #000 28%, transparent 72%);
+    mask-image: radial-gradient(72% 62% at 50% -6%, #000 28%, transparent 72%);
+  }
+}
+
+@property --auth-angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes auth-angle-spin {
+  to {
+    --auth-angle: 360deg;
+  }
+}
+
+@keyframes field-shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-4px);
+  }
+  40% {
+    transform: translateX(4px);
+  }
+  60% {
+    transform: translateX(-3px);
+  }
+  80% {
+    transform: translateX(2px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .auth-submit:hover:not(:disabled)::before {
+    animation: none;
+  }
+
+  .field-shake {
+    animation: none;
   }
 }
 

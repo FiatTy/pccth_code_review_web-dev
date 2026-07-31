@@ -23,6 +23,7 @@ import {
   XCircle,
 } from 'lucide-react';
 import { PageHeader } from '@/components/common/PageHeader';
+import { SelectField } from '@/components/common/SelectField';
 import { SkeletonCard } from '@/components/common/Skeleton';
 import { useToast } from '@/lib/toast/toast-context';
 import { useDeleteRepository, useRepositories } from '@/features/repository/hooks/useRepositories';
@@ -72,7 +73,7 @@ function StatCard({
   return (
     <div className="rounded-xl border border-border bg-surface p-4">
       <div className="flex items-center justify-between">
-        <span className="font-mono text-[10px] font-medium uppercase tracking-[0.14em] text-faint">
+        <span className="text-[13px] font-medium uppercase tracking-[0.08em] text-muted">
           {label}
         </span>
         <span className={`flex h-7 w-7 items-center justify-center rounded-md ${tone}`}>
@@ -124,8 +125,8 @@ function RepoCard({
 
   return (
     <div
-      className={`group flex flex-col rounded-xl border bg-surface p-5 transition-colors ${
-        isScanning ? 'scan-card border-primary/40' : 'border-border hover:border-border-strong'
+      className={`hover-lift group flex flex-col rounded-2xl border bg-surface p-5 shadow-sm ${
+        isScanning ? 'scan-card border-primary/40' : 'border-border'
       }`}
     >
       <div className="flex items-start justify-between gap-3">
@@ -429,16 +430,17 @@ export function RepositoriesPage() {
               className="h-10 w-full rounded-lg border border-border bg-surface pl-9 pr-3 text-sm text-fg outline-none transition placeholder:text-faint focus:border-primary focus:ring-2 focus:ring-primary/25"
             />
           </div>
-          <select
+          <SelectField
             value={statusFilter}
-            onChange={(event) => setStatusFilter(event.target.value as StatusFilter)}
-            className="h-10 rounded-lg border border-border bg-surface px-3 text-sm text-fg outline-none transition focus:border-primary focus:ring-2 focus:ring-primary/25"
-          >
-            <option value="all">{t('REPOSITORY.STATUS_ALL')}</option>
-            <option value="Active">{t('REPOSITORY.STATUS_ACTIVE')}</option>
-            <option value="Scanning">{t('REPOSITORY.STATUS_SCANNING')}</option>
-            <option value="Error">{t('REPOSITORY.STATUS_ERROR')}</option>
-          </select>
+            onChange={(next) => setStatusFilter(next as StatusFilter)}
+            className="h-11 min-w-40 rounded-xl border border-border bg-surface px-3.5 text-sm text-fg shadow-sm outline-none transition hover:border-border-strong focus:border-primary focus:ring-4 focus:ring-primary/15"
+            options={[
+              { value: 'all', label: t('REPOSITORY.STATUS_ALL') },
+              { value: 'Active', label: t('REPOSITORY.STATUS_ACTIVE') },
+              { value: 'Scanning', label: t('REPOSITORY.STATUS_SCANNING') },
+              { value: 'Error', label: t('REPOSITORY.STATUS_ERROR') },
+            ]}
+          />
         </div>
       </div>
 

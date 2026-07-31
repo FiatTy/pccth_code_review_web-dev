@@ -5,6 +5,8 @@ import { useQueryClient } from '@tanstack/react-query';
 import { CalendarRange, FileText, FolderGit2, Layers, Loader2 } from 'lucide-react';
 import { PageHeader } from '@/components/common/PageHeader';
 import { FIELD_INPUT_CLASS, FormField } from '@/components/common/FormField';
+import { DateField } from '@/components/common/DateField';
+import { SelectField } from '@/components/common/SelectField';
 import { Switch } from '@/components/common/Switch';
 import { useAuth } from '@/lib/auth/auth-context';
 import { useToast } from '@/lib/toast/toast-context';
@@ -195,40 +197,36 @@ export function GenerateReportPage() {
               label={t('GENERATE_REPORT.SELECT_PROJECT')}
               error={submitted ? projectError : ''}
             >
-              <select
+              <SelectField
                 id="reportProject"
                 className={FIELD_INPUT_CLASS}
                 value={projectId}
-                onChange={(event) => setProjectId(event.target.value)}
-              >
-                <option value="">{t('GENERATE_REPORT.SELECT_PROJECT')}</option>
-                {repositories.map((repo) => (
-                  <option key={repo.projectId} value={repo.projectId}>
-                    {repo.name}
-                  </option>
-                ))}
-              </select>
+                onChange={setProjectId}
+                placeholder={t('GENERATE_REPORT.SELECT_PROJECT')}
+                options={repositories.map((repo) => ({
+                  value: repo.projectId,
+                  label: repo.name,
+                }))}
+              />
             </FormField>
           </SectionCard>
 
           <SectionCard eyebrow="02" title={t('GENERATE_REPORT.DATE_RANGE')} icon={CalendarRange}>
             <div className="grid gap-4 sm:grid-cols-2">
               <FormField id="dateFrom" label={t('SCAN.START_DATE')}>
-                <input
+                <DateField
                   id="dateFrom"
-                  type="date"
                   className={FIELD_INPUT_CLASS}
                   value={dateFrom}
-                  onChange={(event) => setDateFrom(event.target.value)}
+                  onChange={setDateFrom}
                 />
               </FormField>
               <FormField id="dateTo" label={t('SCAN.END_DATE')}>
-                <input
+                <DateField
                   id="dateTo"
-                  type="date"
                   className={FIELD_INPUT_CLASS}
                   value={dateTo}
-                  onChange={(event) => setDateTo(event.target.value)}
+                  onChange={setDateTo}
                 />
               </FormField>
             </div>

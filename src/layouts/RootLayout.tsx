@@ -159,12 +159,12 @@ export function RootLayout() {
       ) : null}
 
       <aside
-        className={`fixed inset-y-0 left-0 z-40 flex w-64 shrink-0 flex-col border-r border-border bg-surface transition-transform duration-200 lg:sticky lg:top-0 lg:h-screen lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-40 flex w-64 shrink-0 flex-col border-r border-border bg-surface/60 backdrop-blur-xl transition-transform duration-200 lg:sticky lg:top-0 lg:h-screen lg:translate-x-0 ${
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        <div className="flex h-14 items-center justify-between border-b border-border px-5">
-          <BrandMark size={28} />
+        <div className="flex h-16 items-center justify-between border-b border-border/70 px-4">
+          <BrandMark size={30} />
           <button
             type="button"
             aria-label={t('NAV.CLOSE_MENU')}
@@ -195,9 +195,9 @@ export function RootLayout() {
                         to={item.to}
                         onClick={() => setMobileOpen(false)}
                         className={({ isActive }) =>
-                          `group relative flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors ${
+                          `group relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm transition-all duration-200 ${
                             isActive
-                              ? 'bg-primary-subtle font-medium text-primary'
+                              ? 'bg-primary/10 font-semibold text-primary'
                               : 'text-muted hover:bg-surface-2 hover:text-fg'
                           }`
                         }
@@ -205,11 +205,18 @@ export function RootLayout() {
                         {({ isActive }) => (
                           <>
                             <span
-                              className={`absolute left-0 top-1/2 h-5 w-0.5 -translate-y-1/2 rounded-full bg-primary transition-opacity ${
-                                isActive ? 'opacity-100' : 'opacity-0'
+                              className={`absolute left-0 top-1/2 h-5 w-[3px] -translate-y-1/2 rounded-full bg-primary transition-all duration-200 ${
+                                isActive
+                                  ? 'opacity-100 shadow-[0_0_8px] shadow-primary/60'
+                                  : 'opacity-0'
                               }`}
                             />
-                            <Icon size={17} />
+                            <Icon
+                              size={18}
+                              className={`shrink-0 transition-colors ${
+                                isActive ? 'text-primary' : 'text-faint group-hover:text-fg'
+                              }`}
+                            />
                             <span>{t(item.labelKey, item.fallback)}</span>
                           </>
                         )}
@@ -224,11 +231,11 @@ export function RootLayout() {
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-20 flex h-14 items-center gap-3 border-b border-border bg-surface/80 px-4 backdrop-blur">
+        <header className="sticky top-0 z-20 flex h-16 items-center gap-2.5 border-b border-border/60 bg-bg/70 px-4 backdrop-blur-xl lg:px-6">
           <button
             type="button"
             aria-label={t('NAV.OPEN_MENU')}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-border text-muted transition-colors hover:text-fg lg:hidden"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border bg-surface/60 text-muted shadow-sm backdrop-blur transition-all hover:border-border-strong hover:text-fg lg:hidden"
             onClick={() => setMobileOpen(true)}
           >
             <Menu size={18} />

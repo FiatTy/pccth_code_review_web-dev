@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Loader2, X } from 'lucide-react';
 import { FIELD_INPUT_CLASS, FormField } from '@/components/common/FormField';
+import { SelectField } from '@/components/common/SelectField';
 import { UserSelect } from '@/features/user/components/UserSelect';
 import { useUpdateIssue } from '@/features/issue/hooks/useIssue';
 import type { Issue } from '@/features/issue/types';
@@ -103,18 +104,16 @@ export function AssignIssueModal({ issue, mode, onClose, onSaved }: AssignIssueM
             <UserSelect id="assignedTo" value={assignedTo} onChange={setAssignedTo} />
           ) : (
             <FormField id="issueStatus" label={t('ISSUE_MODAL.STATUS')} error={error}>
-              <select
+              <SelectField
                 id="issueStatus"
                 className={FIELD_INPUT_CLASS}
                 value={status}
-                onChange={(event) => setStatus(event.target.value)}
-              >
-                {STATUS_OPTIONS.map((option) => (
-                  <option key={option.value} value={option.value}>
-                    {t(option.labelKey)}
-                  </option>
-                ))}
-              </select>
+                onChange={setStatus}
+                options={STATUS_OPTIONS.map((option) => ({
+                  value: option.value,
+                  label: t(option.labelKey),
+                }))}
+              />
             </FormField>
           )}
 
