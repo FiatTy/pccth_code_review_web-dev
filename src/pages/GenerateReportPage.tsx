@@ -93,6 +93,20 @@ export function GenerateReportPage() {
   const [sections, setSections] = useState<ReportSections>(DEFAULT_SECTIONS);
   const [submitted, setSubmitted] = useState(false);
 
+  function handleDateFrom(next: string) {
+    setDateFrom(next);
+    if (dateTo && next && next > dateTo) {
+      setDateTo(next);
+    }
+  }
+
+  function handleDateTo(next: string) {
+    setDateTo(next);
+    if (dateFrom && next && next < dateFrom) {
+      setDateFrom(next);
+    }
+  }
+
   const repositories = useMemo(() => repositoriesQuery.data ?? [], [repositoriesQuery.data]);
   const selectedProject = repositories.find((repo) => repo.projectId === projectId);
 
@@ -123,8 +137,8 @@ export function GenerateReportPage() {
 
   const projectError = projectId ? '' : t('GENERATE_REPORT.PROJECT_REQUIRED');
   const noScanError =
-    !projectError && !dateError && scansInRange.length === 0
-      ? t('GENERATE_REPORT.NO_SCAN_FOUND')
+    projectId && dateFrom && dateTo && scansInRange.length === 0
+      ? t('GENERATE_REPORT.NO_SCANS_IN_RANGE')
       : '';
 
   const isValid = !projectError && !dateError && !noScanError;
@@ -218,7 +232,8 @@ export function GenerateReportPage() {
                   id="dateFrom"
                   className={FIELD_INPUT_CLASS}
                   value={dateFrom}
-                  onChange={setDateFrom}
+                  maxDate={dateTo || undefined}
+                  onChange={handleDateFrom}
                 />
               </FormField>
               <FormField id="dateTo" label={t('SCAN.END_DATE')}>
@@ -226,7 +241,8 @@ export function GenerateReportPage() {
                   id="dateTo"
                   className={FIELD_INPUT_CLASS}
                   value={dateTo}
-                  onChange={setDateTo}
+                  minDate={dateFrom || undefined}
+                  onChange={handleDateTo}
                 />
               </FormField>
             </div>

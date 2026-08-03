@@ -9,6 +9,8 @@ interface DateFieldProps {
   id?: string;
   className?: string;
   placeholder?: string;
+  minDate?: string;
+  maxDate?: string;
 }
 
 function pad(n: number): string {
@@ -42,7 +44,15 @@ function sameDay(a: Date, b: Date): boolean {
  * so the stored value stays `yyyy-mm-dd` for the backend. Drop-in replacement
  * for `<input type="date">` — Chrome ignores `lang` on native pickers.
  */
-export function DateField({ value, onChange, id, className = '', placeholder }: DateFieldProps) {
+export function DateField({
+  value,
+  onChange,
+  id,
+  className = '',
+  placeholder,
+  minDate,
+  maxDate,
+}: DateFieldProps) {
   const { t, i18n } = useTranslation();
   const locale = i18n.resolvedLanguage === 'th' ? 'th' : 'en';
 
@@ -84,7 +94,6 @@ export function DateField({ value, onChange, id, className = '', placeholder }: 
 
   const weekdays = useMemo(() => {
     const formatter = new Intl.DateTimeFormat(locale, { weekday: 'short' });
-    // 2023-01-01 is a Sunday — build Sun..Sat labels.
     return Array.from({ length: 7 }, (_, i) => formatter.format(new Date(2023, 0, 1 + i)));
   }, [locale]);
 
@@ -156,29 +165,43 @@ export function DateField({ value, onChange, id, className = '', placeholder }: 
                 {label}
               </div>
             ))}
-            {cells.map((date, i) =>
-              date ? (
+            {cells.map((date, i) => {
+              if (!date) {
+                return <div key={i} />;
+              }
+              const iso = toISO(date);
+              const isDisabled = Boolean(
+                (minDate && iso < minDate) || (maxDate && iso > maxDate),
+              );
+              const isSelected = selected && sameDay(date, selected);
+              const isToday = sameDay(date, today);
+
+              return (
                 <button
                   key={i}
                   type="button"
+                  disabled={isDisabled}
                   onClick={() => {
-                    onChange(toISO(date));
+                    if (isDisabled) {
+                      return;
+                    }
+                    onChange(iso);
                     setOpen(false);
                   }}
                   className={`h-9 rounded-lg text-sm transition-colors ${
-                    selected && sameDay(date, selected)
-                      ? 'bg-primary font-semibold text-primary-fg shadow-sm shadow-primary/30'
-                      : sameDay(date, today)
-                        ? 'font-semibold text-primary ring-1 ring-inset ring-primary/40 hover:bg-surface-2'
-                        : 'text-fg hover:bg-surface-2'
+                    isDisabled
+                      ? 'cursor-not-allowed opacity-25 text-faint'
+                      : isSelected
+                        ? 'bg-primary font-semibold text-primary-fg shadow-sm shadow-primary/30'
+                        : isToday
+                          ? 'font-semibold text-primary ring-1 ring-inset ring-primary/40 hover:bg-surface-2'
+                          : 'text-fg hover:bg-surface-2'
                   }`}
                 >
                   {date.getDate()}
                 </button>
-              ) : (
-                <div key={i} />
-              ),
-            )}
+              );
+            })}
           </div>
         </div>
       ) : null}

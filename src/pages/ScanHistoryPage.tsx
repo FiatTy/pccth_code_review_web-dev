@@ -56,11 +56,17 @@ function withinDate(value: string, start: string, end: string): boolean {
   if (Number.isNaN(time)) {
     return false;
   }
-  if (start && time < new Date(start).getTime()) {
-    return false;
+  if (start) {
+    const startTime = new Date(`${start}T00:00:00`).getTime();
+    if (time < startTime) {
+      return false;
+    }
   }
-  if (end && time > new Date(end).getTime() + 24 * 60 * 60 * 1000) {
-    return false;
+  if (end) {
+    const endTime = new Date(`${end}T23:59:59.999`).getTime();
+    if (time > endTime) {
+      return false;
+    }
   }
   return true;
 }
@@ -101,6 +107,22 @@ export function ScanHistoryPage() {
   const [page, setPage] = useState(1);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [showCompare, setShowCompare] = useState(false);
+
+  function handleStartDateChange(next: string) {
+    setStartDate(next);
+    if (endDate && next && next > endDate) {
+      setEndDate(next);
+    }
+    setPage(1);
+  }
+
+  function handleEndDateChange(next: string) {
+    setEndDate(next);
+    if (startDate && next && next < startDate) {
+      setStartDate(next);
+    }
+    setPage(1);
+  }
 
   const scans = useMemo(() => data ?? [], [data]);
 
@@ -200,10 +222,8 @@ export function ScanHistoryPage() {
           </span>
           <DateField
             value={startDate}
-            onChange={(next) => {
-              setStartDate(next);
-              setPage(1);
-            }}
+            maxDate={endDate || undefined}
+            onChange={handleStartDateChange}
             className={selectClass}
           />
         </label>
@@ -214,10 +234,8 @@ export function ScanHistoryPage() {
           </span>
           <DateField
             value={endDate}
-            onChange={(next) => {
-              setEndDate(next);
-              setPage(1);
-            }}
+            minDate={startDate || undefined}
+            onChange={handleEndDateChange}
             className={selectClass}
           />
         </label>
