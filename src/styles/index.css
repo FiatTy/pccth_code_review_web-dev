@@ -364,6 +364,13 @@
     background: var(--primary);
   }
 
+  /* Distinct table headers — tinted background + strong divider so the header
+     row stands out from the body instead of blending in. */
+  thead th {
+    background-color: color-mix(in oklab, var(--primary) 7%, var(--surface-2));
+    border-bottom: 1.5px solid var(--border-strong);
+  }
+
   /* Premium subtle hover for cards — gentle lift + soft shadow, no bounce */
   .hover-lift {
     transition:
