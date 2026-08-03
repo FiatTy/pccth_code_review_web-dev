@@ -159,11 +159,11 @@ export function RootLayout() {
       ) : null}
 
       <aside
-        className={`fixed inset-y-0 left-0 z-40 flex w-64 shrink-0 flex-col border-r border-border bg-surface/60 backdrop-blur-xl transition-transform duration-200 lg:sticky lg:top-0 lg:h-screen lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-40 flex w-64 shrink-0 flex-col bg-surface/60 backdrop-blur-xl transition-transform duration-200 lg:sticky lg:top-0 lg:h-screen lg:translate-x-0 ${
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        <div className="flex h-16 items-center justify-between border-b border-border/70 px-4">
+        <div className="flex h-16 items-center justify-between border-b border-border/60 px-4">
           <BrandMark size={30} />
           <button
             type="button"
@@ -175,7 +175,7 @@ export function RootLayout() {
           </button>
         </div>
 
-        <nav className="scroll-slim flex-1 space-y-6 overflow-y-auto px-3 py-5">
+        <nav className="scroll-slim flex-1 space-y-6 overflow-y-auto border-r border-border px-3 py-5">
           {NAV_SECTIONS.map((section) => {
             const items = section.items.filter((item) => !item.adminOnly || isAdmin);
             if (items.length === 0) {
@@ -231,7 +231,7 @@ export function RootLayout() {
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-20 flex h-16 items-center gap-2.5 border-b border-border/60 bg-bg/70 px-4 backdrop-blur-xl lg:px-6">
+        <header className="sticky top-0 z-20 flex h-16 items-center gap-2.5 border-b border-border/60 bg-surface/60 px-4 backdrop-blur-xl lg:px-6">
           <button
             type="button"
             aria-label={t('NAV.OPEN_MENU')}

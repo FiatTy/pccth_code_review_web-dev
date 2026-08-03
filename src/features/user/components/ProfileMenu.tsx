@@ -79,15 +79,15 @@ export function ProfileMenu() {
         aria-label={t('ACCOUNT.MENU')}
         aria-expanded={isOpen}
         onClick={() => setIsOpen((open) => !open)}
-        className="flex items-center gap-2 rounded-md pl-1 transition-colors hover:bg-surface-2"
+        className="group flex items-center gap-2.5 rounded-full border border-border bg-surface/60 py-1 pl-3.5 pr-1 shadow-sm backdrop-blur transition-all duration-200 hover:border-border-strong hover:shadow-md active:scale-[0.98]"
       >
-        <div className="hidden py-1 pl-1 text-right leading-tight sm:block">
-          <div className="text-xs font-medium text-fg">{user?.username}</div>
+        <div className="hidden text-right leading-tight sm:block">
+          <div className="text-xs font-semibold text-fg">{user?.username}</div>
           <div className="font-mono text-[10px] uppercase tracking-wide text-faint">
             {user?.role}
           </div>
         </div>
-        <div className="relative flex h-8 w-8 items-center justify-center rounded-full bg-primary-subtle text-sm font-semibold text-primary">
+        <div className="brand-gradient-bg relative flex h-8 w-8 items-center justify-center rounded-full text-sm font-semibold text-primary-fg shadow-sm shadow-primary/30 transition-transform duration-200 group-hover:scale-105">
           {initial}
           {isVerified ? (
             <BadgeCheck
