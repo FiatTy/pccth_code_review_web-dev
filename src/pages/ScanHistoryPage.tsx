@@ -3,9 +3,10 @@ import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import {
   AlertTriangle,
-  ChevronLeft,
+  ChevronDown,
   ChevronRight,
   FileBarChart,
+  Folder,
   GitCompare,
   Loader2,
   RefreshCw,
@@ -18,9 +19,10 @@ import { SelectField } from '@/components/common/SelectField';
 import { SkeletonTable } from '@/components/common/Skeleton';
 import { ScanCompareModal } from '@/features/scan/components/ScanCompareModal';
 import { useScanHistory } from '@/features/scan/hooks/useScanHistory';
+import { useRepositories } from '@/features/repository/hooks/useRepositories';
+import { parseGitUrl } from '@/lib/git-utils';
 import type { Scan } from '@/features/scan/types';
 
-const PAGE_SIZE = 8;
 type StatusFilter = 'all' | 'SUCCESS' | 'FAILED' | 'PENDING';
 
 function formatDateTime(value?: string): string {
@@ -99,21 +101,30 @@ function GradeChip({ scan }: { scan: Scan }) {
 export function ScanHistoryPage() {
   const { t } = useTranslation();
   const { data, isPending, isError, refetch, isFetching } = useScanHistory();
+  const { data: repositories } = useRepositories();
 
   const [project, setProject] = useState('all');
+  const [folderFilter, setFolderFilter] = useState('all');
   const [status, setStatus] = useState<StatusFilter>('all');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
-  const [page, setPage] = useState(1);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [showCompare, setShowCompare] = useState(false);
+
+  const [collapsedFolders, setCollapsedFolders] = useState<Record<string, boolean>>({});
+
+  function toggleFolder(folderName: string) {
+    setCollapsedFolders((prev) => ({
+      ...prev,
+      [folderName]: !prev[folderName],
+    }));
+  }
 
   function handleStartDateChange(next: string) {
     setStartDate(next);
     if (endDate && next && next > endDate) {
       setEndDate(next);
     }
-    setPage(1);
   }
 
   function handleEndDateChange(next: string) {
@@ -121,8 +132,38 @@ export function ScanHistoryPage() {
     if (startDate && next && next < startDate) {
       setStartDate(next);
     }
-    setPage(1);
   }
+
+  const repoFolderMap = useMemo(() => {
+    const map = new Map<string, string>();
+    (repositories ?? []).forEach((repo) => {
+      const { folder } = parseGitUrl(repo.repositoryUrl);
+      if (repo.projectId) map.set(repo.projectId, folder);
+      if (repo.name) map.set(repo.name, folder);
+    });
+    return map;
+  }, [repositories]);
+
+  const getFolderForScan = (scan: Scan): string => {
+    if (scan.repositoryUrl) {
+      const { folder } = parseGitUrl(scan.repositoryUrl);
+      if (folder && folder !== 'General') return folder;
+    }
+    if (scan.projectId && repoFolderMap.has(scan.projectId)) {
+      return repoFolderMap.get(scan.projectId)!;
+    }
+    if (scan.projectName && repoFolderMap.has(scan.projectName)) {
+      return repoFolderMap.get(scan.projectName)!;
+    }
+    if (scan.projectName && repoFolderMap.has(scan.projectName.toLowerCase())) {
+      return repoFolderMap.get(scan.projectName.toLowerCase())!;
+    }
+    const parsed = parseGitUrl(scan.projectName);
+    if (parsed.folder && parsed.folder !== 'General') {
+      return parsed.folder;
+    }
+    return 'General';
+  };
 
   const scans = useMemo(() => data ?? [], [data]);
 
@@ -131,20 +172,37 @@ export function ScanHistoryPage() {
     [scans],
   );
 
+  const availableFolders = useMemo(() => {
+    const set = new Set<string>();
+    scans.forEach((scan) => {
+      const folder = getFolderForScan(scan);
+      if (folder) set.add(folder);
+    });
+    return Array.from(set).sort();
+  }, [scans, repoFolderMap]);
+
   const filtered = useMemo(
     () =>
       scans.filter((scan) => {
         if (project !== 'all' && scan.projectName !== project) return false;
+        if (folderFilter !== 'all' && getFolderForScan(scan) !== folderFilter) return false;
         if (status !== 'all' && scan.status !== status) return false;
         if (!withinDate(scan.startedAt, startDate, endDate)) return false;
         return true;
       }),
-    [scans, project, status, startDate, endDate],
+    [scans, project, folderFilter, status, startDate, endDate, repoFolderMap],
   );
 
-  const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
-  const currentPage = Math.min(page, totalPages);
-  const pageRows = filtered.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+  const groupedByFolder = useMemo(() => {
+    const groups = new Map<string, Scan[]>();
+    filtered.forEach((scan) => {
+      const folder = getFolderForScan(scan);
+      const existing = groups.get(folder) ?? [];
+      existing.push(scan);
+      groups.set(folder, existing);
+    });
+    return Array.from(groups.entries()).sort(([a], [b]) => a.localeCompare(b));
+  }, [filtered, repoFolderMap]);
 
   const selectedScans = useMemo(
     () => scans.filter((scan) => selectedIds.includes(scan.id)),
@@ -153,11 +211,11 @@ export function ScanHistoryPage() {
 
   function resetFilters() {
     setProject('all');
+    setFolderFilter('all');
     setStatus('all');
     setStartDate('');
     setEndDate('');
     setSelectedIds([]);
-    setPage(1);
   }
 
   function toggleSelected(scanId: string) {
@@ -178,16 +236,30 @@ export function ScanHistoryPage() {
       <PageHeader title={t('SCAN.TITLE')} subtitle={t('SCAN.SUBTITLE')} />
 
       <div className="mb-6 flex flex-wrap items-end gap-3 rounded-2xl border border-border bg-surface p-5 shadow-sm">
+        {availableFolders.length > 0 ? (
+          <label className="flex flex-col gap-1">
+            <span className="font-mono text-[10px] uppercase tracking-wide text-faint">
+              {t('SCAN.FOLDER')}
+            </span>
+            <SelectField
+              value={folderFilter}
+              onChange={(next) => setFolderFilter(next)}
+              className={`${selectClass} min-w-40`}
+              options={[
+                { value: 'all', label: `📁 ${t('SCAN.ALL_FOLDERS')}` },
+                ...availableFolders.map((f) => ({ value: f, label: `📁 ${f}` })),
+              ]}
+            />
+          </label>
+        ) : null}
+
         <label className="flex flex-col gap-1">
           <span className="font-mono text-[10px] uppercase tracking-wide text-faint">
             {t('SCAN.PROJECT')}
           </span>
           <SelectField
             value={project}
-            onChange={(next) => {
-              setProject(next);
-              setPage(1);
-            }}
+            onChange={(next) => setProject(next)}
             className={`${selectClass} min-w-44`}
             options={[
               { value: 'all', label: t('SCAN.ALL_PROJECTS') },
@@ -202,10 +274,7 @@ export function ScanHistoryPage() {
           </span>
           <SelectField
             value={status}
-            onChange={(next) => {
-              setStatus(next as StatusFilter);
-              setPage(1);
-            }}
+            onChange={(next) => setStatus(next as StatusFilter)}
             className={`${selectClass} min-w-40`}
             options={[
               { value: 'all', label: t('SCAN.ALL') },
@@ -295,108 +364,176 @@ export function ScanHistoryPage() {
           </p>
         </div>
       ) : (
-        <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-sm">
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[720px] text-sm">
-              <thead>
-                <tr className="border-b border-border bg-surface-2/50 text-left">
-                  <th className="w-10 px-4 py-3">
-                    <span className="sr-only">{t('SCAN.COL_SELECT')}</span>
-                  </th>
-                  <th className="px-4 py-3 font-mono text-xs font-semibold uppercase tracking-wide text-muted">
-                    {t('SCAN.COL_DATE_TIME')}
-                  </th>
-                  <th className="px-4 py-3 font-mono text-xs font-semibold uppercase tracking-wide text-muted">
-                    {t('SCAN.COL_PROJECT')}
-                  </th>
-                  <th className="px-4 py-3 font-mono text-xs font-semibold uppercase tracking-wide text-muted">
-                    {t('SCAN.COL_GRADE')}
-                  </th>
-                  <th className="px-4 py-3 text-right font-mono text-xs font-semibold uppercase tracking-wide text-muted">
-                    {t('SCAN.COL_ISSUES')}
-                  </th>
-                  <th className="px-4 py-3 text-center font-mono text-xs font-semibold uppercase tracking-wide text-muted">
-                    {t('SCAN.COL_LOG')}
-                  </th>
-                  <th className="px-4 py-3 text-center font-mono text-xs font-semibold uppercase tracking-wide text-muted">
-                    {t('SCAN.COL_RESULT')}
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {pageRows.map((scan) => (
-                  <tr
-                    key={scan.id}
-                    className="border-b border-border last:border-0 transition-colors hover:bg-surface-2/40"
-                  >
-                    <td className="px-4 py-3">
-                      <input
-                        type="checkbox"
-                        aria-label={`${t('SCAN.COL_SELECT')} ${scan.projectName}`}
-                        checked={selectedIds.includes(scan.id)}
-                        disabled={!selectedIds.includes(scan.id) && selectedIds.length >= 3}
-                        onChange={() => toggleSelected(scan.id)}
-                        className="h-4 w-4 cursor-pointer accent-[var(--color-primary)] disabled:cursor-not-allowed disabled:opacity-40"
-                      />
-                    </td>
-                    <td className="whitespace-nowrap px-4 py-3 text-muted">
-                      {formatDateTime(scan.startedAt)}
-                    </td>
-                    <td className="px-4 py-3 font-medium text-fg">{scan.projectName || '—'}</td>
-                    <td className="px-4 py-3">
-                      <GradeChip scan={scan} />
-                    </td>
-                    <td className="px-4 py-3 text-right font-medium text-fg">
-                      {issuesCount(scan)}
-                    </td>
-                    <td className="px-4 py-3 text-center">
-                      <Link
-                        to={`/logviewer/${scan.id}`}
-                        title={t('SCAN.VIEW_LOG_TOOLTIP')}
-                        aria-label={t('SCAN.VIEW_LOG_TOOLTIP')}
-                        className="inline-flex h-8 w-8 items-center justify-center rounded-md text-muted transition-colors hover:bg-surface-2 hover:text-fg"
-                      >
-                        <ScrollText size={15} />
-                      </Link>
-                    </td>
-                    <td className="px-4 py-3 text-center">
-                      <Link
-                        to={`/scanresult/${scan.id}`}
-                        title={t('SCAN.VIEW_RESULT_TOOLTIP')}
-                        aria-label={t('SCAN.VIEW_RESULT_TOOLTIP')}
-                        className="inline-flex h-8 w-8 items-center justify-center rounded-md text-primary transition-colors hover:bg-primary-subtle"
-                      >
-                        <FileBarChart size={15} />
-                      </Link>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-
-          <div className="flex items-center justify-between border-t border-border px-4 py-3">
-            <p className="text-xs text-muted">
-              {t('SCAN.PAGE_INFO', { current: currentPage, total: totalPages })}
-            </p>
-            <div className="flex items-center gap-1">
+        <div className="space-y-3">
+          <div className="flex items-center justify-between px-1">
+            <span className="text-xs font-medium text-muted">
+              {t('REPOSITORY.GROUP_BY_FOLDER')} ({groupedByFolder.length} {t('REPOSITORY.FOLDER')})
+            </span>
+            <div className="flex items-center gap-3">
               <button
                 type="button"
-                onClick={() => setPage((value) => Math.max(1, value - 1))}
-                disabled={currentPage <= 1}
-                className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-border text-muted transition-colors hover:bg-surface-2 hover:text-fg disabled:cursor-not-allowed disabled:opacity-40"
+                onClick={() => setCollapsedFolders({})}
+                className="text-xs font-medium text-muted hover:text-primary transition-colors"
               >
-                <ChevronLeft size={16} />
+                {t('REPOSITORY.EXPAND_ALL')}
               </button>
+              <span className="text-faint">•</span>
               <button
                 type="button"
-                onClick={() => setPage((value) => Math.min(totalPages, value + 1))}
-                disabled={currentPage >= totalPages}
-                className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-border text-muted transition-colors hover:bg-surface-2 hover:text-fg disabled:cursor-not-allowed disabled:opacity-40"
+                onClick={() => {
+                  const next: Record<string, boolean> = {};
+                  availableFolders.forEach((f) => {
+                    next[f] = true;
+                  });
+                  setCollapsedFolders(next);
+                }}
+                className="text-xs font-medium text-muted hover:text-primary transition-colors"
               >
-                <ChevronRight size={16} />
+                {t('REPOSITORY.COLLAPSE_ALL')}
               </button>
             </div>
+          </div>
+
+          <div className="overflow-hidden rounded-xl border border-border bg-surface shadow-sm divide-y divide-border/60">
+            {groupedByFolder.map(([folderName, folderScans]) => {
+              const isCollapsed = Boolean(collapsedFolders[folderName]);
+              const passedCount = folderScans.filter(
+                (s) => String(s.qualityGate ?? '').trim().toUpperCase() === 'OK',
+              ).length;
+              const failedCount = folderScans.length - passedCount;
+
+              return (
+                <div key={folderName} className="transition-colors">
+                  <div
+                    onClick={() => toggleFolder(folderName)}
+                    role="button"
+                    tabIndex={0}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        toggleFolder(folderName);
+                      }
+                    }}
+                    className={`flex cursor-pointer items-center justify-between select-none px-4 py-3.5 transition-colors ${
+                      !isCollapsed ? 'bg-surface-2/40' : 'hover:bg-surface-2/50'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <span className="text-muted shrink-0 transition-transform">
+                        {isCollapsed ? <ChevronRight size={15} /> : <ChevronDown size={15} />}
+                      </span>
+                      <Folder size={17} className="text-muted shrink-0" />
+                      <span className="truncate text-sm font-semibold text-fg">{folderName}</span>
+                      <span className="text-xs text-muted font-normal shrink-0">
+                        {folderScans.length} {folderScans.length === 1 ? 'scan' : 'scans'}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-3 shrink-0 text-xs">
+                      {passedCount > 0 && (
+                        <span className="inline-flex items-center gap-1.5 text-[12px] font-medium text-success">
+                          <span className="h-2 w-2 rounded-full bg-success" />
+                          {passedCount} passed
+                        </span>
+                      )}
+                      {failedCount > 0 && (
+                        <span className="inline-flex items-center gap-1.5 text-[12px] font-medium text-danger">
+                          <span className="h-2 w-2 rounded-full bg-danger" />
+                          {failedCount} failed
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {!isCollapsed && (
+                    <div className="border-t border-border/40 bg-surface-2/20">
+                      <div className="overflow-x-auto max-h-[225px] overflow-y-auto">
+                        <table className="w-full min-w-[720px] text-sm">
+                          <thead className="sticky top-0 z-10 bg-surface-2/95 backdrop-blur-xs shadow-xs">
+                            <tr className="border-b border-border/40 text-left">
+                              <th className="w-10 px-4 py-2.5">
+                                <span className="sr-only">{t('SCAN.COL_SELECT')}</span>
+                              </th>
+                              <th className="px-4 py-2.5 font-mono text-xs font-semibold uppercase tracking-wide text-muted">
+                                {t('SCAN.COL_DATE_TIME')}
+                              </th>
+                              <th className="px-4 py-2.5 font-mono text-xs font-semibold uppercase tracking-wide text-muted">
+                                {t('SCAN.COL_PROJECT')}
+                              </th>
+                              <th className="px-4 py-2.5 font-mono text-xs font-semibold uppercase tracking-wide text-muted">
+                                {t('SCAN.COL_GRADE')}
+                              </th>
+                              <th className="px-4 py-2.5 text-right font-mono text-xs font-semibold uppercase tracking-wide text-muted">
+                                {t('SCAN.COL_ISSUES')}
+                              </th>
+                              <th className="px-4 py-2.5 text-center font-mono text-xs font-semibold uppercase tracking-wide text-muted">
+                                {t('SCAN.COL_LOG')}
+                              </th>
+                              <th className="px-4 py-2.5 text-center font-mono text-xs font-semibold uppercase tracking-wide text-muted">
+                                {t('SCAN.COL_RESULT')}
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-border/30">
+                            {folderScans.map((scan) => (
+                              <tr
+                                key={scan.id}
+                                className="transition-colors hover:bg-surface-2/60"
+                              >
+                                <td className="px-4 py-2.5">
+                                  <input
+                                    type="checkbox"
+                                    aria-label={`${t('SCAN.COL_SELECT')} ${scan.projectName}`}
+                                    checked={selectedIds.includes(scan.id)}
+                                    disabled={
+                                      !selectedIds.includes(scan.id) && selectedIds.length >= 3
+                                    }
+                                    onChange={() => toggleSelected(scan.id)}
+                                    className="h-4 w-4 cursor-pointer accent-[var(--color-primary)] disabled:cursor-not-allowed disabled:opacity-40"
+                                  />
+                                </td>
+                                <td className="whitespace-nowrap px-4 py-2.5 text-muted">
+                                  {formatDateTime(scan.startedAt)}
+                                </td>
+                                <td className="px-4 py-2.5 font-semibold text-fg">
+                                  {scan.projectName || '—'}
+                                </td>
+                                <td className="px-4 py-2.5">
+                                  <GradeChip scan={scan} />
+                                </td>
+                                <td className="px-4 py-2.5 text-right font-medium text-fg">
+                                  {issuesCount(scan)}
+                                </td>
+                                <td className="px-4 py-2.5 text-center">
+                                  <Link
+                                    to={`/logviewer/${scan.id}`}
+                                    title={t('SCAN.VIEW_LOG_TOOLTIP')}
+                                    aria-label={t('SCAN.VIEW_LOG_TOOLTIP')}
+                                    className="inline-flex h-7 w-7 items-center justify-center rounded-md text-muted transition-colors hover:bg-surface-2 hover:text-fg"
+                                  >
+                                    <ScrollText size={14} />
+                                  </Link>
+                                </td>
+                                <td className="px-4 py-2.5 text-center">
+                                  <Link
+                                    to={`/scanresult/${scan.id}`}
+                                    title={t('SCAN.VIEW_RESULT_TOOLTIP')}
+                                    aria-label={t('SCAN.VIEW_RESULT_TOOLTIP')}
+                                    className="inline-flex h-7 w-7 items-center justify-center rounded-md text-primary transition-colors hover:bg-primary-subtle"
+                                  >
+                                    <FileBarChart size={14} />
+                                  </Link>
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
       )}

@@ -667,7 +667,7 @@ export function RepositoriesPage() {
                   </div>
 
                   {!isCollapsed && (
-                    <div className="divide-y divide-border/40 bg-surface-2/20 border-t border-border/40">
+                    <div className="max-h-[235px] overflow-y-auto divide-y divide-border/40 bg-surface-2/20 border-t border-border/40">
                       {repos.map((repo) => {
                         const lastScanTime = formatDateTime(repo.lastScan);
                         const isScanning = repo.status === 'Scanning';

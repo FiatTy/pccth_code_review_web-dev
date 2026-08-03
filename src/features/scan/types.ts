@@ -21,6 +21,7 @@ export interface Scan {
   projectId?: string;
   projectName: string;
   projectType?: string;
+  repositoryUrl?: string;
   status: ScanStatus;
   startedAt: string;
   completedAt?: string;
