@@ -9,6 +9,7 @@ import {
   FolderGit2,
   Gauge,
   Layers,
+  LayoutGrid,
   Loader2,
   Play,
   Plus,
@@ -30,6 +31,7 @@ import { useDeleteRepository, useRepositories } from '@/features/repository/hook
 import { useStartScan } from '@/features/repository/hooks/useRepository';
 import { useSonarQubeConfig } from '@/features/setting/hooks/useSonarQubeConfig';
 import type { ProjectType, RepoStatus, Repository } from '@/features/repository/types';
+import { parseGitUrl } from '@/lib/git-utils';
 
 const SCAN_BRANCH = 'dev';
 
@@ -122,6 +124,7 @@ function RepoCard({
   const coverage = repo.metrics?.coverage;
   const qualityPassed = repo.qualityGate === 'Passed';
   const isScanning = repo.status === 'Scanning';
+  const parsedGit = useMemo(() => parseGitUrl(repo.repositoryUrl), [repo.repositoryUrl]);
 
   return (
     <div
@@ -153,6 +156,10 @@ function RepoCard({
       </div>
 
       <div className="mt-3 flex flex-wrap items-center gap-2">
+        <span className="inline-flex items-center gap-1 rounded-md bg-primary-subtle/80 px-2 py-0.5 font-mono text-[10px] font-medium text-primary">
+          <FolderGit2 size={11} />
+          {parsedGit.folder}
+        </span>
         {repo.projectTypeLabel ? (
           <span className="rounded-md bg-surface-2 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wide text-muted">
             {repo.projectTypeLabel}
@@ -271,6 +278,8 @@ export function RepositoriesPage() {
 
   const [typeTab, setTypeTab] = useState<TypeTab>('all');
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
+  const [folderFilter, setFolderFilter] = useState<string>('all');
+  const [viewMode, setViewMode] = useState<'grid' | 'folder'>('grid');
   const [search, setSearch] = useState('');
   const [pendingDelete, setPendingDelete] = useState<Repository | null>(null);
   const [scanningId, setScanningId] = useState<string | null>(null);
@@ -326,6 +335,17 @@ export function RepositoriesPage() {
     [list],
   );
 
+  const availableFolders = useMemo(() => {
+    const set = new Set<string>();
+    for (const repo of list) {
+      const folder = parseGitUrl(repo.repositoryUrl).folder;
+      if (folder) {
+        set.add(folder);
+      }
+    }
+    return Array.from(set).sort();
+  }, [list]);
+
   const filtered = useMemo(() => {
     const query = search.trim().toLowerCase();
     return list.filter((repo) => {
@@ -335,12 +355,30 @@ export function RepositoriesPage() {
       if (statusFilter !== 'all' && repo.status !== statusFilter) {
         return false;
       }
+      if (folderFilter !== 'all') {
+        const folder = parseGitUrl(repo.repositoryUrl).folder;
+        if (folder !== folderFilter) {
+          return false;
+        }
+      }
       if (query && !`${repo.name} ${repo.repositoryUrl}`.toLowerCase().includes(query)) {
         return false;
       }
       return true;
     });
-  }, [list, typeTab, statusFilter, search]);
+  }, [list, typeTab, statusFilter, folderFilter, search]);
+
+  const groupedByFolder = useMemo(() => {
+    const map = new Map<string, Repository[]>();
+    for (const repo of filtered) {
+      const folder = parseGitUrl(repo.repositoryUrl).folder;
+      if (!map.has(folder)) {
+        map.set(folder, []);
+      }
+      map.get(folder)!.push(repo);
+    }
+    return Array.from(map.entries());
+  }, [filtered]);
 
   const typeTabs: { key: TypeTab; label: string }[] = [
     { key: 'all', label: t('REPOSITORY.TAB_ALL') },
@@ -401,23 +439,56 @@ export function RepositoriesPage() {
       </div>
 
       <div className="mb-5 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-        <div className="inline-flex rounded-lg border border-border bg-surface p-0.5">
-          {typeTabs.map((tab) => (
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="inline-flex rounded-lg border border-border bg-surface p-0.5">
+            {typeTabs.map((tab) => (
+              <button
+                key={tab.key}
+                type="button"
+                onClick={() => setTypeTab(tab.key)}
+                className={`rounded-md px-3.5 py-1.5 text-sm font-medium transition-colors ${
+                  typeTab === tab.key
+                    ? 'bg-primary-subtle text-primary'
+                    : 'text-muted hover:text-fg'
+                }`}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="inline-flex rounded-lg border border-border bg-surface p-0.5">
             <button
-              key={tab.key}
               type="button"
-              onClick={() => setTypeTab(tab.key)}
-              className={`rounded-md px-3.5 py-1.5 text-sm font-medium transition-colors ${
-                typeTab === tab.key ? 'bg-primary-subtle text-primary' : 'text-muted hover:text-fg'
+              onClick={() => setViewMode('grid')}
+              title={t('REPOSITORY.GRID_VIEW')}
+              className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
+                viewMode === 'grid'
+                  ? 'bg-primary-subtle text-primary'
+                  : 'text-muted hover:text-fg'
               }`}
             >
-              {tab.label}
+              <LayoutGrid size={15} />
+              <span className="hidden sm:inline">{t('REPOSITORY.ALL_REPOS')}</span>
             </button>
-          ))}
+            <button
+              type="button"
+              onClick={() => setViewMode('folder')}
+              title={t('REPOSITORY.GROUP_BY_FOLDER')}
+              className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
+                viewMode === 'folder'
+                  ? 'bg-primary-subtle text-primary'
+                  : 'text-muted hover:text-fg'
+              }`}
+            >
+              <FolderGit2 size={15} />
+              <span>{t('REPOSITORY.GROUP_BY_FOLDER')}</span>
+            </button>
+          </div>
         </div>
 
-        <div className="flex items-center gap-2">
-          <div className="relative flex-1 lg:w-64">
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="relative flex-1 lg:w-56">
             <Search
               size={15}
               className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-faint"
@@ -430,10 +501,21 @@ export function RepositoriesPage() {
               className="h-10 w-full rounded-lg border border-border bg-surface pl-9 pr-3 text-sm text-fg outline-none transition placeholder:text-faint focus:border-primary focus:ring-2 focus:ring-primary/25"
             />
           </div>
+          {availableFolders.length > 0 ? (
+            <SelectField
+              value={folderFilter}
+              onChange={(next) => setFolderFilter(next)}
+              className="h-10 min-w-36 rounded-lg border border-border bg-surface px-3 text-sm text-fg shadow-sm outline-none transition hover:border-border-strong focus:border-primary focus:ring-2 focus:ring-primary/15"
+              options={[
+                { value: 'all', label: `📁 ${t('REPOSITORY.FOLDER_ALL')}` },
+                ...availableFolders.map((f) => ({ value: f, label: `📁 ${f}` })),
+              ]}
+            />
+          ) : null}
           <SelectField
             value={statusFilter}
             onChange={(next) => setStatusFilter(next as StatusFilter)}
-            className="h-11 min-w-40 rounded-xl border border-border bg-surface px-3.5 text-sm text-fg shadow-sm outline-none transition hover:border-border-strong focus:border-primary focus:ring-4 focus:ring-primary/15"
+            className="h-10 min-w-36 rounded-lg border border-border bg-surface px-3 text-sm text-fg shadow-sm outline-none transition hover:border-border-strong focus:border-primary focus:ring-2 focus:ring-primary/15"
             options={[
               { value: 'all', label: t('REPOSITORY.STATUS_ALL') },
               { value: 'Active', label: t('REPOSITORY.STATUS_ACTIVE') },
@@ -468,6 +550,39 @@ export function RepositoriesPage() {
           <FolderGit2 size={30} className="text-faint" />
           <h3 className="mt-4 text-sm font-semibold text-fg">{t('REPOSITORY.NO_REPOS_FOUND')}</h3>
           <p className="mt-1 max-w-sm text-sm text-muted">{t('REPOSITORY.NO_REPOS_FOUND_DESC')}</p>
+        </div>
+      ) : viewMode === 'folder' ? (
+        <div className="space-y-6">
+          {groupedByFolder.map(([folderName, repos]) => (
+            <div key={folderName} className="rounded-2xl border border-border bg-surface-2/30 p-5">
+              <div className="mb-4 flex items-center justify-between border-b border-border pb-3">
+                <div className="flex items-center gap-2.5">
+                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                    <FolderGit2 size={18} />
+                  </div>
+                  <div>
+                    <h2 className="text-base font-semibold text-fg flex items-center gap-2">
+                      <span>{folderName}</span>
+                      <span className="rounded-full bg-primary-subtle px-2 py-0.5 text-xs font-mono font-medium text-primary">
+                        {repos.length}
+                      </span>
+                    </h2>
+                  </div>
+                </div>
+              </div>
+              <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+                {repos.map((repo) => (
+                  <RepoCard
+                    key={repo.projectId}
+                    repo={repo}
+                    onDelete={setPendingDelete}
+                    onScan={(target) => void handleScan(target)}
+                    isScanPending={scanningId === repo.projectId}
+                  />
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">

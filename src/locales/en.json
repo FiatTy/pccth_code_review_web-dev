@@ -131,7 +131,14 @@
       "FAILED_TITLE": "Delete Failed",
       "FAILED_TEXT": "An error occurred while deleting the repository"
     },
-    "SCAN_IN_PROGRESS": "Scanning in progress"
+    "SCAN_IN_PROGRESS": "Scanning in progress",
+    "FOLDER": "Folder",
+    "FOLDER_ALL": "All Folders",
+    "GROUP_BY_FOLDER": "Group by Folder",
+    "ALL_REPOS": "All Repositories",
+    "EXTRACTED_INFO": "Extracted from Git URL",
+    "EXTRACTED_PROJECT": "Project Name:",
+    "EXTRACTED_FOLDER": "Folder Name:"
   },
   "SCAN": {
     "TITLE": "Scan History",

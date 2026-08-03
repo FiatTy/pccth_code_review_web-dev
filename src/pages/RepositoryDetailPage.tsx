@@ -6,6 +6,7 @@ import {
   Bug,
   CheckCircle2,
   ExternalLink,
+  FolderGit2,
   Gauge,
   Loader2,
   Settings2,
@@ -17,6 +18,7 @@ import {
 import { useRepositoryDetail } from '@/features/repository/hooks/useRepository';
 import { useIssues } from '@/features/issue/hooks/useIssues';
 import type { Scan } from '@/features/scan/types';
+import { parseGitUrl } from '@/lib/git-utils';
 
 type DetailTab = 'overview' | 'issues' | 'history';
 
@@ -164,6 +166,7 @@ export function RepositoryDetailPage() {
   const metrics = repo.metrics;
   const securityTotal = (metrics?.vulnerabilities ?? 0) + (metrics?.securityHotspots ?? 0);
   const qualityPassed = repo.qualityGate === 'Passed';
+  const parsedGit = useMemo(() => parseGitUrl(repo.repositoryUrl), [repo.repositoryUrl]);
 
   const tabs: { key: DetailTab; label: string }[] = [
     { key: 'overview', label: t('DETAIL_REPO.TAB_OVERVIEW') },
@@ -184,6 +187,10 @@ export function RepositoryDetailPage() {
           </Link>
           <div className="mt-2 flex flex-wrap items-center gap-3">
             <h1 className="truncate text-2xl font-semibold tracking-tight text-fg">{repo.name}</h1>
+            <span className="inline-flex items-center gap-1 rounded-md bg-primary-subtle px-2.5 py-1 font-mono text-xs font-medium text-primary">
+              <FolderGit2 size={13} />
+              {parsedGit.folder}
+            </span>
             <span
               className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-medium ${
                 STATUS_BADGE[repo.status] ?? 'bg-surface-2 text-muted'
