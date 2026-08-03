@@ -451,9 +451,6 @@ export function ScanHistoryPage() {
                         <table className="w-full min-w-[720px] text-sm">
                           <thead className="sticky top-0 z-10 bg-surface-2/95 backdrop-blur-xs shadow-xs">
                             <tr className="border-b border-border/40 text-left">
-                              <th className="w-10 px-4 py-2.5">
-                                <span className="sr-only">{t('SCAN.COL_SELECT')}</span>
-                              </th>
                               <th className="px-4 py-2.5 font-mono text-xs font-semibold uppercase tracking-wide text-muted">
                                 {t('SCAN.COL_DATE_TIME')}
                               </th>
@@ -475,57 +472,63 @@ export function ScanHistoryPage() {
                             </tr>
                           </thead>
                           <tbody className="divide-y divide-border/30">
-                            {folderScans.map((scan) => (
-                              <tr
-                                key={scan.id}
-                                className="transition-colors hover:bg-surface-2/60"
-                              >
-                                <td className="px-4 py-2.5">
-                                  <input
-                                    type="checkbox"
-                                    aria-label={`${t('SCAN.COL_SELECT')} ${scan.projectName}`}
-                                    checked={selectedIds.includes(scan.id)}
-                                    disabled={
-                                      !selectedIds.includes(scan.id) && selectedIds.length >= 3
+                            {folderScans.map((scan) => {
+                              const isSelected = selectedIds.includes(scan.id);
+                              const isDisabledSelect = !isSelected && selectedIds.length >= 3;
+
+                              return (
+                                <tr
+                                  key={scan.id}
+                                  onClick={() => {
+                                    if (!isDisabledSelect) {
+                                      toggleSelected(scan.id);
                                     }
-                                    onChange={() => toggleSelected(scan.id)}
-                                    className="h-4 w-4 cursor-pointer accent-[var(--color-primary)] disabled:cursor-not-allowed disabled:opacity-40"
-                                  />
-                                </td>
-                                <td className="whitespace-nowrap px-4 py-2.5 text-muted">
-                                  {formatDateTime(scan.startedAt)}
-                                </td>
-                                <td className="px-4 py-2.5 font-semibold text-fg">
-                                  {scan.projectName || '—'}
-                                </td>
-                                <td className="px-4 py-2.5">
-                                  <GradeChip scan={scan} />
-                                </td>
-                                <td className="px-4 py-2.5 text-right font-medium text-fg">
-                                  {issuesCount(scan)}
-                                </td>
-                                <td className="px-4 py-2.5 text-center">
-                                  <Link
-                                    to={`/logviewer/${scan.id}`}
-                                    title={t('SCAN.VIEW_LOG_TOOLTIP')}
-                                    aria-label={t('SCAN.VIEW_LOG_TOOLTIP')}
-                                    className="inline-flex h-7 w-7 items-center justify-center rounded-md text-muted transition-colors hover:bg-surface-2 hover:text-fg"
-                                  >
-                                    <ScrollText size={14} />
-                                  </Link>
-                                </td>
-                                <td className="px-4 py-2.5 text-center">
-                                  <Link
-                                    to={`/scanresult/${scan.id}`}
-                                    title={t('SCAN.VIEW_RESULT_TOOLTIP')}
-                                    aria-label={t('SCAN.VIEW_RESULT_TOOLTIP')}
-                                    className="inline-flex h-7 w-7 items-center justify-center rounded-md text-primary transition-colors hover:bg-primary-subtle"
-                                  >
-                                    <FileBarChart size={14} />
-                                  </Link>
-                                </td>
-                              </tr>
-                            ))}
+                                  }}
+                                  className={`cursor-pointer select-none transition-colors ${
+                                    isSelected
+                                      ? 'bg-primary/12 border-l-4 border-l-primary font-medium hover:bg-primary/18'
+                                      : isDisabledSelect
+                                        ? 'opacity-60 cursor-not-allowed'
+                                        : 'hover:bg-surface-2/60'
+                                  }`}
+                                >
+                                  <td className="whitespace-nowrap px-4 py-2.5 text-muted">
+                                    {formatDateTime(scan.startedAt)}
+                                  </td>
+                                  <td className="px-4 py-2.5 font-semibold text-fg">
+                                    {scan.projectName || '—'}
+                                  </td>
+                                  <td className="px-4 py-2.5">
+                                    <GradeChip scan={scan} />
+                                  </td>
+                                  <td className="px-4 py-2.5 text-right font-medium text-fg">
+                                    {issuesCount(scan)}
+                                  </td>
+                                  <td className="px-4 py-2.5 text-center">
+                                    <Link
+                                      to={`/logviewer/${scan.id}`}
+                                      onClick={(e) => e.stopPropagation()}
+                                      title={t('SCAN.VIEW_LOG_TOOLTIP')}
+                                      aria-label={t('SCAN.VIEW_LOG_TOOLTIP')}
+                                      className="inline-flex h-7 w-7 items-center justify-center rounded-md text-muted transition-colors hover:bg-surface-2 hover:text-fg"
+                                    >
+                                      <ScrollText size={14} />
+                                    </Link>
+                                  </td>
+                                  <td className="px-4 py-2.5 text-center">
+                                    <Link
+                                      to={`/scanresult/${scan.id}`}
+                                      onClick={(e) => e.stopPropagation()}
+                                      title={t('SCAN.VIEW_RESULT_TOOLTIP')}
+                                      aria-label={t('SCAN.VIEW_RESULT_TOOLTIP')}
+                                      className="inline-flex h-7 w-7 items-center justify-center rounded-md text-primary transition-colors hover:bg-primary-subtle"
+                                    >
+                                      <FileBarChart size={14} />
+                                    </Link>
+                                  </td>
+                                </tr>
+                              );
+                            })}
                           </tbody>
                         </table>
                       </div>
