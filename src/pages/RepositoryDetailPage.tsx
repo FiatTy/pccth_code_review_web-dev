@@ -128,6 +128,7 @@ export function RepositoryDetailPage() {
   const [page, setPage] = useState(1);
 
   const repo = detailQuery.data;
+  const parsedGit = useMemo(() => parseGitUrl(repo?.repositoryUrl ?? ''), [repo?.repositoryUrl]);
   const scans = useMemo(() => (repo?.scans ?? []).filter((scan) => scan.completedAt), [repo]);
 
   const issues = useMemo(
@@ -166,7 +167,6 @@ export function RepositoryDetailPage() {
   const metrics = repo.metrics;
   const securityTotal = (metrics?.vulnerabilities ?? 0) + (metrics?.securityHotspots ?? 0);
   const qualityPassed = repo.qualityGate === 'Passed';
-  const parsedGit = useMemo(() => parseGitUrl(repo.repositoryUrl), [repo.repositoryUrl]);
 
   const tabs: { key: DetailTab; label: string }[] = [
     { key: 'overview', label: t('DETAIL_REPO.TAB_OVERVIEW') },
