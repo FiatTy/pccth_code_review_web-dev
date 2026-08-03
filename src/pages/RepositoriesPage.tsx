@@ -5,6 +5,8 @@ import {
   AlertTriangle,
   Bug,
   CheckCircle2,
+  ChevronDown,
+  ChevronRight,
   ExternalLink,
   FolderGit2,
   Gauge,
@@ -280,10 +282,18 @@ export function RepositoriesPage() {
   const [statusFilter, setStatusFilter] = useState<StatusFilter>('all');
   const [folderFilter, setFolderFilter] = useState<string>('all');
   const [viewMode, setViewMode] = useState<'grid' | 'folder'>('grid');
+  const [collapsedFolders, setCollapsedFolders] = useState<Record<string, boolean>>({});
   const [search, setSearch] = useState('');
   const [pendingDelete, setPendingDelete] = useState<Repository | null>(null);
   const [scanningId, setScanningId] = useState<string | null>(null);
   const [missingConfigKey, setMissingConfigKey] = useState<'SONAR' | 'GIT' | null>(null);
+
+  function toggleFolder(folderName: string) {
+    setCollapsedFolders((prev) => ({
+      ...prev,
+      [folderName]: !prev[folderName],
+    }));
+  }
 
   const config = configQuery.data;
 
@@ -379,6 +389,18 @@ export function RepositoriesPage() {
     }
     return Array.from(map.entries());
   }, [filtered]);
+
+  function collapseAll() {
+    const next: Record<string, boolean> = {};
+    for (const [folderName] of groupedByFolder) {
+      next[folderName] = true;
+    }
+    setCollapsedFolders(next);
+  }
+
+  function expandAll() {
+    setCollapsedFolders({});
+  }
 
   const typeTabs: { key: TypeTab; label: string }[] = [
     { key: 'all', label: t('REPOSITORY.TAB_ALL') },
@@ -552,37 +574,110 @@ export function RepositoriesPage() {
           <p className="mt-1 max-w-sm text-sm text-muted">{t('REPOSITORY.NO_REPOS_FOUND_DESC')}</p>
         </div>
       ) : viewMode === 'folder' ? (
-        <div className="space-y-6">
-          {groupedByFolder.map(([folderName, repos]) => (
-            <div key={folderName} className="rounded-2xl border border-border bg-surface-2/30 p-5">
-              <div className="mb-4 flex items-center justify-between border-b border-border pb-3">
-                <div className="flex items-center gap-2.5">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
-                    <FolderGit2 size={18} />
-                  </div>
-                  <div>
-                    <h2 className="text-base font-semibold text-fg flex items-center gap-2">
-                      <span>{folderName}</span>
-                      <span className="rounded-full bg-primary-subtle px-2 py-0.5 text-xs font-mono font-medium text-primary">
-                        {repos.length}
+        <div className="space-y-3">
+          <div className="flex items-center justify-between px-1">
+            <span className="text-xs font-medium text-muted">
+              {t('REPOSITORY.GROUP_BY_FOLDER')} ({groupedByFolder.length} {t('REPOSITORY.FOLDER')})
+            </span>
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={expandAll}
+                className="text-xs font-medium text-muted hover:text-primary transition-colors"
+              >
+                {t('REPOSITORY.EXPAND_ALL')}
+              </button>
+              <span className="text-faint">•</span>
+              <button
+                type="button"
+                onClick={collapseAll}
+                className="text-xs font-medium text-muted hover:text-primary transition-colors"
+              >
+                {t('REPOSITORY.COLLAPSE_ALL')}
+              </button>
+            </div>
+          </div>
+
+          {groupedByFolder.map(([folderName, repos]) => {
+            const isCollapsed = Boolean(collapsedFolders[folderName]);
+            const activeCount = repos.filter((r) => r.status === 'Active').length;
+            const scanningCount = repos.filter((r) => r.status === 'Scanning').length;
+            const errorCount = repos.filter((r) => r.status === 'Error').length;
+
+            return (
+              <div
+                key={folderName}
+                className="overflow-hidden rounded-xl border border-border bg-surface shadow-xs transition-all"
+              >
+                <div
+                  onClick={() => toggleFolder(folderName)}
+                  role="button"
+                  tabIndex={0}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      toggleFolder(folderName);
+                    }
+                  }}
+                  className="flex cursor-pointer items-center justify-between select-none px-4 py-3 bg-surface hover:bg-surface-2/60 transition-colors"
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-primary-subtle text-primary">
+                      <FolderGit2 size={16} />
+                    </div>
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <span className="truncate text-sm font-semibold text-fg">{folderName}</span>
+                      <span className="shrink-0 rounded-full bg-surface-2 border border-border px-2 py-0.5 text-[11px] font-mono font-medium text-muted">
+                        {t('REPOSITORY.ITEMS_COUNT', { count: repos.length })}
                       </span>
-                    </h2>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3 shrink-0">
+                    <div className="hidden sm:flex items-center gap-2 text-xs">
+                      {activeCount > 0 && (
+                        <span className="inline-flex items-center gap-1 rounded-full bg-success/10 px-2 py-0.5 text-[11px] font-medium text-success">
+                          <span className="h-1.5 w-1.5 rounded-full bg-success" />
+                          {activeCount}
+                        </span>
+                      )}
+                      {scanningCount > 0 && (
+                        <span className="inline-flex items-center gap-1 rounded-full bg-primary-subtle px-2 py-0.5 text-[11px] font-medium text-primary">
+                          <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse" />
+                          {scanningCount}
+                        </span>
+                      )}
+                      {errorCount > 0 && (
+                        <span className="inline-flex items-center gap-1 rounded-full bg-danger/10 px-2 py-0.5 text-[11px] font-medium text-danger">
+                          <span className="h-1.5 w-1.5 rounded-full bg-danger" />
+                          {errorCount}
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex h-7 w-7 items-center justify-center rounded-md text-muted transition-transform">
+                      {isCollapsed ? <ChevronRight size={16} /> : <ChevronDown size={16} />}
+                    </div>
                   </div>
                 </div>
+
+                {!isCollapsed && (
+                  <div className="border-t border-border bg-surface-2/20 p-3.5 sm:p-4">
+                    <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-3">
+                      {repos.map((repo) => (
+                        <RepoCard
+                          key={repo.projectId}
+                          repo={repo}
+                          onDelete={setPendingDelete}
+                          onScan={(target) => void handleScan(target)}
+                          isScanPending={scanningId === repo.projectId}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
-              <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-                {repos.map((repo) => (
-                  <RepoCard
-                    key={repo.projectId}
-                    repo={repo}
-                    onDelete={setPendingDelete}
-                    onScan={(target) => void handleScan(target)}
-                    isScanPending={scanningId === repo.projectId}
-                  />
-                ))}
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">

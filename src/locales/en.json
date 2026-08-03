@@ -138,7 +138,10 @@
     "ALL_REPOS": "All Repositories",
     "EXTRACTED_INFO": "Extracted from Git URL",
     "EXTRACTED_PROJECT": "Project Name:",
-    "EXTRACTED_FOLDER": "Folder Name:"
+    "EXTRACTED_FOLDER": "Folder Name:",
+    "EXPAND_ALL": "Expand All",
+    "COLLAPSE_ALL": "Collapse All",
+    "ITEMS_COUNT": "{{count}} items"
   },
   "SCAN": {
     "TITLE": "Scan History",

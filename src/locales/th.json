@@ -138,7 +138,10 @@
     "ALL_REPOS": "คลังโค้ดทั้งหมด",
     "EXTRACTED_INFO": "ถอดข้อมูลจาก Git URL",
     "EXTRACTED_PROJECT": "ชื่อโปรเจกต์:",
-    "EXTRACTED_FOLDER": "ชื่อแฟ้ม:"
+    "EXTRACTED_FOLDER": "ชื่อแฟ้ม:",
+    "EXPAND_ALL": "ขยายทั้งหมด",
+    "COLLAPSE_ALL": "พับเก็บทั้งหมด",
+    "ITEMS_COUNT": "{{count}} รายการ"
   },
   "SCAN": {
     "TITLE": "ประวัติการสแกน",
