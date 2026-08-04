@@ -12,7 +12,6 @@ import {
   FolderGit2,
   Gauge,
   Layers,
-  LayoutGrid,
   Loader2,
   Play,
   Plus,
@@ -301,7 +300,7 @@ export function RepositoriesPage() {
   function toggleFolder(folderName: string) {
     setCollapsedFolders((prev) => ({
       ...prev,
-      [folderName]: !prev[folderName],
+      [folderName]: prev[folderName] === false ? true : false,
     }));
   }
 
@@ -401,15 +400,15 @@ export function RepositoriesPage() {
   }, [filtered]);
 
   function collapseAll() {
-    const next: Record<string, boolean> = {};
-    for (const [folderName] of groupedByFolder) {
-      next[folderName] = true;
-    }
-    setCollapsedFolders(next);
+    setCollapsedFolders({});
   }
 
   function expandAll() {
-    setCollapsedFolders({});
+    const next: Record<string, boolean> = {};
+    for (const [folderName] of groupedByFolder) {
+      next[folderName] = false;
+    }
+    setCollapsedFolders(next);
   }
 
   const typeTabs: { key: TypeTab; label: string }[] = [
@@ -488,32 +487,15 @@ export function RepositoriesPage() {
             ))}
           </div>
 
-          <div className="inline-flex rounded-lg border border-border bg-surface p-0.5">
-            <button
-              type="button"
-              onClick={() => setViewMode('grid')}
-              title={t('REPOSITORY.GRID_VIEW')}
-              className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${viewMode === 'grid'
-                  ? 'bg-primary-subtle text-primary'
-                  : 'text-muted hover:text-fg'
-                }`}
-            >
-              <LayoutGrid size={15} />
-              <span className="hidden sm:inline">{t('REPOSITORY.ALL_REPOS')}</span>
-            </button>
-            <button
-              type="button"
-              onClick={() => setViewMode('folder')}
-              title={t('REPOSITORY.GROUP_BY_FOLDER')}
-              className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${viewMode === 'folder'
-                  ? 'bg-primary-subtle text-primary'
-                  : 'text-muted hover:text-fg'
-                }`}
-            >
-              <FolderGit2 size={15} />
-              <span>{t('REPOSITORY.GROUP_BY_FOLDER')}</span>
-            </button>
-          </div>
+          <SelectField
+            value={viewMode}
+            onChange={(next) => setViewMode(next as 'grid' | 'folder')}
+            className="h-10 rounded-xl border border-border bg-surface px-3.5 text-sm text-fg shadow-sm outline-none transition hover:border-border-strong focus:border-primary focus:ring-4 focus:ring-primary/15 min-w-44"
+            options={[
+              { value: 'grid', label: t('REPOSITORY.ALL_REPOS') },
+              { value: 'folder', label: t('REPOSITORY.GROUP_BY_FOLDER') },
+            ]}
+          />
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
@@ -607,7 +589,7 @@ export function RepositoriesPage() {
 
           <div className="overflow-hidden rounded-xl border border-border bg-surface shadow-sm divide-y divide-border/60">
             {groupedByFolder.map(([folderName, repos]) => {
-              const isCollapsed = Boolean(collapsedFolders[folderName]);
+              const isCollapsed = collapsedFolders[folderName] !== false;
               const activeCount = repos.filter((r) => r.status === 'Active').length;
               const scanningCount = repos.filter((r) => r.status === 'Scanning').length;
               const errorCount = repos.filter((r) => r.status === 'Error').length;

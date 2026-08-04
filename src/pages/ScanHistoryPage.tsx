@@ -116,7 +116,7 @@ export function ScanHistoryPage() {
   function toggleFolder(folderName: string) {
     setCollapsedFolders((prev) => ({
       ...prev,
-      [folderName]: !prev[folderName],
+      [folderName]: prev[folderName] === false ? true : false,
     }));
   }
 
@@ -372,7 +372,13 @@ export function ScanHistoryPage() {
             <div className="flex items-center gap-3">
               <button
                 type="button"
-                onClick={() => setCollapsedFolders({})}
+                onClick={() => {
+                  const next: Record<string, boolean> = {};
+                  availableFolders.forEach((f) => {
+                    next[f] = false;
+                  });
+                  setCollapsedFolders(next);
+                }}
                 className="text-xs font-medium text-muted hover:text-primary transition-colors"
               >
                 {t('REPOSITORY.EXPAND_ALL')}
@@ -380,13 +386,7 @@ export function ScanHistoryPage() {
               <span className="text-faint">•</span>
               <button
                 type="button"
-                onClick={() => {
-                  const next: Record<string, boolean> = {};
-                  availableFolders.forEach((f) => {
-                    next[f] = true;
-                  });
-                  setCollapsedFolders(next);
-                }}
+                onClick={() => setCollapsedFolders({})}
                 className="text-xs font-medium text-muted hover:text-primary transition-colors"
               >
                 {t('REPOSITORY.COLLAPSE_ALL')}
@@ -396,7 +396,7 @@ export function ScanHistoryPage() {
 
           <div className="overflow-hidden rounded-xl border border-border bg-surface shadow-sm divide-y divide-border/60">
             {groupedByFolder.map(([folderName, folderScans]) => {
-              const isCollapsed = Boolean(collapsedFolders[folderName]);
+              const isCollapsed = collapsedFolders[folderName] !== false;
               const passedCount = folderScans.filter(
                 (s) => String(s.qualityGate ?? '').trim().toUpperCase() === 'OK',
               ).length;
