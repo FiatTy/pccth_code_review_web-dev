@@ -131,9 +131,8 @@ function RepoCard({
 
   return (
     <div
-      className={`hover-lift group flex flex-col rounded-2xl border bg-surface p-5 shadow-sm ${
-        isScanning ? 'scan-card border-primary/40' : 'border-border'
-      }`}
+      className={`hover-lift group flex flex-col rounded-2xl border bg-surface p-5 shadow-sm ${isScanning ? 'scan-card border-primary/40' : 'border-border'
+        }`}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
@@ -168,10 +167,10 @@ function RepoCard({
             {repo.projectTypeLabel}
           </span>
         ) : null}
-        <span className="text-xs text-faint">
-          {lastScan ? `${t('REPOSITORY.LAST_SCAN')}: ${lastScan}` : t('REPOSITORY.NEVER_SCANNED')}
-        </span>
       </div>
+      <p className="mt-1.5 text-xs text-faint">
+        {lastScan ? `${t('REPOSITORY.LAST_SCAN')}: ${lastScan}` : t('REPOSITORY.NEVER_SCANNED')}
+      </p>
 
       <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 border-t border-border pt-4">
         <Metric icon={Bug} value={formatMetric(repo.metrics?.bugs)} tone="text-blocker" />
@@ -190,9 +189,8 @@ function RepoCard({
             )
           ) : null}
           <span
-            className={`text-xs font-medium ${
-              repo.qualityGate ? (qualityPassed ? 'text-success' : 'text-danger') : 'text-faint'
-            }`}
+            className={`text-xs font-medium ${repo.qualityGate ? (qualityPassed ? 'text-success' : 'text-danger') : 'text-faint'
+              }`}
           >
             {repo.qualityGate ? t(`REPOSITORY.${qualityPassed ? 'PASSED' : 'FAILED'}`) : '—'}
           </span>
@@ -480,11 +478,10 @@ export function RepositoriesPage() {
                 key={tab.key}
                 type="button"
                 onClick={() => setTypeTab(tab.key)}
-                className={`rounded-md px-3.5 py-1.5 text-sm font-medium transition-colors ${
-                  typeTab === tab.key
+                className={`rounded-md px-3.5 py-1.5 text-sm font-medium transition-colors ${typeTab === tab.key
                     ? 'bg-primary-subtle text-primary'
                     : 'text-muted hover:text-fg'
-                }`}
+                  }`}
               >
                 {tab.label}
               </button>
@@ -496,11 +493,10 @@ export function RepositoriesPage() {
               type="button"
               onClick={() => setViewMode('grid')}
               title={t('REPOSITORY.GRID_VIEW')}
-              className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
-                viewMode === 'grid'
+              className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${viewMode === 'grid'
                   ? 'bg-primary-subtle text-primary'
                   : 'text-muted hover:text-fg'
-              }`}
+                }`}
             >
               <LayoutGrid size={15} />
               <span className="hidden sm:inline">{t('REPOSITORY.ALL_REPOS')}</span>
@@ -509,11 +505,10 @@ export function RepositoriesPage() {
               type="button"
               onClick={() => setViewMode('folder')}
               title={t('REPOSITORY.GROUP_BY_FOLDER')}
-              className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${
-                viewMode === 'folder'
+              className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${viewMode === 'folder'
                   ? 'bg-primary-subtle text-primary'
                   : 'text-muted hover:text-fg'
-              }`}
+                }`}
             >
               <FolderGit2 size={15} />
               <span>{t('REPOSITORY.GROUP_BY_FOLDER')}</span>
@@ -629,9 +624,8 @@ export function RepositoriesPage() {
                         toggleFolder(folderName);
                       }
                     }}
-                    className={`flex cursor-pointer items-center justify-between select-none px-4 py-3.5 transition-colors ${
-                      !isCollapsed ? 'bg-surface-2/40' : 'hover:bg-surface-2/50'
-                    }`}
+                    className={`flex cursor-pointer items-center justify-between select-none px-4 py-3.5 transition-colors ${!isCollapsed ? 'bg-surface-2/40' : 'hover:bg-surface-2/50'
+                      }`}
                   >
                     <div className="flex items-center gap-2.5 min-w-0">
                       <span className="text-muted shrink-0 transition-transform">
@@ -680,13 +674,12 @@ export function RepositoriesPage() {
                           >
                             <div className="flex items-center gap-3 min-w-0">
                               <span
-                                className={`h-2 w-2 rounded-full shrink-0 ${
-                                  repo.status === 'Active'
+                                className={`h-2 w-2 rounded-full shrink-0 ${repo.status === 'Active'
                                     ? 'bg-success'
                                     : isScanning
                                       ? 'bg-primary animate-pulse'
                                       : 'bg-danger'
-                                }`}
+                                  }`}
                               />
                               <Link
                                 to={`/detailrepo/${repo.projectId}`}
