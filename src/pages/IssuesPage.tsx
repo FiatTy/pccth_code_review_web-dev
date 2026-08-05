@@ -302,9 +302,9 @@ export function IssuesPage() {
                   </th>
                   <th className={headCell}>{t('ISSUE.COL_TYPE')}</th>
                   <th className={headCell}>{t('ISSUE.COL_SEVERITY')}</th>
+                  <th className={headCell}>{t('ISSUE.COL_PROJECT')}</th>
                   <th className={headCell}>{t('ISSUE.COL_ISSUE')}</th>
                   <th className={headCell}>{t('ISSUE.COL_COMPONENT')}</th>
-                  <th className={headCell}>{t('ISSUE.COL_PROJECT')}</th>
                   <th className={headCell}>{t('ISSUE.COL_ASSIGNED')}</th>
                   <th className={headCell}>{t('ISSUE.COL_STATUS')}</th>
                   <th className={`${headCell} text-center`}>{t('ISSUE.COL_VIEW')}</th>
@@ -333,6 +333,9 @@ export function IssuesPage() {
                       <td className="px-4 py-3">
                         <SeverityCell severity={issue.severity} />
                       </td>
+                      <td className="whitespace-nowrap px-4 py-3 text-muted">
+                        {issue.projectName || '—'}
+                      </td>
                       <td className="max-w-[280px] px-4 py-3">
                         <p className="truncate text-fg" title={issue.message}>
                           {issue.message || '—'}
@@ -345,9 +348,6 @@ export function IssuesPage() {
                         >
                           {issue.component || '—'}
                         </p>
-                      </td>
-                      <td className="whitespace-nowrap px-4 py-3 text-muted">
-                        {issue.projectName || '—'}
                       </td>
                       <td className="whitespace-nowrap px-4 py-3">
                         <button
