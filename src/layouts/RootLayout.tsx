@@ -163,7 +163,7 @@ export function RootLayout() {
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
-        <div className="flex h-16 items-center justify-between border-b border-border/60 px-4">
+        <div className="app-header flex h-16 items-center justify-between px-4">
           <BrandMark size={30} />
           <button
             type="button"
@@ -231,7 +231,7 @@ export function RootLayout() {
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="sticky top-0 z-20 flex h-16 items-center gap-2.5 border-b border-border/60 bg-surface/60 px-4 backdrop-blur-xl lg:px-6">
+        <header className="app-header app-header--main sticky top-0 z-20 flex h-16 items-center gap-2.5 px-4 lg:px-6">
           <button
             type="button"
             aria-label={t('NAV.OPEN_MENU')}

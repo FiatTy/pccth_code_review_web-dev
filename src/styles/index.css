@@ -396,6 +396,81 @@
     }
   }
 
+  /* Premium top navbar — horizontal teal→gold sheen that reads as ONE seamless
+     plate across the logo bar + header.
+
+     The trick: both bars paint the SAME viewport-wide gradient (background-size:
+     100vw), and the header shifts its copy left by the sidebar width (--nav-x) so
+     its slice continues exactly where the logo bar's slice ends — one continuous
+     sweep, no seam. Base is OPAQUE var(--surface) so the differing backdrops
+     behind each bar (sidebar surface vs page bg) can't bleed through and split it.
+     Colors are held in vars so dark only swaps the tints, keeping size/position. */
+  .app-header {
+    position: relative;
+    --nav-x: 0px;
+    --nav-sheen: linear-gradient(
+      90deg,
+      color-mix(in oklab, var(--primary) 16%, transparent) 0%,
+      transparent 45%,
+      color-mix(in oklab, var(--accent) 12%, transparent) 100%
+    );
+    --nav-underline: linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in oklab, var(--primary) 55%, transparent) 30%,
+      color-mix(in oklab, var(--accent) 45%, transparent) 70%,
+      transparent
+    );
+    background: var(--nav-sheen), var(--surface);
+    background-repeat: no-repeat;
+    background-size:
+      100vw 100%,
+      100% 100%;
+    background-position:
+      calc(-1 * var(--nav-x)) 0,
+      0 0;
+    box-shadow: 0 12px 28px -24px color-mix(in oklab, var(--primary) 35%, transparent);
+  }
+
+  /* Continuous teal→gold underline, coordinated the same way as the sheen */
+  .app-header::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    height: 1px;
+    background: var(--nav-underline);
+    background-repeat: no-repeat;
+    background-size: 100vw 1px;
+    background-position: calc(-1 * var(--nav-x)) 0;
+  }
+
+  /* The header sits to the right of the 16rem (w-64) sidebar on lg+, so its copy
+     of the gradient must shift left by that width. On mobile the sidebar is
+     off-canvas and the header is full width, so offset stays 0. */
+  @media (min-width: 1024px) {
+    .app-header--main {
+      --nav-x: 16rem;
+    }
+  }
+
+  .dark .app-header {
+    --nav-sheen: linear-gradient(
+      90deg,
+      color-mix(in oklab, var(--primary) 24%, transparent) 0%,
+      transparent 48%,
+      color-mix(in oklab, var(--accent) 18%, transparent) 100%
+    );
+    --nav-underline: linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in oklab, var(--primary) 70%, transparent) 30%,
+      color-mix(in oklab, var(--accent) 55%, transparent) 70%,
+      transparent
+    );
+    box-shadow: 0 14px 34px -24px color-mix(in oklab, var(--primary) 50%, transparent);
+  }
+
   /* Landing / marketing surfaces (theme colors only) */
   .brand-gradient-bg {
     background: linear-gradient(135deg, var(--primary), color-mix(in oklab, var(--primary) 60%, #0b3b38));
