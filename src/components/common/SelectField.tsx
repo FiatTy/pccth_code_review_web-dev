@@ -80,7 +80,7 @@ export function SelectField({
       {open && !disabled ? (
         <div
           role="listbox"
-          className="dialog-enter absolute left-0 top-full z-50 mt-2 max-h-64 w-full min-w-max overflow-auto rounded-xl border border-border bg-surface p-1.5 shadow-xl"
+          className="dialog-enter absolute left-0 top-full z-50 mt-2 max-h-[228px] w-full min-w-max overflow-y-auto rounded-xl border border-border bg-surface p-1.5 shadow-xl"
         >
           {options.map((option) => {
             const active = option.value === value;

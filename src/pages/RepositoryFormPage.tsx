@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import {
+  FolderGit2,
   GitBranch,
   Hash,
   Link2,
@@ -28,6 +29,7 @@ import {
 } from '@/features/repository/hooks/useRepository';
 import { useSonarQubeConfig } from '@/features/setting/hooks/useSonarQubeConfig';
 import type { ProjectType } from '@/features/repository/types';
+import { parseGitUrl } from '@/lib/git-utils';
 
 const MIN_COST_PER_DAY = 1000;
 const SCAN_BRANCH = 'dev';
@@ -140,7 +142,20 @@ export function RepositoryFormPage() {
 
   const config = configQuery.data;
   const serverUrl = config?.serverUrl ?? '';
+  const parsedGit = useMemo(() => parseGitUrl(form.repositoryUrl), [form.repositoryUrl]);
   const projectKey = isEditMode ? savedProjectKey : form.name;
+
+  function handleUrlChange(url: string) {
+    const parsed = parseGitUrl(url);
+    const patch: Partial<RepositoryFormState> = { repositoryUrl: url };
+    if (!isEditMode && parsed.projectName) {
+      const currentParsedName = parseGitUrl(form.repositoryUrl).projectName;
+      if (!form.name || form.name === currentParsedName) {
+        patch.name = parsed.projectName;
+      }
+    }
+    update(patch);
+  }
 
   const duplicateName = useMemo(() => {
     const name = form.name.trim().toLowerCase();
@@ -371,10 +386,28 @@ export function RepositoryFormPage() {
                       placeholder="https://gitlab.com/team/project.git"
                       disabled={isEditMode}
                       value={form.repositoryUrl}
-                      onChange={(event) => update({ repositoryUrl: event.target.value })}
+                      onChange={(event) => handleUrlChange(event.target.value)}
                       onBlur={() => markTouched('repositoryUrl')}
                     />
                   </div>
+                  {form.repositoryUrl && parsedGit.projectName ? (
+                    <div className="mt-3.5 rounded-lg border border-primary/20 bg-primary-subtle/40 p-3 text-xs">
+                      <div className="flex items-center gap-1.5 font-semibold text-primary">
+                        <FolderGit2 size={14} />
+                        <span>{t('REPOSITORY.EXTRACTED_INFO')}</span>
+                      </div>
+                      <div className="mt-2 grid grid-cols-2 gap-2 text-fg">
+                        <div>
+                          <span className="text-muted">{t('REPOSITORY.EXTRACTED_FOLDER')} </span>
+                          <span className="font-mono font-medium text-primary">{parsedGit.folder}</span>
+                        </div>
+                        <div>
+                          <span className="text-muted">{t('REPOSITORY.EXTRACTED_PROJECT')} </span>
+                          <span className="font-mono font-medium text-fg">{parsedGit.projectName}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ) : null}
                 </FormField>
               </div>
             </div>
@@ -437,6 +470,7 @@ export function RepositoryFormPage() {
             </p>
             <div className="mt-3 divide-y divide-border">
               <SummaryRow label={t('REPOSITORY.REPOSITORY_NAME')} value={form.name || '—'} />
+              <SummaryRow label={t('REPOSITORY.FOLDER')} value={parsedGit.folder || '—'} mono />
               <SummaryRow label={t('REPOSITORY.PROJECT_TYPE')} value={typeLabel} />
               <SummaryRow label={t('REPOSITORY.PROJECT_KEY')} value={projectKey || '—'} mono />
               <SummaryRow
