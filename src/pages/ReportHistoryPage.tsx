@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { Download, FileText, Loader2, Search, TriangleAlert } from 'lucide-react';
 import { PageHeader } from '@/components/common/PageHeader';
@@ -37,7 +38,15 @@ export function ReportHistoryPage() {
   const historyQuery = useReportHistory();
   const generatePdf = useGenerateReportPdf();
 
-  const [search, setSearch] = useState('');
+  const [searchParams] = useSearchParams();
+  const [search, setSearch] = useState(() => searchParams.get('search') ?? searchParams.get('q') ?? '');
+
+  useEffect(() => {
+    const val = searchParams.get('search') ?? searchParams.get('q');
+    if (val !== null) {
+      setSearch(val);
+    }
+  }, [searchParams]);
   const [page, setPage] = useState(1);
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
 

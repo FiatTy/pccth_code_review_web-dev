@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react';
-import { Link, useNavigate } from 'react-router';
+import { useEffect, useMemo, useState } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import {
   AlertTriangle,
@@ -293,9 +293,17 @@ export function RepositoriesPage() {
     localStorage.setItem(VIEW_MODE_KEY, mode);
   }
 
+  const [searchParams] = useSearchParams();
   const [collapsedFolders, setCollapsedFolders] = useState<Record<string, boolean>>({});
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState(() => searchParams.get('search') ?? searchParams.get('q') ?? '');
   const [pendingDelete, setPendingDelete] = useState<Repository | null>(null);
+
+  useEffect(() => {
+    const param = searchParams.get('search') ?? searchParams.get('q');
+    if (param !== null) {
+      setSearch(param);
+    }
+  }, [searchParams]);
   const [scanningId, setScanningId] = useState<string | null>(null);
   const [missingConfigKey, setMissingConfigKey] = useState<'SONAR' | 'GIT' | null>(null);
 

@@ -16,7 +16,8 @@
     "SECTION_REPORTS": "รายงาน",
     "SECTION_SETTINGS": "ตั้งค่า",
     "OPEN_MENU": "เปิดเมนู",
-    "CLOSE_MENU": "ปิดเมนู"
+    "CLOSE_MENU": "ปิดเมนู",
+    "SEARCH_PLACEHOLDER": "พิมพ์ / เพื่อสั่งงานค้นหา เช่น /Repositories Pcc-Code-Review"
   },
   "AUTH": {
     "LOGIN": "เข้าสู่ระบบ",

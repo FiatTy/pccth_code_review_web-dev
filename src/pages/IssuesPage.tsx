@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react';
-import { Link } from 'react-router';
+import { useEffect, useMemo, useState } from 'react';
+import { Link, useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import {
   AlertTriangle,
@@ -103,11 +103,23 @@ export function IssuesPage() {
   const { t } = useTranslation();
   const { data, isPending, isError, refetch, isFetching } = useIssues();
 
+  const [searchParams] = useSearchParams();
   const [type, setType] = useState('all');
   const [severity, setSeverity] = useState('all');
   const [status, setStatus] = useState('all');
-  const [project, setProject] = useState('all');
-  const [search, setSearch] = useState('');
+  const [project, setProject] = useState(() => searchParams.get('project') ?? 'all');
+  const [search, setSearch] = useState(() => searchParams.get('search') ?? searchParams.get('q') ?? '');
+
+  useEffect(() => {
+    const searchVal = searchParams.get('search') ?? searchParams.get('q');
+    if (searchVal !== null) {
+      setSearch(searchVal);
+    }
+    const projVal = searchParams.get('project');
+    if (projVal !== null) {
+      setProject(projVal);
+    }
+  }, [searchParams]);
   const [page, setPage] = useState(1);
   const [assignTarget, setAssignTarget] = useState<Issue | null>(null);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);

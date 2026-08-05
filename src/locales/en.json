@@ -16,7 +16,8 @@
     "SECTION_REPORTS": "Reports",
     "SECTION_SETTINGS": "Settings",
     "OPEN_MENU": "Open menu",
-    "CLOSE_MENU": "Close menu"
+    "CLOSE_MENU": "Close menu",
+    "SEARCH_PLACEHOLDER": "Type / to search e.g. /Repositories Pcc-Code-Review"
   },
   "AUTH": {
     "LOGIN": "Login",
