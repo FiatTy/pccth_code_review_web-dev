@@ -396,6 +396,68 @@
     }
   }
 
+  /* Premium top navbar — translucent glass base + soft primary→accent sheen.
+     Sits over `backdrop-blur-xl`, so the base stays semi-transparent. Light and
+     dark tune the tint strength + shadow separately for the right depth. */
+  .app-header {
+    position: relative;
+    background:
+      linear-gradient(
+        90deg,
+        color-mix(in oklab, var(--primary) 14%, transparent) 0%,
+        transparent 42%,
+        color-mix(in oklab, var(--accent) 10%, transparent) 100%
+      ),
+      color-mix(in oklab, var(--surface) 68%, transparent);
+    /* Sheen layer is anchored to the viewport so the logo bar + header read as
+       ONE continuous gradient across the seam; surface base scrolls normally. */
+    background-attachment: fixed, local;
+    box-shadow:
+      0 1px 0 color-mix(in oklab, var(--fg) 6%, transparent),
+      0 10px 30px -22px color-mix(in oklab, var(--primary) 45%, transparent);
+  }
+
+  /* Premium bottom hairline: primary→accent gradient that fades at both ends */
+  .app-header::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in oklab, var(--primary) 55%, transparent) 30%,
+      color-mix(in oklab, var(--accent) 45%, transparent) 70%,
+      transparent
+    );
+  }
+
+  .dark .app-header {
+    background:
+      linear-gradient(
+        90deg,
+        color-mix(in oklab, var(--primary) 22%, transparent) 0%,
+        transparent 45%,
+        color-mix(in oklab, var(--accent) 16%, transparent) 100%
+      ),
+      color-mix(in oklab, var(--surface) 72%, transparent);
+    background-attachment: fixed, local;
+    box-shadow:
+      0 1px 0 color-mix(in oklab, #000000 40%, transparent),
+      0 12px 34px -22px color-mix(in oklab, var(--primary) 60%, transparent);
+  }
+
+  .dark .app-header::after {
+    background: linear-gradient(
+      90deg,
+      transparent,
+      color-mix(in oklab, var(--primary) 70%, transparent) 30%,
+      color-mix(in oklab, var(--accent) 55%, transparent) 70%,
+      transparent
+    );
+  }
+
   /* Landing / marketing surfaces (theme colors only) */
   .brand-gradient-bg {
     background: linear-gradient(135deg, var(--primary), color-mix(in oklab, var(--primary) 60%, #0b3b38));
