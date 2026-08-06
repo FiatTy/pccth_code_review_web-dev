@@ -14,6 +14,7 @@ import { useAuth } from '@/lib/auth/auth-context';
 import { useRepositories } from '@/features/repository/hooks/useRepositories';
 import { useScanHistory } from '@/features/scan/hooks/useScanHistory';
 import { useIssues } from '@/features/issue/hooks/useIssues';
+import { GreetingMascot } from '@/components/common/GreetingMascot';
 import { DonutChart } from '@/components/charts/DonutChart';
 import { LineChart } from '@/components/charts/LineChart';
 import { buildDailyTrend } from '@/features/scan/lib/scan-trends';
@@ -201,10 +202,11 @@ export function DashboardPage() {
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-2xl font-semibold tracking-tight text-fg">
+        <h1 className="flex flex-wrap items-center text-4xl font-bold tracking-tight text-fg sm:text-5xl">
           {t('DASHBOARD.WELCOME_BACK')} {user?.username}
+          <GreetingMascot />
         </h1>
-        <p className="mt-1 text-sm text-muted">{t('DASHBOARD.WELCOME_TEXT')}</p>
+        <p className="mt-2 text-lg text-muted">{t('DASHBOARD.WELCOME_TEXT')}</p>
       </div>
 
       <div className="mb-4 grid grid-cols-2 gap-3 lg:grid-cols-4">

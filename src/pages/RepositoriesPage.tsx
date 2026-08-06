@@ -75,7 +75,7 @@ function StatCard({
   tone: string;
 }) {
   return (
-    <div className="rounded-xl border border-border bg-surface p-4">
+    <div className="hover-lift rounded-xl border border-border bg-surface p-4 shadow-sm">
       <div className="flex items-center justify-between">
         <span className="text-[13px] font-medium uppercase tracking-[0.08em] text-muted">
           {label}
