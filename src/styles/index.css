@@ -471,6 +471,185 @@
     box-shadow: 0 14px 34px -24px color-mix(in oklab, var(--primary) 50%, transparent);
   }
 
+  /* Dashboard greeting mascot — day: a hand offering a sloshing coffee; night: a
+     sleepy moon with a nightcap, blinking, ringed by twinkling stars.
+     transform-box: fill-box makes transform-origin relative to each SVG group. */
+  .greet-mascot {
+    display: inline-block;
+    vertical-align: middle;
+    margin-inline-start: 0.5em;
+  }
+
+  .greet-mascot [class^='greet-'] {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  /* whole coffee scene floats gently — soft, graceful bob + tilt */
+  .greet-offer {
+    animation: greet-offer 3.6s ease-in-out infinite;
+  }
+
+  /* coffee surface — waves flow across the cup (two layers for depth) */
+  .greet-wave {
+    animation: greet-wave 1.3s linear infinite;
+  }
+
+  .greet-wave-2 {
+    animation-duration: 1.9s;
+  }
+
+  .greet-steam {
+    animation: greet-steam 2.4s ease-in-out infinite;
+  }
+
+  .greet-steam-2 {
+    animation-delay: 1.2s;
+  }
+
+  .greet-moon {
+    animation: greet-moon-bob 3.4s ease-in-out infinite;
+  }
+
+  /* both eyes share the timing → synced sleepy blink */
+  .greet-eye {
+    animation: greet-blink 3.2s ease-in-out infinite;
+  }
+
+  .greet-star {
+    animation: greet-star 2s ease-in-out infinite;
+  }
+
+  .greet-star-2 {
+    animation-delay: 0.5s;
+  }
+
+  .greet-star-3 {
+    animation-delay: 1s;
+  }
+
+  .greet-star-4 {
+    animation-delay: 1.5s;
+  }
+
+  .greet-pom {
+    animation: greet-pom 1.6s ease-in-out infinite;
+  }
+
+  .greet-zzz {
+    animation: greet-zzz 2.6s ease-in-out infinite;
+  }
+
+  .greet-zzz-2 {
+    animation-delay: 1.3s;
+  }
+
+  @keyframes greet-offer {
+    0%,
+    100% {
+      transform: translateY(0) rotate(-1.5deg);
+    }
+    50% {
+      transform: translateY(-2.5px) rotate(1.5deg);
+    }
+  }
+
+  @keyframes greet-wave {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-4px);
+    }
+  }
+
+  @keyframes greet-steam {
+    0% {
+      opacity: 0;
+      transform: translateY(2px) scaleY(0.7);
+    }
+    35% {
+      opacity: 0.7;
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-7px) scaleY(1.3);
+    }
+  }
+
+  @keyframes greet-moon-bob {
+    0%,
+    100% {
+      transform: translateY(0) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-3px) rotate(-7deg);
+    }
+  }
+
+  @keyframes greet-blink {
+    0%,
+    82%,
+    100% {
+      transform: scaleY(1);
+    }
+    88% {
+      transform: scaleY(0.1);
+    }
+    94% {
+      transform: scaleY(1);
+    }
+  }
+
+  @keyframes greet-star {
+    0%,
+    100% {
+      opacity: 0.2;
+      transform: scale(0.6);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes greet-pom {
+    0%,
+    100% {
+      transform: translateY(0) rotate(0deg);
+    }
+    50% {
+      transform: translateY(-2px) rotate(9deg);
+    }
+  }
+
+  @keyframes greet-zzz {
+    0% {
+      opacity: 0;
+      transform: translate(0, 0) scale(0.7);
+    }
+    40% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0;
+      transform: translate(4px, -10px) scale(1.1);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .greet-offer,
+    .greet-wave,
+    .greet-steam,
+    .greet-moon,
+    .greet-eye,
+    .greet-star,
+    .greet-pom,
+    .greet-zzz {
+      animation: none;
+    }
+  }
+
   /* Landing / marketing surfaces (theme colors only) */
   .brand-gradient-bg {
     background: linear-gradient(135deg, var(--primary), color-mix(in oklab, var(--primary) 60%, #0b3b38));
