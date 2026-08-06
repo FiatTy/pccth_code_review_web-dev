@@ -3,9 +3,9 @@ import { defineConfig } from 'vitest/config';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 
-export default defineConfig({
-  base: '/',
-  //base: '/codereview/', กรณี Deploy
+export default defineConfig(({ mode }) => ({
+  // dev = '/' ทำงานเหมือนเดิม, build = '/codereview/' 
+  base: mode === 'production' ? '/codereview/' : '/',
   define: {
     global: 'globalThis',
   },
@@ -21,4 +21,4 @@ export default defineConfig({
       TZ: 'Asia/Bangkok',
     },
   },
-});
+}));
