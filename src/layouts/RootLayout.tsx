@@ -24,6 +24,7 @@ import { BrandMark } from '@/components/common/BrandMark';
 import { LanguageSwitcher } from '@/components/common/LanguageSwitcher';
 import { ThemeToggle } from '@/components/common/ThemeToggle';
 import { NotificationBell } from '@/features/notification/components/NotificationBell';
+import { GlobalCommandSearch } from '@/components/common/GlobalCommandSearch';
 import { ProfileMenu } from '@/features/user/components/ProfileMenu';
 
 interface NavItemConfig {
@@ -241,7 +242,9 @@ export function RootLayout() {
             <Menu size={18} />
           </button>
 
-          <div className="flex-1" />
+          <div className="flex-1 max-w-md mr-auto">
+            <GlobalCommandSearch />
+          </div>
 
           <LanguageSwitcher />
           <ThemeToggle />

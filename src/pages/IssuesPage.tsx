@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react';
-import { Link } from 'react-router';
+import { useEffect, useMemo, useState } from 'react';
+import { Link, useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import {
   AlertTriangle,
@@ -103,11 +103,23 @@ export function IssuesPage() {
   const { t } = useTranslation();
   const { data, isPending, isError, refetch, isFetching } = useIssues();
 
+  const [searchParams] = useSearchParams();
   const [type, setType] = useState('all');
   const [severity, setSeverity] = useState('all');
   const [status, setStatus] = useState('all');
-  const [project, setProject] = useState('all');
-  const [search, setSearch] = useState('');
+  const [project, setProject] = useState(() => searchParams.get('project') ?? 'all');
+  const [search, setSearch] = useState(() => searchParams.get('search') ?? searchParams.get('q') ?? '');
+
+  useEffect(() => {
+    const searchVal = searchParams.get('search') ?? searchParams.get('q');
+    if (searchVal !== null) {
+      setSearch(searchVal);
+    }
+    const projVal = searchParams.get('project');
+    if (projVal !== null) {
+      setProject(projVal);
+    }
+  }, [searchParams]);
   const [page, setPage] = useState(1);
   const [assignTarget, setAssignTarget] = useState<Issue | null>(null);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -302,9 +314,9 @@ export function IssuesPage() {
                   </th>
                   <th className={headCell}>{t('ISSUE.COL_TYPE')}</th>
                   <th className={headCell}>{t('ISSUE.COL_SEVERITY')}</th>
+                  <th className={headCell}>{t('ISSUE.COL_PROJECT')}</th>
                   <th className={headCell}>{t('ISSUE.COL_ISSUE')}</th>
                   <th className={headCell}>{t('ISSUE.COL_COMPONENT')}</th>
-                  <th className={headCell}>{t('ISSUE.COL_PROJECT')}</th>
                   <th className={headCell}>{t('ISSUE.COL_ASSIGNED')}</th>
                   <th className={headCell}>{t('ISSUE.COL_STATUS')}</th>
                   <th className={`${headCell} text-center`}>{t('ISSUE.COL_VIEW')}</th>
@@ -333,6 +345,9 @@ export function IssuesPage() {
                       <td className="px-4 py-3">
                         <SeverityCell severity={issue.severity} />
                       </td>
+                      <td className="whitespace-nowrap px-4 py-3 text-muted">
+                        {issue.projectName || '—'}
+                      </td>
                       <td className="max-w-[280px] px-4 py-3">
                         <p className="truncate text-fg" title={issue.message}>
                           {issue.message || '—'}
@@ -345,9 +360,6 @@ export function IssuesPage() {
                         >
                           {issue.component || '—'}
                         </p>
-                      </td>
-                      <td className="whitespace-nowrap px-4 py-3 text-muted">
-                        {issue.projectName || '—'}
                       </td>
                       <td className="whitespace-nowrap px-4 py-3">
                         <button

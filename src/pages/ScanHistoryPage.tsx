@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react';
-import { Link } from 'react-router';
+import { useEffect, useMemo, useState } from 'react';
+import { Link, useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import {
   AlertTriangle,
@@ -100,8 +100,16 @@ export function ScanHistoryPage() {
   const { t } = useTranslation();
   const { data, isPending, isError, refetch, isFetching } = useScanHistory();
 
-  const [project, setProject] = useState('all');
+  const [searchParams] = useSearchParams();
+  const [project, setProject] = useState(() => searchParams.get('project') ?? searchParams.get('search') ?? searchParams.get('q') ?? 'all');
   const [status, setStatus] = useState<StatusFilter>('all');
+
+  useEffect(() => {
+    const param = searchParams.get('project') ?? searchParams.get('search') ?? searchParams.get('q');
+    if (param !== null) {
+      setProject(param);
+    }
+  }, [searchParams]);
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [page, setPage] = useState(1);
