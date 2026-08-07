@@ -255,26 +255,7 @@ export function RootLayout() {
             </div>
           </div>
 
-          <div className="flex items-center justify-between rounded-2xl border border-border/70 bg-surface p-2.5 shadow-2xs">
-            <div className="flex items-center gap-2.5 min-w-0">
-              <div className="brand-gradient-bg relative flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-semibold text-primary-fg shadow-sm shadow-primary/30">
-                {user?.username?.charAt(0).toUpperCase() ?? '?'}
-                {(user?.status ?? '').toUpperCase() === 'VERIFIED' ? (
-                  <BadgeCheck
-                    size={13}
-                    className="absolute -bottom-0.5 -right-0.5 rounded-full bg-surface text-success"
-                  />
-                ) : null}
-              </div>
-              <div className="min-w-0">
-                <p className="truncate text-xs font-semibold text-fg">{user?.username}</p>
-                <p className="font-mono text-[10px] uppercase tracking-wide text-faint">
-                  {user?.role}
-                </p>
-              </div>
-            </div>
-            <ProfileMenu direction="up" />
-          </div>
+          <ProfileMenu variant="card" direction="up" />
         </div>
       </aside>
 
