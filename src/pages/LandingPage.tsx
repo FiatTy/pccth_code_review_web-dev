@@ -13,6 +13,7 @@ import {
 import { BrandMark } from '@/components/common/BrandMark';
 import { LanguageSwitcher } from '@/components/common/LanguageSwitcher';
 import { ThemeToggle } from '@/components/common/ThemeToggle';
+import { StableLabel, StableText } from '@/components/common/StableLabel';
 import { Reveal } from '@/components/common/Reveal';
 import { useAuth } from '@/lib/auth/auth-context';
 
@@ -90,13 +91,13 @@ export function LandingPage() {
               to="/login"
               className="inline-flex rounded-full px-2.5 py-1.5 text-xs font-medium text-muted transition-colors hover:text-fg sm:px-4 sm:py-2 sm:text-sm"
             >
-              {t('AUTH.LOGIN')}
+              <StableLabel i18nKey="AUTH.LOGIN" />
             </Link>
             <Link
               to="/register"
               className="brand-gradient-bg group inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold text-primary-fg shadow-lg shadow-primary/25 transition-all duration-200 hover:-translate-y-px hover:shadow-primary/40 active:scale-[0.98] sm:px-4 sm:py-2 sm:text-sm"
             >
-              {t('AUTH.REGISTER')}
+              <StableLabel i18nKey="AUTH.REGISTER" />
               <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5 sm:w-[15px] sm:h-[15px]" />
             </Link>
           </div>
@@ -133,8 +134,16 @@ export function LandingPage() {
             </Reveal>
             <Reveal delay={180}>
               <p className="mt-6 max-w-xl text-base leading-relaxed text-muted sm:text-lg">
-                {t('LANDING.HERO_SUBTITLE_1')}{' '}
-                <span className="font-medium text-fg">{t('LANDING.HERO_SUBTITLE_2')}</span>
+                <StableText>
+                  {(lang) => (
+                    <>
+                      {t('LANDING.HERO_SUBTITLE_1', { lng: lang })}{' '}
+                      <span className="font-medium text-fg">
+                        {t('LANDING.HERO_SUBTITLE_2', { lng: lang })}
+                      </span>
+                    </>
+                  )}
+                </StableText>
               </p>
             </Reveal>
             <Reveal delay={270}>
@@ -143,7 +152,7 @@ export function LandingPage() {
                   to="/register"
                   className="brand-gradient-bg group inline-flex items-center gap-2 rounded-xl px-6 py-3 text-[15px] font-semibold text-primary-fg shadow-lg shadow-primary/25 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-primary/35 active:scale-[0.99]"
                 >
-                  {t('LANDING.GET_STARTED')}
+                  <StableLabel i18nKey="LANDING.GET_STARTED" />
                   <ArrowRight
                     size={17}
                     className="transition-transform group-hover:translate-x-0.5"
@@ -153,7 +162,7 @@ export function LandingPage() {
                   href="#features"
                   className="inline-flex items-center gap-2 rounded-xl border border-border bg-surface/60 px-6 py-3 text-[15px] font-semibold text-fg shadow-sm backdrop-blur transition-all duration-200 hover:-translate-y-0.5 hover:border-border-strong hover:shadow-md active:scale-[0.99]"
                 >
-                  {t('LANDING.EXPLORE_FEATURES')}
+                  <StableLabel i18nKey="LANDING.EXPLORE_FEATURES" />
                 </a>
               </div>
             </Reveal>
