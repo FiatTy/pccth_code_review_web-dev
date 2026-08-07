@@ -8,6 +8,11 @@ export interface UserInfo {
   status: string;
 }
 
+export interface UserOption {
+  id: string;
+  username: string;
+}
+
 export interface LoginUser {
   id: string;
   username: string;

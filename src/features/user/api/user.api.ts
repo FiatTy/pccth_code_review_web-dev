@@ -1,8 +1,13 @@
 import { apiClient } from '@/lib/api-client';
-import type { UserInfo } from '@/types/user';
+import type { UserInfo, UserOption } from '@/types/user';
 
 export async function getAllUsers(): Promise<UserInfo[]> {
   const { data } = await apiClient.get<UserInfo[]>('/user/all-user');
+  return Array.isArray(data) ? data : [];
+}
+
+export async function getAssignableUsers(): Promise<UserOption[]> {
+  const { data } = await apiClient.get<UserOption[]>('/user/assignable');
   return Array.isArray(data) ? data : [];
 }
 
