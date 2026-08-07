@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { NavLink, Outlet } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import {
+  BadgeCheck,
   Bell,
   Bug,
   ClipboardList,
@@ -148,19 +149,31 @@ export function RootLayout() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const isAdmin = user?.role === 'ADMIN';
 
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileOpen]);
+
   return (
     <div className="flex min-h-screen bg-bg text-fg">
       {mobileOpen ? (
         <button
           type="button"
           aria-label={t('NAV.CLOSE_MENU')}
-          className="fixed inset-0 z-30 bg-black/40 lg:hidden"
+          className="fixed inset-0 z-30 bg-black/50 backdrop-blur-xs lg:hidden"
           onClick={() => setMobileOpen(false)}
+          onTouchMove={(e) => e.preventDefault()}
         />
       ) : null}
 
       <aside
-        className={`fixed inset-y-0 left-0 z-40 flex w-64 shrink-0 flex-col bg-surface/60 backdrop-blur-xl transition-transform duration-200 lg:sticky lg:top-0 lg:h-screen lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-40 flex w-64 shrink-0 flex-col bg-surface shadow-2xl border-r border-border transition-transform duration-200 lg:sticky lg:top-0 lg:h-screen lg:shadow-none lg:translate-x-0 ${
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
@@ -176,7 +189,7 @@ export function RootLayout() {
           </button>
         </div>
 
-        <nav className="scroll-slim flex-1 space-y-6 overflow-y-auto border-r border-border px-3 py-5">
+        <nav className="scroll-slim flex-1 space-y-6 overflow-y-auto px-3 py-5">
           {NAV_SECTIONS.map((section) => {
             const items = section.items.filter((item) => !item.adminOnly || isAdmin);
             if (items.length === 0) {
@@ -229,6 +242,21 @@ export function RootLayout() {
             );
           })}
         </nav>
+
+        {/* Sidebar Footer (Mobile responsive drawer) */}
+        <div className="border-t border-border bg-surface-2/40 p-3.5 space-y-3 lg:hidden">
+          <div className="flex items-center justify-between gap-2 px-1">
+            <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-faint">
+              {t('NAV.PREFERENCES', 'Preferences')}
+            </span>
+            <div className="flex items-center gap-2">
+              <LanguageSwitcher />
+              <ThemeToggle />
+            </div>
+          </div>
+
+          <ProfileMenu variant="card" direction="up" />
+        </div>
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
@@ -246,11 +274,13 @@ export function RootLayout() {
             <GlobalCommandSearch />
           </div>
 
-          <LanguageSwitcher />
-          <ThemeToggle />
           <NotificationBell />
 
-          <ProfileMenu />
+          <div className="hidden lg:flex lg:items-center lg:gap-2.5">
+            <LanguageSwitcher />
+            <ThemeToggle />
+            <ProfileMenu direction="down" />
+          </div>
         </header>
 
         <main className="flex-1 px-4 py-6 lg:px-8">
