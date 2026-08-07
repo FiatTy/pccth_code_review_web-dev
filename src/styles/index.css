@@ -471,7 +471,7 @@
     box-shadow: 0 14px 34px -24px color-mix(in oklab, var(--primary) 50%, transparent);
   }
 
-  /* Dashboard greeting mascot — day: a hand offering a sloshing coffee; night: a
+  /* Dashboard greeting mascot — day: a hand gripping a takeaway cup; night: a
      sleepy moon with a nightcap, blinking, ringed by twinkling stars.
      transform-box: fill-box makes transform-origin relative to each SVG group. */
   .greet-mascot {
@@ -485,26 +485,43 @@
     transform-origin: center;
   }
 
-  /* whole coffee scene floats gently — soft, graceful bob + tilt */
+  /* The arm drifts around a slow loop while the wrist sways on its own beat.
+     5.6s against 4.3s only realign every ~4 minutes, so each pass lands slightly
+     differently instead of reading as one repeating bob. Sine-like easing (no
+     linear segments) keeps the direction changes soft. */
   .greet-offer {
-    animation: greet-offer 3.6s ease-in-out infinite;
+    animation: greet-offer 5.6s cubic-bezier(0.37, 0, 0.63, 1) infinite;
   }
 
-  /* coffee surface — waves flow across the cup (two layers for depth) */
-  .greet-wave {
-    animation: greet-wave 1.3s linear infinite;
+  /* pivots at the wrist, not the group centre, so the cup arcs instead of shearing */
+  .greet-mascot .greet-sway {
+    transform-origin: 8% 87%;
+    animation: greet-sway 4.3s cubic-bezier(0.37, 0, 0.63, 1) infinite;
   }
 
-  .greet-wave-2 {
-    animation-duration: 1.9s;
+  /* fingertips settle into the grip one after another */
+  .greet-finger {
+    animation: greet-finger 3.1s cubic-bezier(0.37, 0, 0.63, 1) infinite;
+  }
+
+  .greet-finger-2 {
+    animation-delay: 0.26s;
+  }
+
+  .greet-finger-3 {
+    animation-delay: 0.52s;
   }
 
   .greet-steam {
-    animation: greet-steam 2.4s ease-in-out infinite;
+    animation: greet-steam 3.4s ease-in-out infinite;
   }
 
   .greet-steam-2 {
-    animation-delay: 1.2s;
+    animation-delay: 1.1s;
+  }
+
+  .greet-steam-3 {
+    animation-delay: 2.2s;
   }
 
   .greet-moon {
@@ -544,36 +561,58 @@
     animation-delay: 1.3s;
   }
 
+  /* four stops trace a loop rather than a straight up-down bob */
   @keyframes greet-offer {
     0%,
     100% {
-      transform: translateY(0) rotate(-1.5deg);
+      transform: translate(0, 0);
+    }
+    25% {
+      transform: translate(1.3px, -2.1px);
     }
     50% {
-      transform: translateY(-2.5px) rotate(1.5deg);
+      transform: translate(0, -3.2px);
+    }
+    75% {
+      transform: translate(-1.3px, -1.3px);
     }
   }
 
-  @keyframes greet-wave {
-    from {
-      transform: translateX(0);
+  @keyframes greet-sway {
+    0%,
+    100% {
+      transform: rotate(-3.4deg);
     }
-    to {
-      transform: translateX(-4px);
+    50% {
+      transform: rotate(2.8deg);
+    }
+  }
+
+  @keyframes greet-finger {
+    0%,
+    100% {
+      transform: translate(0, 0);
+    }
+    50% {
+      transform: translate(-0.45px, 0.25px);
     }
   }
 
   @keyframes greet-steam {
     0% {
       opacity: 0;
-      transform: translateY(2px) scaleY(0.7);
+      transform: translate(0, 3px) scaleY(0.55);
     }
-    35% {
-      opacity: 0.7;
+    22% {
+      opacity: 0.6;
+    }
+    62% {
+      opacity: 0.42;
+      transform: translate(1.5px, -3px) scaleY(1.1);
     }
     100% {
       opacity: 0;
-      transform: translateY(-7px) scaleY(1.3);
+      transform: translate(-1.4px, -8.5px) scaleY(1.5);
     }
   }
 
@@ -639,7 +678,8 @@
 
   @media (prefers-reduced-motion: reduce) {
     .greet-offer,
-    .greet-wave,
+    .greet-mascot .greet-sway,
+    .greet-finger,
     .greet-steam,
     .greet-moon,
     .greet-eye,

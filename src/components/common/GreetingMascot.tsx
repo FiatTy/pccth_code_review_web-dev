@@ -1,7 +1,9 @@
 /**
  * Animated greeting mascot for the dashboard header.
- * Daytime (06:00–17:59) → a sleeved hand reaches in from the left offering a
- *   coffee cup, the coffee sloshes, steam rises, the whole scene nudges forward.
+ * Daytime (06:00–17:59) → a cuffed hand grips a lidded takeaway cup from the
+ *   side: thumb pressed on the near face, fingertips curling over the far edge.
+ *   The arm drifts along a slow loop while the wrist sways on a different beat,
+ *   and steam drifts off the lid.
  * Nighttime → a round moon in a nightcap bobs and blinks sleepily, ringed by
  *   twinkling stars, with floating Zzz.
  * Both respect prefers-reduced-motion (animations disabled via CSS).
@@ -74,103 +76,132 @@ export function GreetingMascot() {
   const skin = '#e3a878';
   const skinLight = '#f0be8f';
   const skinShade = '#c98a5c';
+  const nailPlate = '#f6cdb2'; // nail bed: paler and pinker than the skin around it
+  const nailEdge = '#fdece0'; // the free edge at the tip catches the light
 
   return (
     <svg
       className="greet-mascot"
-      style={{ height: '1.9em', width: '2.7em' }}
-      viewBox="0 0 70 50"
+      style={{ height: '1.9em', width: '2.15em' }}
+      viewBox="0 0 54 48"
       fill="none"
       role="img"
       aria-label="Good day"
     >
-      <defs>
-        <clipPath id="greet-cup-clip">
-          <ellipse cx="46" cy="17" rx="8" ry="2.4" />
-        </clipPath>
-      </defs>
-
-      {/* wavy steam */}
-      <g stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" fill="none" opacity="0.38">
-        <path className="greet-steam" d="M43 3c-2.4 2 2.4 4 0 6s2.4 4 0 6" />
-        <path className="greet-steam greet-steam-2" d="M51 2c-2.4 2 2.4 4 0 6s2.4 4 0 6" />
-      </g>
-
       <g className="greet-offer">
-        {/* sleeve + cuff reaching in from the left */}
-        <path d="M0 27q0-1.2 1.2-1.2H14a6.5 6.5 0 0 1 0 13H1.2Q0 38.8 0 37.6z" fill="var(--primary)" />
-        <rect x="9" y="25" width="5" height="14" rx="2.4" fill="var(--primary-hover)" />
+        {/* steam drifting off the lid */}
+        <g stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" fill="none" opacity="0.3">
+          <path className="greet-steam" d="M34 2.6c-1.7 1.5 1.7 2.9 0 4.4" />
+          <path className="greet-steam greet-steam-2" d="M38 1.4c-1.7 1.5 1.7 2.9 0 4.4" />
+          <path className="greet-steam greet-steam-3" d="M42 2.6c-1.7 1.5 1.7 2.9 0 4.4" />
+        </g>
 
-        {/* mug handle (right) + body */}
-        <path d="M54 19.5h3a4.8 4.8 0 0 1 0 9h-3" fill="none" stroke="var(--accent)" strokeWidth="2.8" />
-        <path d="M38 17h16v6.5a8 8 0 0 1-16 0z" fill="var(--accent)" />
-        {/* body shading */}
-        <path d="M50.5 17v6.5a8 8 0 0 1-3.4 6.3A8 8 0 0 0 50.5 17z" fill="#00000012" />
+        {/* hand + cup move as one rigid grip, pivoting at the wrist */}
+        <g className="greet-sway">
+          {/* back of the hand — mostly hidden behind the cup, only the near edge shows */}
+          <ellipse cx="27.5" cy="37.5" rx="9" ry="6.4" fill={skin} transform="rotate(-12 27.5 37.5)" />
+          <path d="M19.5 41.4c3 2.3 8.4 2.7 12.2 1.1-2.4 2.3-8.6 2.6-12.2-1.1z" fill="#00000012" />
 
-        {/* coffee: dark base + two flowing wave layers, clipped to the rim */}
-        <g clipPath="url(#greet-cup-clip)">
-          <rect x="37" y="14.5" width="18" height="6" fill="#3d2415" />
+          {/* takeaway cup: stepped lid, tapered body, kraft sleeve.
+              currentColor outline keeps the line-art contrast in both themes —
+              --border-strong all but disappears against the dark surface. */}
+          <g fill="var(--surface)" stroke="currentColor" strokeOpacity="0.28" strokeWidth="1.1">
+            <rect x="26" y="9" width="24" height="6" rx="2.6" />
+            <rect x="28" y="14.6" width="20" height="3.2" rx="1.4" />
+            <path d="M28.8 17.4h18.4l-2.6 22.4a3 3 0 0 1-3 2.6h-7.2a3 3 0 0 1-3-2.6z" />
+          </g>
+          <path d="M29.3 22h17.4l-1.2 12H30.5z" fill="var(--accent)" />
+          <path d="M43.4 22h3.3l-1.2 12h-3.3z" fill="#0000000f" />
+
+          {/* fingertips curling over the far edge — each overlaps the cup outline
+              so the grip reads as "wrapped around" rather than "resting beside" */}
+          <g fill={skin} stroke={skinShade} strokeWidth="0.6" strokeOpacity="0.45">
+            <rect className="greet-finger" x="43.4" y="19.4" width="6.3" height="4.1" rx="2.05" />
+            <rect
+              className="greet-finger greet-finger-2"
+              x="43.1"
+              y="24.8"
+              width="6.4"
+              height="4.1"
+              rx="2.05"
+            />
+            <rect
+              className="greet-finger greet-finger-3"
+              x="42.8"
+              y="30.2"
+              width="6.2"
+              height="3.9"
+              rx="1.95"
+            />
+          </g>
+
+          {/* Thumb laid along the near face of the sleeve. It is drawn as one
+              unstroked shape whose base flares into the palm — an outlined
+              capsule reads as a separate part glued on. The two creases (knuckle
+              + thenar) are what sell it as a joint instead of a seam. */}
+          <g transform="rotate(14 30.3 29.75)">
+            <path
+              d="M27.6 25.3a2.7 2.7 0 0 1 5.4 0c0 3.4.8 6.4 1.1 9.2.35 3.3-7.9 3.7-7.9.2 0-2.7 1.4-5.8 1.4-9.4z"
+              fill={skinLight}
+            />
+            <g
+              fill="none"
+              stroke={skinShade}
+              strokeWidth="0.55"
+              strokeOpacity="0.45"
+              strokeLinecap="round"
+            >
+              <path d="M28.2 29.3c1.4 1 3 1 4.4-.1" />
+              <path d="M26.7 34.5c2.3 1.9 5.4 2 7.5.2" />
+            </g>
+            {/* nail: plate + lighter free edge, ringed so it reads against the skin */}
+            <ellipse
+              cx="30.3"
+              cy="25.2"
+              rx="1.75"
+              ry="2.1"
+              fill={nailPlate}
+              stroke={skinShade}
+              strokeWidth="0.45"
+              strokeOpacity="0.5"
+            />
+            <path
+              d="M28.85 25a1.6 1.9 0 0 1 2.9 0"
+              fill="none"
+              stroke={nailEdge}
+              strokeWidth="0.8"
+              strokeLinecap="round"
+            />
+          </g>
+        </g>
+
+        {/* Shirt sleeve, angled toward the wrist and drawn last so the cuff hides
+            the wrist seam as the hand sways. The band sits at the end of the
+            sleeve (not across its middle) so it reads as a real buttoned cuff. */}
+        <g transform="rotate(-12 8 40.4)">
+          {/* forearm, long and slim so it reads as a limb entering frame rather
+              than a block; the left end runs past the viewBox */}
+          <path d="M-16 33.4h27v14h-27z" fill="var(--primary)" />
+          <path d="M-16 43.9h27v3.5h-27z" fill="#00000016" />
+          <g stroke="#ffffff" strokeOpacity="0.16" strokeWidth="0.8" strokeLinecap="round">
+            <path d="M-7.5 35v10.8" />
+            <path d="M-1 34.6v11.4" />
+            <path d="M4.4 35.2v10.4" />
+          </g>
+          {/* cuff: same cloth lifted a touch, so the seam reads as a fold in the
+              fabric — a darker block here looks like a separate object */}
           <path
-            className="greet-wave"
-            d="M29 17.5q2-1.3 4 0t4 0 4 0 4 0 4 0 4 0 4 0 4 0V22H29z"
-            fill="#6b4327"
+            d="M11 32.8h6.2a3.2 3.2 0 0 1 3.2 3.2v8.8a3.2 3.2 0 0 1-3.2 3.2H11z"
+            fill="var(--primary)"
           />
           <path
-            className="greet-wave greet-wave-2"
-            d="M29 18.3q2-1 4 0t4 0 4 0 4 0 4 0 4 0 4 0 4 0V22H29z"
-            fill="#7d4f2e"
-            opacity="0.8"
+            d="M11 32.8h6.2a3.2 3.2 0 0 1 3.2 3.2v8.8a3.2 3.2 0 0 1-3.2 3.2H11z"
+            fill="#ffffff"
+            opacity="0.1"
           />
+          <path d="M11.2 33.2v14.6" stroke="#00000026" strokeWidth="0.7" strokeLinecap="round" />
+          <circle cx="15.4" cy="40.4" r="0.95" fill="var(--surface)" opacity="0.9" />
         </g>
-        {/* rim */}
-        <ellipse cx="46" cy="17" rx="8" ry="2.4" fill="none" stroke="var(--accent)" strokeWidth="1" opacity="0.5" />
-
-        {/* ===== detailed hand: a fist with knuckles gripping the mug's left ===== */}
-        {/* back-of-hand + knuckle silhouette */}
-        <path
-          d="M16 28C13 26 14 22 18 22Q21 19.5 24 22Q27 19.5 30 22Q33 19.5 36 22Q38.5 20 40 23C42 26 40 32 35 35C28 38 18 38 15 34Z"
-          fill={skin}
-        />
-        {/* soft highlight along the knuckles */}
-        <path
-          d="M18 22Q21 19.8 24 22Q27 19.8 30 22Q33 19.8 36 22"
-          fill="none"
-          stroke={skinLight}
-          strokeWidth="1.2"
-          strokeLinecap="round"
-          opacity="0.7"
-        />
-        {/* finger creases */}
-        <g stroke={skinShade} strokeWidth="0.7" strokeLinecap="round" opacity="0.6">
-          <path d="M24 21.6v4" />
-          <path d="M30 21.6v4.2" />
-          <path d="M36 22v3.6" />
-        </g>
-        {/* lower shadow of the hand */}
-        <path
-          d="M15 34C18 38 28 38 35 35C33 37 27 38 20 37C17 36.5 15.5 35.5 15 34Z"
-          fill="#0000000f"
-        />
-        {/* thumb on the near side, with nail */}
-        <path d="M20 31c-2.4 1-3 4-.6 5.6 2 1.4 4.6.6 5.2-1.6.5-2-1-4.6-4.6-4z" fill="#e6ac7e" />
-        <ellipse
-          cx="21.4"
-          cy="33.6"
-          rx="1.1"
-          ry="1.5"
-          fill="#f5d3ab"
-          opacity="0.8"
-          transform="rotate(-22 21.4 33.6)"
-        />
-        {/* thumb crease */}
-        <path
-          d="M24.6 31.6c.6 1.4.4 2.8-.7 3.9"
-          fill="none"
-          stroke={skinShade}
-          strokeWidth="0.7"
-          strokeLinecap="round"
-          opacity="0.55"
-        />
       </g>
     </svg>
   );
