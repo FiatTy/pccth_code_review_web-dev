@@ -78,6 +78,13 @@ export function GreetingMascot() {
   const skinShade = '#c98a5c';
   const nailPlate = '#f6cdb2'; // nail bed: paler and pinker than the skin around it
   const nailEdge = '#fdece0'; // the free edge at the tip catches the light
+  // The cup is a physical object, not a UI surface: a paper cup is white under
+  // any theme, so both fill and outline are fixed rather than themed. Bound to
+  // --surface it turned black in dark mode; bound to currentColor the outline
+  // would then vanish against the white it has to describe.
+  const cupPaper = '#ffffff';
+  const cupLine = '#0e1620';
+  const cupSleeve = '#b08d57'; // the light-theme kraft, pinned so the whole cup is one object
 
   return (
     <svg
@@ -102,15 +109,13 @@ export function GreetingMascot() {
           <ellipse cx="27.5" cy="37.5" rx="9" ry="6.4" fill={skin} transform="rotate(-12 27.5 37.5)" />
           <path d="M19.5 41.4c3 2.3 8.4 2.7 12.2 1.1-2.4 2.3-8.6 2.6-12.2-1.1z" fill="#00000012" />
 
-          {/* takeaway cup: stepped lid, tapered body, kraft sleeve.
-              currentColor outline keeps the line-art contrast in both themes —
-              --border-strong all but disappears against the dark surface. */}
-          <g fill="var(--surface)" stroke="currentColor" strokeOpacity="0.28" strokeWidth="1.1">
+          {/* takeaway cup: stepped lid, tapered body, kraft sleeve */}
+          <g fill={cupPaper} stroke={cupLine} strokeOpacity="0.28" strokeWidth="1.1">
             <rect x="26" y="9" width="24" height="6" rx="2.6" />
             <rect x="28" y="14.6" width="20" height="3.2" rx="1.4" />
             <path d="M28.8 17.4h18.4l-2.6 22.4a3 3 0 0 1-3 2.6h-7.2a3 3 0 0 1-3-2.6z" />
           </g>
-          <path d="M29.3 22h17.4l-1.2 12H30.5z" fill="var(--accent)" />
+          <path d="M29.3 22h17.4l-1.2 12H30.5z" fill={cupSleeve} />
           <path d="M43.4 22h3.3l-1.2 12h-3.3z" fill="#0000000f" />
 
           {/* fingertips curling over the far edge — each overlaps the cup outline
@@ -200,7 +205,8 @@ export function GreetingMascot() {
             opacity="0.1"
           />
           <path d="M11.2 33.2v14.6" stroke="#00000026" strokeWidth="0.7" strokeLinecap="round" />
-          <circle cx="15.4" cy="40.4" r="0.95" fill="var(--surface)" opacity="0.9" />
+          {/* same reasoning as the cup: a button is an object, not a surface */}
+          <circle cx="15.4" cy="40.4" r="0.95" fill={cupPaper} opacity="0.9" />
         </g>
       </g>
     </svg>
