@@ -7,7 +7,11 @@ import { ConfirmDialog } from '@/components/common/ConfirmDialog';
 import { ChangePasswordModal } from '@/features/user/components/ChangePasswordModal';
 import { useSendVerificationEmail } from '@/features/user/hooks/useAccount';
 
-export function ProfileMenu() {
+interface ProfileMenuProps {
+  direction?: 'down' | 'up';
+}
+
+export function ProfileMenu({ direction = 'down' }: ProfileMenuProps) {
   const { t } = useTranslation();
   const { user, logout } = useAuth();
   const { showToast } = useToast();
@@ -99,7 +103,11 @@ export function ProfileMenu() {
       </button>
 
       {isOpen ? (
-        <div className="absolute right-0 top-11 z-50 w-60 overflow-hidden rounded-xl border border-border bg-surface py-1 shadow-xl shadow-black/10">
+        <div
+          className={`absolute right-0 z-50 w-60 overflow-hidden rounded-xl border border-border bg-surface py-1 shadow-xl shadow-black/10 ${
+            direction === 'up' ? 'bottom-11' : 'top-11'
+          }`}
+        >
           <div className="border-b border-border px-3 pb-2 pt-1">
             <p className="truncate text-sm font-medium text-fg">{user?.username}</p>
             <p className="truncate text-[11px] text-muted">{user?.email}</p>
