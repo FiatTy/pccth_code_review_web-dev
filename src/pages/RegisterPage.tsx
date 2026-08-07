@@ -2,7 +2,7 @@ import { useState, type FormEvent } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
-import { AtSign, Check, Circle, Eye, EyeOff, Lock, Phone, User } from 'lucide-react';
+import { AtSign, Check, Circle, Eye, EyeOff, Lock, User } from 'lucide-react';
 import { AuthShell } from '@/features/auth/components/AuthShell';
 import { AuthField } from '@/features/auth/components/AuthField';
 import { AuthSubmitButton } from '@/features/auth/components/AuthSubmitButton';
@@ -12,13 +12,11 @@ import { useAuth } from '@/lib/auth/auth-context';
 import { getPasswordRules } from '@/lib/password-rules';
 
 const EMAIL_PATTERN = /^[^@\s]+@[^@\s]+\.[a-zA-Z]{2,}$/;
-const PHONE_PATTERN = /^0\d{9}$/;
 const ALLOWED_DOMAINS = ['pccth.com', 'wisesoft.co.th'];
 
 interface DuplicateFields {
   username?: boolean;
   email?: boolean;
-  phone?: boolean;
 }
 
 function isInvalidDomain(email: string): boolean {
@@ -43,13 +41,11 @@ function extractDuplicateFields(error: unknown): DuplicateFields {
     for (const field of data.fields) {
       if (field === 'username') result.username = true;
       if (field === 'email') result.email = true;
-      if (field === 'phoneNumber' || field === 'phone') result.phone = true;
     }
   }
   const message = String(data?.message ?? error.message ?? '').toLowerCase();
   if (message.includes('username')) result.username = true;
   if (message.includes('email')) result.email = true;
-  if (message.includes('phone')) result.phone = true;
   return result;
 }
 
@@ -61,7 +57,6 @@ export function RegisterPage() {
 
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -96,14 +91,6 @@ export function RegisterPage() {
           ? 'REGISTER.EMAIL_EXISTS'
           : null;
 
-  const phoneErrorKey = !phone.trim()
-    ? 'REGISTER.PHONE_REQUIRED'
-    : !PHONE_PATTERN.test(phone.trim())
-      ? 'REGISTER.PHONE_PATTERN'
-      : duplicates.phone
-        ? 'REGISTER.PHONE_EXISTS'
-        : null;
-
   const confirmErrorKey = !confirmPassword
     ? 'REGISTER.CONFIRM_PASSWORD_REQUIRED'
     : password !== confirmPassword
@@ -120,7 +107,7 @@ export function RegisterPage() {
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setSubmitted(true);
-    if (usernameErrorKey || emailErrorKey || phoneErrorKey || !passwordValid || confirmErrorKey) {
+    if (usernameErrorKey || emailErrorKey || !passwordValid || confirmErrorKey) {
       return;
     }
     setGenericError(false);
@@ -128,14 +115,13 @@ export function RegisterPage() {
       {
         username: username.trim(),
         email: email.trim(),
-        phone: phone.trim(),
         password: password.trim(),
       },
       {
         onSuccess: () => navigate('/login', { replace: true }),
         onError: (error) => {
           const found = extractDuplicateFields(error);
-          if (found.username || found.email || found.phone) {
+          if (found.username || found.email) {
             setDuplicates(found);
           } else {
             setGenericError(true);
@@ -224,24 +210,6 @@ export function RegisterPage() {
           placeholder={t('REGISTER.EMAIL_PLACEHOLDER')}
           autoComplete="email"
           error={submitted && emailErrorKey ? t(emailErrorKey) : null}
-        />
-
-        <AuthField
-          id="phone"
-          label={t('REGISTER.PHONE_NUMBER')}
-          icon={Phone}
-          type="tel"
-          inputMode="numeric"
-          maxLength={10}
-          value={phone}
-          onChange={(value) => {
-            setPhone(value);
-            setDuplicates((current) => ({ ...current, phone: false }));
-            resetServerErrors();
-          }}
-          placeholder={t('REGISTER.PHONE_PLACEHOLDER')}
-          autoComplete="tel"
-          error={submitted && phoneErrorKey ? t(phoneErrorKey) : null}
         />
 
         <AuthField
