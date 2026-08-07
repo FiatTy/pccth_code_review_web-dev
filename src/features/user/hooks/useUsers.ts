@@ -1,13 +1,27 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { createUser, deleteUser, getAllUsers, updateUser } from '@/features/user/api/user.api';
-import type { UserInfo } from '@/types/user';
+import {
+  createUser,
+  deleteUser,
+  getAllUsers,
+  getAssignableUsers,
+  updateUser,
+} from '@/features/user/api/user.api';
+import type { UserInfo, UserOption } from '@/types/user';
 
 export const usersQueryKey = ['users'] as const;
+export const assignableUsersQueryKey = ['users', 'assignable'] as const;
 
 export function useUsers() {
   return useQuery<UserInfo[]>({
     queryKey: usersQueryKey,
     queryFn: getAllUsers,
+  });
+}
+
+export function useAssignableUsers() {
+  return useQuery<UserOption[]>({
+    queryKey: assignableUsersQueryKey,
+    queryFn: getAssignableUsers,
   });
 }
 
