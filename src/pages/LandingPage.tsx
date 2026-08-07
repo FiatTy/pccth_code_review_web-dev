@@ -79,23 +79,25 @@ export function LandingPage() {
   return (
     <div className="min-h-screen bg-bg text-fg">
       <header className="sticky top-0 z-30 border-b border-border/60 bg-bg/70 backdrop-blur-xl">
-        <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-5">
-          <BrandMark size={44} />
-          <div className="flex items-center gap-2.5">
+        <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-3 sm:px-5">
+          <BrandMark size={44} wordmarkClassName="hidden min-[575px]:flex" />
+          <div className="flex items-center gap-1.5 sm:gap-2.5">
             <LanguageSwitcher />
-            <ThemeToggle />
+            <div className="hidden min-[575px]:block">
+              <ThemeToggle />
+            </div>
             <Link
               to="/login"
-              className="hidden rounded-full px-4 py-2 text-sm font-medium text-muted transition-colors hover:text-fg sm:inline-flex"
+              className="inline-flex rounded-full px-2.5 py-1.5 text-xs font-medium text-muted transition-colors hover:text-fg sm:px-4 sm:py-2 sm:text-sm"
             >
               {t('AUTH.LOGIN')}
             </Link>
             <Link
               to="/register"
-              className="brand-gradient-bg group inline-flex items-center gap-1.5 rounded-full px-4 py-2 text-sm font-semibold text-primary-fg shadow-lg shadow-primary/25 transition-all duration-200 hover:-translate-y-px hover:shadow-primary/40 active:scale-[0.98]"
+              className="brand-gradient-bg group inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold text-primary-fg shadow-lg shadow-primary/25 transition-all duration-200 hover:-translate-y-px hover:shadow-primary/40 active:scale-[0.98] sm:px-4 sm:py-2 sm:text-sm"
             >
               {t('AUTH.REGISTER')}
-              <ArrowRight size={15} className="transition-transform group-hover:translate-x-0.5" />
+              <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5 sm:w-[15px] sm:h-[15px]" />
             </Link>
           </div>
         </div>

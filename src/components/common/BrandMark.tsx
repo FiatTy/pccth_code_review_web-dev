@@ -3,9 +3,14 @@ import logoUrl from '@/assets/logo.png';
 interface BrandMarkProps {
   size?: number;
   showWordmark?: boolean;
+  wordmarkClassName?: string;
 }
 
-export function BrandMark({ size = 28, showWordmark = true }: BrandMarkProps) {
+export function BrandMark({
+  size = 28,
+  showWordmark = true,
+  wordmarkClassName = '',
+}: BrandMarkProps) {
   // Wordmark scales with the logo; anchored so size 28 keeps the original 14px / 9px.
   const titleSize = Math.round(size * 0.5);
   const subtitleSize = Math.min(Math.max(Math.round(size * 0.32), 8), 12);
@@ -21,7 +26,7 @@ export function BrandMark({ size = 28, showWordmark = true }: BrandMarkProps) {
         style={{ width: size, height: size }}
       />
       {showWordmark ? (
-        <div className="flex flex-col leading-none">
+        <div className={`flex flex-col leading-none ${wordmarkClassName}`}>
           <span
             className="font-semibold tracking-tight text-fg"
             style={{ fontSize: titleSize }}
