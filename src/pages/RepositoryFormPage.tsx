@@ -1,25 +1,18 @@
-import { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
 import {
-  FolderGit2,
-  GitBranch,
-  Hash,
-  Link2,
   Loader2,
   Plus,
   Save,
-  Server,
-  SlidersHorizontal,
-  Tag,
   Trash2,
-  TriangleAlert,
-  Wallet,
 } from 'lucide-react';
+import { RepositorySummaryRow } from '@/features/repository/components/RepositorySummaryRow';
+import { RepositoryDetailsSection } from '@/features/repository/components/RepositoryDetailsSection';
+import { RepositoryAnalysisSection } from '@/features/repository/components/RepositoryAnalysisSection';
+import { MissingScanConfigDialog } from '@/features/repository/components/MissingScanConfigDialog';
 import { PageHeader } from '@/components/common/PageHeader';
-import { FIELD_INPUT_CLASS, FormField } from '@/components/common/FormField';
-import { SelectField } from '@/components/common/SelectField';
 import { useToast } from '@/lib/toast/toast-context';
 import { useRepositories, useDeleteRepository } from '@/features/repository/hooks/useRepositories';
 import {
@@ -65,43 +58,6 @@ function readErrorMessage(error: unknown, fallback: string): string {
     return error.message || fallback;
   }
   return fallback;
-}
-
-function SectionCard({
-  eyebrow,
-  title,
-  children,
-}: {
-  eyebrow: string;
-  title: string;
-  children: ReactNode;
-}) {
-  return (
-    <section className="rounded-xl border border-border bg-surface">
-      <div className="card-header border-b border-border px-5 py-4">
-        <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.15em] text-faint">
-          {eyebrow}
-        </p>
-        <h2 className="mt-1 text-sm font-semibold text-fg">{title}</h2>
-      </div>
-      <div className="px-5 py-5">{children}</div>
-    </section>
-  );
-}
-
-function SummaryRow({ label, value, mono }: { label: string; value: string; mono?: boolean }) {
-  return (
-    <div className="flex items-baseline justify-between gap-3 py-1.5">
-      <span className="shrink-0 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-faint">
-        {label}
-      </span>
-      <span
-        className={`min-w-0 truncate text-right text-sm text-fg ${mono ? 'font-mono text-xs' : ''}`}
-      >
-        {value}
-      </span>
-    </div>
-  );
 }
 
 export function RepositoryFormPage() {
@@ -298,169 +254,20 @@ export function RepositoryFormPage() {
 
       <div className="grid items-start gap-4 lg:grid-cols-3">
         <div className="space-y-4 lg:col-span-2">
-          <SectionCard eyebrow="01" title={t('REPOSITORY.PROJECT_DETAILS')}>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <FormField
-                id="name"
-                label={t('REPOSITORY.REPOSITORY_NAME')}
-                error={touched.name ? errors.name : ''}
-              >
-                <div className="relative">
-                  <Tag
-                    size={15}
-                    className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-faint"
-                  />
-                  <input
-                    id="name"
-                    type="text"
-                    className={`${FIELD_INPUT_CLASS} pl-9`}
-                    placeholder="my-service"
-                    value={form.name}
-                    onChange={(event) => update({ name: event.target.value })}
-                    onBlur={() => markTouched('name')}
-                  />
-                </div>
-              </FormField>
+          <RepositoryDetailsSection
+            form={form}
+            errors={errors}
+            touched={touched}
+            update={update}
+            markTouched={markTouched}
+            handleUrlChange={handleUrlChange}
+            parsedGit={parsedGit}
+            isEditMode={isEditMode}
+            PROJECT_TYPES={PROJECT_TYPES}
+            MIN_COST_PER_DAY={MIN_COST_PER_DAY}
+          />
 
-              <FormField
-                id="projectType"
-                label={t('REPOSITORY.PROJECT_TYPE')}
-                error={touched.projectType ? errors.projectType : ''}
-              >
-                <SelectField
-                  id="projectType"
-                  className={FIELD_INPUT_CLASS}
-                  disabled={isEditMode}
-                  value={form.projectType}
-                  onChange={(next) => {
-                    update({ projectType: next as ProjectType });
-                    markTouched('projectType');
-                  }}
-                  placeholder={t('REPOSITORY.SELECT_FRAMEWORK')}
-                  options={PROJECT_TYPES.map((type) => ({
-                    value: type.value,
-                    label: type.label,
-                  }))}
-                />
-              </FormField>
-
-              <FormField
-                id="costPerDay"
-                label={t('REPOSITORY.COST_PER_DAY')}
-                error={touched.costPerDay ? errors.costPerDay : ''}
-                hint={t('REPOSITORY.COST_MIN')}
-              >
-                <div className="relative">
-                  <Wallet
-                    size={15}
-                    className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-faint"
-                  />
-                  <input
-                    id="costPerDay"
-                    type="number"
-                    min={MIN_COST_PER_DAY}
-                    className={`${FIELD_INPUT_CLASS} pl-9`}
-                    value={form.costPerDay}
-                    onFocus={(event) => event.target.select()}
-                    onChange={(event) => update({ costPerDay: Number(event.target.value) || 0 })}
-                    onBlur={() => markTouched('costPerDay')}
-                  />
-                </div>
-              </FormField>
-
-              <div className="sm:col-span-2">
-                <FormField
-                  id="repositoryUrl"
-                  label={t('REPOSITORY.GIT_URL')}
-                  error={touched.repositoryUrl ? errors.repositoryUrl : ''}
-                >
-                  <div className="relative">
-                    <Link2
-                      size={15}
-                      className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-faint"
-                    />
-                    <input
-                      id="repositoryUrl"
-                      type="url"
-                      className={`${FIELD_INPUT_CLASS} pl-9 font-mono text-xs`}
-                      placeholder="https://gitlab.com/team/project.git"
-                      disabled={isEditMode}
-                      value={form.repositoryUrl}
-                      onChange={(event) => handleUrlChange(event.target.value)}
-                      onBlur={() => markTouched('repositoryUrl')}
-                    />
-                  </div>
-                  {form.repositoryUrl && parsedGit.projectName ? (
-                    <div className="mt-3.5 rounded-lg border border-primary/20 bg-primary-subtle/40 p-3 text-xs">
-                      <div className="flex items-center gap-1.5 font-semibold text-primary">
-                        <FolderGit2 size={14} />
-                        <span>{t('REPOSITORY.EXTRACTED_INFO')}</span>
-                      </div>
-                      <div className="mt-2 grid grid-cols-2 gap-2 text-fg">
-                        <div>
-                          <span className="text-muted">{t('REPOSITORY.EXTRACTED_FOLDER')} </span>
-                          <span className="font-mono font-medium text-primary">{parsedGit.folder}</span>
-                        </div>
-                        <div>
-                          <span className="text-muted">{t('REPOSITORY.EXTRACTED_PROJECT')} </span>
-                          <span className="font-mono font-medium text-fg">{parsedGit.projectName}</span>
-                        </div>
-                      </div>
-                    </div>
-                  ) : null}
-                </FormField>
-              </div>
-            </div>
-          </SectionCard>
-
-          <SectionCard eyebrow="02" title={t('REPOSITORY.ANALYSIS_CONFIG')}>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <FormField
-                id="sonarServerUrl"
-                label={t('REPOSITORY.SONAR_SERVER')}
-                hint={t('REPOSITORY.FROM_SETTINGS')}
-              >
-                <div className="relative">
-                  <Server
-                    size={15}
-                    className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-faint"
-                  />
-                  <input
-                    id="sonarServerUrl"
-                    type="text"
-                    readOnly
-                    className={`${FIELD_INPUT_CLASS} pl-9 font-mono text-xs text-muted`}
-                    value={serverUrl}
-                  />
-                </div>
-              </FormField>
-
-              <FormField
-                id="sonarProjectKey"
-                label={t('REPOSITORY.PROJECT_KEY')}
-                hint={t('REPOSITORY.PROJECT_KEY_HINT')}
-              >
-                <div className="relative">
-                  <Hash
-                    size={15}
-                    className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-faint"
-                  />
-                  <input
-                    id="sonarProjectKey"
-                    type="text"
-                    readOnly
-                    className={`${FIELD_INPUT_CLASS} pl-9 font-mono text-xs text-muted`}
-                    value={projectKey}
-                  />
-                </div>
-              </FormField>
-            </div>
-
-            <div className="mt-4 flex items-start gap-2.5 rounded-lg border border-border bg-surface-2/50 px-4 py-3 text-xs leading-relaxed text-muted">
-              <GitBranch size={15} className="mt-0.5 shrink-0 text-primary" />
-              <p>{t('REPOSITORY.SCAN_ON_SAVE_HINT', { branch: SCAN_BRANCH })}</p>
-            </div>
-          </SectionCard>
+          <RepositoryAnalysisSection projectKey={projectKey} serverUrl={serverUrl} />
         </div>
 
         <aside className="space-y-4 lg:sticky lg:top-20">
@@ -469,11 +276,11 @@ export function RepositoryFormPage() {
               {t('REPOSITORY.SUMMARY')}
             </p>
             <div className="mt-3 divide-y divide-border">
-              <SummaryRow label={t('REPOSITORY.REPOSITORY_NAME')} value={form.name || '—'} />
-              <SummaryRow label={t('REPOSITORY.FOLDER')} value={parsedGit.folder || '—'} mono />
-              <SummaryRow label={t('REPOSITORY.PROJECT_TYPE')} value={typeLabel} />
-              <SummaryRow label={t('REPOSITORY.PROJECT_KEY')} value={projectKey || '—'} mono />
-              <SummaryRow
+              <RepositorySummaryRow label={t('REPOSITORY.REPOSITORY_NAME')} value={form.name || '—'} />
+              <RepositorySummaryRow label={t('REPOSITORY.FOLDER')} value={parsedGit.folder || '—'} mono />
+              <RepositorySummaryRow label={t('REPOSITORY.PROJECT_TYPE')} value={typeLabel} />
+              <RepositorySummaryRow label={t('REPOSITORY.PROJECT_KEY')} value={projectKey || '—'} mono />
+              <RepositorySummaryRow
                 label={t('REPOSITORY.COST_PER_DAY')}
                 value={form.costPerDay ? form.costPerDay.toLocaleString() : '—'}
               />
@@ -527,42 +334,11 @@ export function RepositoryFormPage() {
       </div>
 
       {showMissingConfig ? (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <button
-            type="button"
-            aria-label={t('REPOSITORY.CANCEL')}
-            className="absolute inset-0 bg-black/50"
-            onClick={() => setShowMissingConfig(false)}
-          />
-          <div className="relative w-full max-w-sm rounded-xl border border-border bg-surface p-6 shadow-xl">
-            <div className="flex h-11 w-11 items-center justify-center rounded-full bg-warning/12 text-warning">
-              <TriangleAlert size={20} />
-            </div>
-            <h2 className="mt-4 text-base font-semibold text-fg">
-              {t('REPOSITORY.MISSING_SONAR_TITLE')}
-            </h2>
-            <p className="mt-1.5 text-sm leading-relaxed text-muted">
-              {t('REPOSITORY.MISSING_SONAR_TEXT')}
-            </p>
-            <div className="mt-6 flex justify-end gap-2">
-              <button
-                type="button"
-                onClick={() => setShowMissingConfig(false)}
-                className="inline-flex h-9 items-center rounded-lg border border-border px-4 text-sm font-medium text-fg transition-colors hover:bg-surface-2"
-              >
-                {t('REPOSITORY.CANCEL')}
-              </button>
-              <button
-                type="button"
-                onClick={() => navigate('/sonarqubeconfig')}
-                className="inline-flex h-9 items-center gap-2 rounded-lg bg-primary px-4 text-sm font-semibold text-primary-fg transition hover:bg-primary-hover active:scale-[0.99]"
-              >
-                <SlidersHorizontal size={15} />
-                {t('REPOSITORY.GO_TO_SETTINGS')}
-              </button>
-            </div>
-          </div>
-        </div>
+        <MissingScanConfigDialog
+          reason="SONAR"
+          onClose={() => setShowMissingConfig(false)}
+          onGoToConfig={() => navigate('/sonarqubeconfig')}
+        />
       ) : null}
 
       {showDeleteConfirm ? (

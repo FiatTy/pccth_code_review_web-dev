@@ -1,4 +1,5 @@
-import { API_BASE, apiClient } from '@/lib/api-client';
+import { apiClient } from '@/lib/api-client';
+import { API_BASE } from '@/config/env';
 import type { LoginRequest, LoginResponse, RefreshResponse, RegisterRequest } from '@/types/user';
 
 export interface ResetPasswordPayload {

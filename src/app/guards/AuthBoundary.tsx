@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { Outlet } from 'react-router';
-import { AuthProvider } from '@/lib/auth/AuthProvider';
+import { AuthProvider } from '@/app/providers/AuthProvider';
 import { PageFallback } from '@/components/common/PageFallback';
 
 export function AuthBoundary() {

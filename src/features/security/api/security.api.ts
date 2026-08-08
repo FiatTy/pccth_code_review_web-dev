@@ -1,6 +1,7 @@
 import { apiClient } from '@/lib/api-client';
-import { mapIssue, type RawIssue } from '@/features/issue/api/issue.api';
-import type { Issue } from '@/features/issue/types';
+import { mapIssue } from '@/lib/mappers/issue-mapper';
+import type { RawIssue } from '@/types/issue';
+import type { Issue } from '@/types/issue';
 import type { OwaspCategory, SecurityCountItem, SecurityMetrics } from '@/features/security/types';
 
 interface RawSecurityMetrics {

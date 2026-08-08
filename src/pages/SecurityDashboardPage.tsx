@@ -3,12 +3,10 @@ import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import {
   ArrowRight,
-  CheckCircle2,
   Flame,
   Loader2,
   ShieldAlert,
   TriangleAlert,
-  XCircle,
 } from 'lucide-react';
 import { PageHeader } from '@/components/common/PageHeader';
 import { BarList } from '@/components/charts/BarList';
@@ -17,7 +15,7 @@ import { LineChart } from '@/components/charts/LineChart';
 import { useSecurityMetrics } from '@/features/security/hooks/useSecurityMetrics';
 import { useScanHistory } from '@/features/scan/hooks/useScanHistory';
 import { buildRecentScanTrend } from '@/features/scan/lib/scan-trends';
-import type { OwaspCategory } from '@/features/security/types';
+import { OwaspStatusIcon } from '@/features/security/components/OwaspStatusIcon';
 
 const SEVERITY_COLOR: Record<string, string> = {
   Critical: 'var(--color-critical)',
@@ -49,17 +47,7 @@ const RISK_TONE: Record<string, string> = {
   CRITICAL: 'bg-danger/12 text-danger',
 };
 
-const OWASP_TONE: Record<OwaspCategory['status'], string> = {
-  pass: 'text-success',
-  warning: 'text-warning',
-  fail: 'text-danger',
-};
 
-function OwaspIcon({ status }: { status: OwaspCategory['status'] }) {
-  if (status === 'pass') return <CheckCircle2 size={14} className={OWASP_TONE.pass} />;
-  if (status === 'warning') return <TriangleAlert size={14} className={OWASP_TONE.warning} />;
-  return <XCircle size={14} className={OWASP_TONE.fail} />;
-}
 
 export function SecurityDashboardPage() {
   const { t } = useTranslation();
@@ -196,7 +184,7 @@ export function SecurityDashboardPage() {
             <ul className="divide-y divide-border">
               {metrics.owaspCoverage.map((category) => (
                 <li key={category.name} className="flex items-center gap-3 px-5 py-3">
-                  <OwaspIcon status={category.status} />
+                  <OwaspStatusIcon status={category.status} />
                   <span className="min-w-0 flex-1 truncate text-sm text-fg">{category.name}</span>
                   <span className="shrink-0 font-mono text-xs text-muted">{category.count}</span>
                 </li>

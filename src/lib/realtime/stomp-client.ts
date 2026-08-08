@@ -2,7 +2,7 @@ import { Client, type IMessage, type IStompSocket, type StompSubscription } from
 import SockJS from 'sockjs-client';
 import { getAccessToken } from '@/lib/auth/token-store';
 
-const API_BASE = import.meta.env.VITE_API_BASE ?? '/backend';
+import { API_BASE } from '@/config/env';
 const RECONNECT_DELAY = 5000;
 
 type TopicHandler = (payload: unknown) => void;

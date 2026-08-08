@@ -1,18 +1,28 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Loader2, X } from 'lucide-react';
-import { UserSelect } from '@/features/user/components/UserSelect';
+import { UserSelect, type AssignableUser } from '@/components/ui/UserSelect';
 import { useBulkAssignIssues } from '@/features/issue/hooks/useIssue';
 import { useToast } from '@/lib/toast/toast-context';
-import type { Issue } from '@/features/issue/types';
+import type { Issue } from '@/types/issue';
 
 interface BulkAssignModalProps {
   issues: Issue[];
   onClose: () => void;
   onDone: () => void;
+  users: AssignableUser[];
+  usersPending?: boolean;
+  usersError?: boolean;
 }
 
-export function BulkAssignModal({ issues, onClose, onDone }: BulkAssignModalProps) {
+export function BulkAssignModal({
+  issues,
+  onClose,
+  onDone,
+  users,
+  usersPending,
+  usersError,
+}: BulkAssignModalProps) {
   const { t } = useTranslation();
   const { showToast } = useToast();
   const bulkAssign = useBulkAssignIssues();
@@ -83,6 +93,9 @@ export function BulkAssignModal({ issues, onClose, onDone }: BulkAssignModalProp
             value={assignedTo}
             onChange={setAssignedTo}
             error={error}
+            users={users}
+            isPending={usersPending}
+            isError={usersError}
           />
         </div>
 

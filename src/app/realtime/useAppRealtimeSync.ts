@@ -57,7 +57,7 @@ export function useAppRealtimeSync(): void {
     settingsRef.current = settings;
   }, [settings]);
 
-  useNotificationStream();
+  useNotificationStream(settings);
 
   const projectNameOf = useCallback(
     (projectId: string): string => {

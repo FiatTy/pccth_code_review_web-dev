@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import {
@@ -13,23 +13,22 @@ import {
   Sparkles,
   Terminal,
   TriangleAlert,
-  type LucideIcon,
 } from 'lucide-react';
 import { useAuth } from '@/lib/auth/auth-context';
 import { useToast } from '@/lib/toast/toast-context';
 import { GateStatus } from '@/components/common/GateStatus';
+import { StatCard } from '@/components/ui/StatCard';
+import { IssueTable } from '@/features/issue/components/IssueTable';
 import { useScan, useSendScanReportEmail } from '@/features/scan/hooks/useScan';
 import { useSonarQubeConfig } from '@/features/setting/hooks/useSonarQubeConfig';
 import {
-  formatDateTime,
   formatDuration,
   hotspotReviewRating,
   ratingTone,
 } from '@/features/scan/lib/scan-rating';
+import { formatDateTime } from '@/lib/format-date';
 import type { ScanDetail } from '@/features/scan/types';
-import type { Issue } from '@/features/issue/types';
-
-const PAGE_SIZE = 5;
+import type { Issue } from '@/types/issue';
 
 const STATUS_LABEL: Record<string, string> = {
   PENDING: 'LOG_VIEWER.SCANNING',
@@ -42,122 +41,6 @@ function resolveScannerType(projectType?: string, buildTool?: string): string {
     return buildTool === 'gradle' ? 'gradle sonar' : 'mvn sonar';
   }
   return 'npm sonar';
-}
-
-function MetricTile({
-  icon: Icon,
-  label,
-  value,
-  tone,
-}: {
-  icon: LucideIcon;
-  label: string;
-  value: string;
-  tone: string;
-}) {
-  return (
-    <div className="rounded-xl border border-border bg-surface p-5">
-      <div className="flex items-center justify-between">
-        <span className="text-[13px] font-medium uppercase tracking-[0.08em] text-muted">
-          {label}
-        </span>
-        <span className={`flex h-8 w-8 items-center justify-center rounded-lg ${tone}`}>
-          <Icon size={16} />
-        </span>
-      </div>
-      <p className="mt-3 text-2xl font-semibold tracking-tight text-fg">{value}</p>
-    </div>
-  );
-}
-
-function IssueTable({ title, issues, tone }: { title: string; issues: Issue[]; tone: string }) {
-  const { t } = useTranslation();
-  const [page, setPage] = useState(1);
-  const totalPages = Math.max(1, Math.ceil(issues.length / PAGE_SIZE));
-  const currentPage = Math.min(page, totalPages);
-  const rows = issues.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
-
-  return (
-    <section className="overflow-hidden rounded-xl border border-border bg-surface">
-      <div className="flex items-center gap-2 card-header border-b border-border px-5 py-4">
-        <span className={`h-2 w-2 rounded-full ${tone}`} />
-        <h2 className="text-sm font-semibold text-fg">{title}</h2>
-      </div>
-      {rows.length === 0 ? (
-        <p className="px-5 py-10 text-center text-sm text-muted">{t('COMMON.NO_DATA')}</p>
-      ) : (
-        <>
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[30rem] text-left text-sm">
-              <thead>
-                <tr className="border-b border-border">
-                  {[
-                    'LOG_VIEWER.COL_HASH',
-                    'LOG_VIEWER.COL_MESSAGE',
-                    'LOG_VIEWER.COL_COMPONENT',
-                    'LOG_VIEWER.COL_LINE',
-                  ].map((key) => (
-                    <th
-                      key={key}
-                      className="px-5 py-3 font-mono text-xs font-semibold uppercase tracking-[0.14em] text-muted"
-                    >
-                      {t(key)}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border">
-                {rows.map((issue, index) => (
-                  <tr key={issue.id} className="transition-colors hover:bg-surface-2/50">
-                    <td className="px-5 py-3 font-mono text-xs text-faint">
-                      {(currentPage - 1) * PAGE_SIZE + index + 1}
-                    </td>
-                    <td className="max-w-[16rem] px-5 py-3">
-                      <span className="block truncate text-fg" title={issue.message}>
-                        {issue.message}
-                      </span>
-                    </td>
-                    <td className="max-w-[10rem] px-5 py-3">
-                      <span
-                        className="block truncate font-mono text-xs text-muted"
-                        title={issue.component}
-                      >
-                        {issue.component}
-                      </span>
-                    </td>
-                    <td className="px-5 py-3 font-mono text-xs text-muted">{issue.line ?? '—'}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-          <div className="flex items-center justify-between border-t border-border px-5 py-3">
-            <span className="font-mono text-[11px] text-faint">
-              {currentPage} / {totalPages}
-            </span>
-            <div className="flex gap-2">
-              <button
-                type="button"
-                onClick={() => setPage((current) => Math.max(1, current - 1))}
-                disabled={currentPage <= 1}
-                className="inline-flex h-8 items-center rounded-md border border-border px-3 text-xs font-medium text-fg transition-colors hover:bg-surface-2 disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                {t('LOG_VIEWER.PREV')}
-              </button>
-              <button
-                type="button"
-                onClick={() => setPage((current) => Math.min(totalPages, current + 1))}
-                disabled={currentPage >= totalPages}
-                className="inline-flex h-8 items-center rounded-md border border-border px-3 text-xs font-medium text-fg transition-colors hover:bg-surface-2 disabled:cursor-not-allowed disabled:opacity-50"
-              >
-                {t('LOG_VIEWER.NEXT')}
-              </button>
-            </div>
-          </div>
-        </>
-      )}
-    </section>
-  );
 }
 
 function buildMarkdown(scan: ScanDetail, scannerType: string): string {
@@ -179,12 +62,12 @@ function buildMarkdown(scan: ScanDetail, scannerType: string): string {
   const details =
     scan.analysisLogs.length > 0
       ? scan.analysisLogs
-          .map((log) => `- ${log.message} (${log.timestamp ? formatDateTime(log.timestamp) : ''})`)
+          .map((log) => `- ${log.message} (${log.timestamp ? (formatDateTime(log.timestamp) ?? '—') : ''})`)
           .join('\n')
       : 'No analysis logs available.';
 
   return `# Scan Report: ${scan.projectName || '-'}
-## Date: ${formatDateTime(scan.startedAt)}
+## Date: ${formatDateTime(scan.startedAt) ?? '—'}
 
 ### Execution Summary
 - **Status**: ${scan.status ?? '-'}
@@ -352,7 +235,7 @@ export function LogViewerPage() {
           </h1>
           <p className="mt-1 text-sm text-muted">
             {t('LOG_VIEWER.EXECUTED_ON', {
-              date: formatDateTime(scan.startedAt),
+              date: formatDateTime(scan.startedAt) ?? '—',
             })}
           </p>
         </div>
@@ -427,25 +310,25 @@ export function LogViewerPage() {
         </div>
       ) : (
         <div className="mb-5 grid grid-cols-2 gap-3 lg:grid-cols-4">
-          <MetricTile
+          <StatCard
             icon={Bug}
             label={t('LOG_VIEWER.BUGS')}
             value={String(metrics.bugs ?? 0)}
             tone="bg-blocker/12 text-blocker"
           />
-          <MetricTile
+          <StatCard
             icon={ShieldAlert}
             label={t('LOG_VIEWER.SECURITY')}
             value={String(metrics.vulnerabilities ?? 0)}
             tone="bg-major/12 text-major"
           />
-          <MetricTile
+          <StatCard
             icon={Sparkles}
             label={t('LOG_VIEWER.CODE_SMELLS')}
             value={String(metrics.codeSmells ?? 0)}
             tone="bg-primary-subtle text-primary"
           />
-          <MetricTile
+          <StatCard
             icon={Gauge}
             label={t('LOG_VIEWER.COVERAGE')}
             value={metrics.coverage != null ? `${metrics.coverage}%` : '—'}
@@ -527,7 +410,7 @@ export function LogViewerPage() {
                 <span className="shrink-0 text-faint">{String(index + 1).padStart(3, '0')}</span>
                 <span className="min-w-0 flex-1 break-words text-fg">{log.message}</span>
                 {log.timestamp ? (
-                  <span className="shrink-0 text-faint">{formatDateTime(log.timestamp)}</span>
+                  <span className="shrink-0 text-faint">{formatDateTime(log.timestamp) ?? '—'}</span>
                 ) : null}
               </li>
             ))}

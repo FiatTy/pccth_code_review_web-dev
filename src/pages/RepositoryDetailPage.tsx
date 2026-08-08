@@ -13,11 +13,13 @@ import {
   ShieldAlert,
   TriangleAlert,
   XCircle,
-  type LucideIcon,
 } from 'lucide-react';
+import { InfoRow } from '@/components/ui/InfoRow';
+import { formatDateTime } from '@/lib/format-date';
+import { StatCard } from '@/components/ui/StatCard';
 import { useRepositoryDetail } from '@/features/repository/hooks/useRepository';
 import { useIssues } from '@/features/issue/hooks/useIssues';
-import type { Scan } from '@/features/scan/types';
+import { ScanGradeChip } from '@/features/scan/components/ScanGradeChip';
 import { parseGitUrl } from '@/lib/git-utils';
 
 type DetailTab = 'overview' | 'issues' | 'history';
@@ -38,85 +40,6 @@ const STATUS_BADGE: Record<string, string> = {
   Scanning: 'bg-primary-subtle text-primary',
   Error: 'bg-danger/12 text-danger',
 };
-
-function formatDateTime(value?: string | null): string {
-  if (!value) return '—';
-  const date = new Date(value);
-  return Number.isNaN(date.getTime())
-    ? '—'
-    : date.toLocaleString(undefined, {
-        year: 'numeric',
-        month: 'short',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-      });
-}
-
-function MetricCard({
-  icon: Icon,
-  label,
-  value,
-  tone,
-}: {
-  icon: LucideIcon;
-  label: string;
-  value: string;
-  tone: string;
-}) {
-  return (
-    <div className="rounded-xl border border-border bg-surface p-5">
-      <div className="flex items-center justify-between">
-        <span className="text-[13px] font-medium uppercase tracking-[0.08em] text-muted">
-          {label}
-        </span>
-        <span className={`flex h-8 w-8 items-center justify-center rounded-lg ${tone}`}>
-          <Icon size={16} />
-        </span>
-      </div>
-      <p className="mt-3 text-2xl font-semibold tracking-tight text-fg">{value}</p>
-    </div>
-  );
-}
-
-function InfoRow({ label, value, mono }: { label: string; value: string; mono?: boolean }) {
-  return (
-    <div className="flex items-baseline justify-between gap-4 border-b border-border py-3 last:border-0">
-      <span className="shrink-0 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-faint">
-        {label}
-      </span>
-      <span
-        className={`min-w-0 truncate text-right text-sm text-fg ${mono ? 'font-mono text-xs' : ''}`}
-      >
-        {value}
-      </span>
-    </div>
-  );
-}
-
-function ScanGrade({ scan }: { scan: Scan }) {
-  const { t } = useTranslation();
-  if (scan.status === 'PENDING') {
-    return (
-      <span className="rounded-full bg-primary-subtle px-2 py-0.5 text-[11px] font-medium text-primary">
-        {t('SCAN.SCANNING')}
-      </span>
-    );
-  }
-  const passed =
-    String(scan.qualityGate ?? '')
-      .trim()
-      .toUpperCase() === 'OK';
-  return (
-    <span
-      className={`rounded-full px-2 py-0.5 text-[11px] font-medium ${
-        passed ? 'bg-success/12 text-success' : 'bg-danger/12 text-danger'
-      }`}
-    >
-      {passed ? t('DETAIL_REPO.PASSED') : t('DETAIL_REPO.FAILED')}
-    </span>
-  );
-}
 
 export function RepositoryDetailPage() {
   const { t } = useTranslation();
@@ -258,19 +181,19 @@ export function RepositoryDetailPage() {
               : '—'}
           </p>
         </div>
-        <MetricCard
+        <StatCard
           icon={Bug}
           label={t('DETAIL_REPO.BUGS')}
           value={String(metrics?.bugs ?? 0)}
           tone="bg-blocker/12 text-blocker"
         />
-        <MetricCard
+        <StatCard
           icon={ShieldAlert}
           label={t('DETAIL_REPO.SECURITY')}
           value={String(securityTotal)}
           tone="bg-major/12 text-major"
         />
-        <MetricCard
+        <StatCard
           icon={Gauge}
           label={t('DETAIL_REPO.COVERAGE')}
           value={metrics?.coverage != null ? `${metrics.coverage}%` : '—'}
@@ -313,7 +236,7 @@ export function RepositoryDetailPage() {
               />
               <InfoRow
                 label={t('DETAIL_REPO.LAST_ANALYSIS')}
-                value={formatDateTime(repo.lastScan)}
+                value={formatDateTime(repo.lastScan) ?? '—'}
               />
             </div>
           </section>
@@ -471,7 +394,7 @@ export function RepositoryDetailPage() {
                     <tr key={scan.id} className="transition-colors hover:bg-surface-2/50">
                       <td className="px-5 py-3 text-fg">
                         <Link to={`/scanresult/${scan.id}`} className="hover:text-primary">
-                          {formatDateTime(scan.completedAt ?? scan.startedAt)}
+                          {formatDateTime(scan.completedAt ?? scan.startedAt) ?? '—'}
                         </Link>
                       </td>
                       <td className="px-5 py-3 font-mono text-xs text-muted">
@@ -482,7 +405,10 @@ export function RepositoryDetailPage() {
                           : '—'}
                       </td>
                       <td className="px-5 py-3">
-                        <ScanGrade scan={scan} />
+                        <ScanGradeChip
+                          scan={scan}
+                          labels={{ passed: t('DETAIL_REPO.PASSED'), failed: t('DETAIL_REPO.FAILED') }}
+                        />
                       </td>
                     </tr>
                   ))}

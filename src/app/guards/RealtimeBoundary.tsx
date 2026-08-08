@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router';
 import { RealtimeProvider } from '@/lib/realtime/RealtimeProvider';
-import { useAppRealtimeSync } from '@/hooks/useAppRealtimeSync';
+import { useAppRealtimeSync } from '@/app/realtime/useAppRealtimeSync';
 
 function RealtimeSyncOutlet() {
   useAppRealtimeSync();

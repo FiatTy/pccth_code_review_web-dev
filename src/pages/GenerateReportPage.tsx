@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useQueryClient } from '@tanstack/react-query';
 import { CalendarRange, FileText, FolderGit2, Layers, Loader2 } from 'lucide-react';
+import { SectionCard } from '@/components/ui/SectionCard';
 import { PageHeader } from '@/components/common/PageHeader';
 import { FIELD_INPUT_CLASS, FormField } from '@/components/common/FormField';
 import { DateField } from '@/components/common/DateField';
@@ -46,35 +47,6 @@ const DEFAULT_SECTIONS: ReportSections = {
   technicalDebt: false,
   recommendations: false,
 };
-
-function SectionCard({
-  eyebrow,
-  title,
-  icon: Icon,
-  children,
-}: {
-  eyebrow: string;
-  title: string;
-  icon: typeof FileText;
-  children: React.ReactNode;
-}) {
-  return (
-    <section className="rounded-xl border border-border bg-surface">
-      <div className="flex items-center gap-2.5 card-header border-b border-border px-5 py-4">
-        <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-surface-2 text-muted">
-          <Icon size={15} />
-        </span>
-        <div>
-          <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.15em] text-faint">
-            {eyebrow}
-          </p>
-          <h2 className="text-sm font-semibold text-fg">{title}</h2>
-        </div>
-      </div>
-      <div className="px-5 py-5">{children}</div>
-    </section>
-  );
-}
 
 export function GenerateReportPage() {
   const { t } = useTranslation();

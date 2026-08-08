@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import {
@@ -7,11 +7,12 @@ import {
   ChevronRight,
   FileBarChart,
   GitCompare,
-  Loader2,
   RefreshCw,
   ScanLine,
   ScrollText,
 } from 'lucide-react';
+import { ScanGradeChip } from '@/features/scan/components/ScanGradeChip';
+import { formatDateTime } from '@/lib/format-date';
 import { PageHeader } from '@/components/common/PageHeader';
 import { DateField } from '@/components/common/DateField';
 import { SelectField } from '@/components/common/SelectField';
@@ -22,23 +23,6 @@ import type { Scan } from '@/features/scan/types';
 
 const PAGE_SIZE = 8;
 type StatusFilter = 'all' | 'SUCCESS' | 'FAILED' | 'PENDING';
-
-function formatDateTime(value?: string): string {
-  if (!value) {
-    return '—';
-  }
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) {
-    return '—';
-  }
-  return date.toLocaleString(undefined, {
-    year: 'numeric',
-    month: 'short',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-  });
-}
 
 function issuesCount(scan: Scan): number {
   const metrics = scan.metrics;
@@ -71,31 +55,6 @@ function withinDate(value: string, start: string, end: string): boolean {
   return true;
 }
 
-function GradeChip({ scan }: { scan: Scan }) {
-  const { t } = useTranslation();
-  if (scan.status === 'PENDING') {
-    return (
-      <span className="inline-flex items-center gap-1 rounded-full bg-primary-subtle px-2.5 py-1 text-[11px] font-medium text-primary">
-        <Loader2 size={11} className="animate-spin" />
-        {t('SCAN.SCANNING')}
-      </span>
-    );
-  }
-  const passed =
-    String(scan.qualityGate ?? '')
-      .trim()
-      .toUpperCase() === 'OK';
-  return (
-    <span
-      className={`inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-medium ${
-        passed ? 'bg-success/12 text-success' : 'bg-danger/12 text-danger'
-      }`}
-    >
-      {passed ? t('SCAN.STATUS_PASS') : t('SCAN.STATUS_FAILED')}
-    </span>
-  );
-}
-
 export function ScanHistoryPage() {
   const { t } = useTranslation();
   const { data, isPending, isError, refetch, isFetching } = useScanHistory();
@@ -104,12 +63,14 @@ export function ScanHistoryPage() {
   const [project, setProject] = useState(() => searchParams.get('project') ?? searchParams.get('search') ?? searchParams.get('q') ?? 'all');
   const [status, setStatus] = useState<StatusFilter>('all');
 
-  useEffect(() => {
+  const [lastSearchParams, setLastSearchParams] = useState(searchParams);
+  if (searchParams !== lastSearchParams) {
+    setLastSearchParams(searchParams);
     const param = searchParams.get('project') ?? searchParams.get('search') ?? searchParams.get('q');
     if (param !== null) {
       setProject(param);
     }
-  }, [searchParams]);
+  }
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [page, setPage] = useState(1);
@@ -348,11 +309,11 @@ export function ScanHistoryPage() {
                       />
                     </td>
                     <td className="whitespace-nowrap px-4 py-3 text-muted">
-                      {formatDateTime(scan.startedAt)}
+                      {formatDateTime(scan.startedAt) ?? '—'}
                     </td>
                     <td className="px-4 py-3 font-medium text-fg">{scan.projectName || '—'}</td>
                     <td className="px-4 py-3">
-                      <GradeChip scan={scan} />
+                      <ScanGradeChip scan={scan} size="md" spinner />
                     </td>
                     <td className="px-4 py-3 text-right font-medium text-fg">
                       {issuesCount(scan)}

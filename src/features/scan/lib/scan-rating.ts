@@ -11,6 +11,14 @@ const RATING_TO_NUMBER: Record<string, number> = {
   E: 5,
 };
 
+export function isQualityGatePassed(scan: Pick<Scan, 'qualityGate'>): boolean {
+  return (
+    String(scan.qualityGate ?? '')
+      .trim()
+      .toUpperCase() === 'OK'
+  );
+}
+
 export function ratingTone(rating: string | undefined, isPending: boolean): GateTone {
   if (isPending) {
     return 'pending';
@@ -62,18 +70,4 @@ export function formatDuration(startedAt?: string, completedAt?: string): string
   const minutes = Math.floor(totalSeconds / 60);
   const seconds = totalSeconds % 60;
   return `${minutes}m ${String(seconds).padStart(2, '0')}s`;
-}
-
-export function formatDateTime(value?: string | null): string {
-  if (!value) return '—';
-  const date = new Date(value);
-  return Number.isNaN(date.getTime())
-    ? '—'
-    : date.toLocaleString(undefined, {
-        year: 'numeric',
-        month: 'short',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-      });
 }

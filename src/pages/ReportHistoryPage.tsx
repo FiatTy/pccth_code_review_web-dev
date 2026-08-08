@@ -1,6 +1,7 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
+import { formatDateTime } from '@/lib/format-date';
 import { Download, FileText, Loader2, Search, TriangleAlert } from 'lucide-react';
 import { PageHeader } from '@/components/common/PageHeader';
 import { FIELD_INPUT_CLASS } from '@/components/common/FormField';
@@ -10,20 +11,6 @@ import { downloadBase64 } from '@/features/report/api/report.api';
 import type { ReportHistoryEntry } from '@/features/report/types';
 
 const PAGE_SIZE = 10;
-
-function formatDateTime(value?: string): string {
-  if (!value) return '—';
-  const date = new Date(value);
-  return Number.isNaN(date.getTime())
-    ? '—'
-    : date.toLocaleString(undefined, {
-        year: 'numeric',
-        month: 'short',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-      });
-}
 
 function formatBytes(bytes?: number): string {
   if (!bytes) return '—';
@@ -41,12 +28,14 @@ export function ReportHistoryPage() {
   const [searchParams] = useSearchParams();
   const [search, setSearch] = useState(() => searchParams.get('search') ?? searchParams.get('q') ?? '');
 
-  useEffect(() => {
+  const [lastSearchParams, setLastSearchParams] = useState(searchParams);
+  if (searchParams !== lastSearchParams) {
+    setLastSearchParams(searchParams);
     const val = searchParams.get('search') ?? searchParams.get('q');
     if (val !== null) {
       setSearch(val);
     }
-  }, [searchParams]);
+  }
   const [page, setPage] = useState(1);
   const [downloadingId, setDownloadingId] = useState<string | null>(null);
 
@@ -183,7 +172,7 @@ export function ReportHistoryPage() {
                         {report.generatedBy}
                       </td>
                       <td className="whitespace-nowrap px-5 py-3 text-muted">
-                        {formatDateTime(report.generatedAt)}
+                        {formatDateTime(report.generatedAt) ?? '—'}
                       </td>
                       <td className="px-5 py-3 text-right">
                         <button

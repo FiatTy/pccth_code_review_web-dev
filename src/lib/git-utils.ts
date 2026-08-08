@@ -22,7 +22,7 @@ export function parseGitUrl(url: string): ParsedGitUrl {
   cleanUrl = cleanUrl.split('?')[0].split('#')[0];
   cleanUrl = cleanUrl.replace(/\/+$/, '').replace(/\.git$/i, '');
 
-  let pathPart = '';
+  let pathPart: string;
 
   if (cleanUrl.includes('://')) {
     try {

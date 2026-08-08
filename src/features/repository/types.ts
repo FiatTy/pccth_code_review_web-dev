@@ -70,3 +70,7 @@ export interface Repository {
 export interface RepositoryDetail extends Repository {
   scans: Scan[];
 }
+
+export type RepositoryTypeTab = 'all' | ProjectType;
+export type RepositoryStatusFilter = 'all' | RepoStatus;
+export type RepositoryViewMode = 'grid' | 'folder';

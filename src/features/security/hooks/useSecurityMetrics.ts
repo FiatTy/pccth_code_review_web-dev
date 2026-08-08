@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { getSecurityIssues, getSecurityMetrics } from '@/features/security/api/security.api';
 import type { SecurityMetrics } from '@/features/security/types';
-import type { Issue } from '@/features/issue/types';
+import type { Issue } from '@/types/issue';
 
 export function securityMetricsQueryKey(projectId?: string) {
   return ['security-metrics', projectId ?? 'all'] as const;

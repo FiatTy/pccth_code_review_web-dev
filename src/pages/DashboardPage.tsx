@@ -17,8 +17,10 @@ import { useIssues } from '@/features/issue/hooks/useIssues';
 import { GreetingMascot } from '@/components/common/GreetingMascot';
 import { DonutChart } from '@/components/charts/DonutChart';
 import { LineChart } from '@/components/charts/LineChart';
+import { StatCard } from '@/components/ui/StatCard';
+import { formatDateTimeShort } from '@/lib/format-date';
+import { ScanGradeChip } from '@/features/scan/components/ScanGradeChip';
 import { buildDailyTrend } from '@/features/scan/lib/scan-trends';
-import type { Scan } from '@/features/scan/types';
 
 const OPEN_STATUSES = new Set(['OPEN', 'IN_PROGRESS', 'PENDING']);
 const RESOLVED_STATUSES = new Set(['DONE', 'RESOLVED']);
@@ -36,67 +38,6 @@ const SEVERITY_DOT: Record<string, string> = {
   MINOR: 'bg-minor',
   INFO: 'bg-faint',
 };
-
-function formatDateTime(value?: string): string {
-  if (!value) return '—';
-  const date = new Date(value);
-  return Number.isNaN(date.getTime())
-    ? '—'
-    : date.toLocaleString(undefined, {
-        month: 'short',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-      });
-}
-
-function StatCard({
-  icon: Icon,
-  label,
-  value,
-  tone,
-}: {
-  icon: typeof Bug;
-  label: string;
-  value: number | string;
-  tone: string;
-}) {
-  return (
-    <div className="hover-lift rounded-2xl border border-border bg-surface p-5 shadow-sm">
-      <div className="flex items-center justify-between">
-        <span className="text-[13px] font-medium uppercase tracking-[0.08em] text-muted">
-          {label}
-        </span>
-        <span className={`flex h-8 w-8 items-center justify-center rounded-lg ${tone}`}>
-          <Icon size={16} />
-        </span>
-      </div>
-      <p className="mt-3 text-3xl font-semibold tracking-tight text-fg">{value}</p>
-    </div>
-  );
-}
-
-function GradeChip({ scan }: { scan: Scan }) {
-  const { t } = useTranslation();
-  if (scan.status === 'PENDING') {
-    return (
-      <span className="rounded-full bg-primary-subtle px-2 py-0.5 text-[11px] font-medium text-primary">
-        {t('SCAN.SCANNING')}
-      </span>
-    );
-  }
-  const passed =
-    String(scan.qualityGate ?? '')
-      .trim()
-      .toUpperCase() === 'OK';
-  return (
-    <span
-      className={`rounded-full px-2 py-0.5 text-[11px] font-medium ${passed ? 'bg-success/12 text-success' : 'bg-danger/12 text-danger'}`}
-    >
-      {passed ? t('SCAN.STATUS_PASS') : t('SCAN.STATUS_FAILED')}
-    </span>
-  );
-}
 
 export function DashboardPage() {
   const { t } = useTranslation();
@@ -211,24 +152,28 @@ export function DashboardPage() {
 
       <div className="mb-4 grid grid-cols-2 gap-3 lg:grid-cols-4">
         <StatCard
+          size="lg"
           icon={FolderGit2}
           label={t('DASHBOARD.TOTAL_REPOSITORIES')}
           value={repos.length}
           tone="bg-primary-subtle text-primary"
         />
         <StatCard
+          size="lg"
           icon={ScanLine}
           label={t('DASHBOARD.TOTAL_SCANS')}
           value={scans.length}
           tone="bg-surface-2 text-fg"
         />
         <StatCard
+          size="lg"
           icon={Bug}
           label={t('DASHBOARD.OPEN_ISSUES')}
           value={openIssues}
           tone="bg-warning/12 text-warning"
         />
         <StatCard
+          size="lg"
           icon={CheckCircle2}
           label={t('DASHBOARD.RESOLVED_ISSUES')}
           value={resolvedIssues}
@@ -276,9 +221,9 @@ export function DashboardPage() {
                     <p className="truncate text-sm font-medium text-fg">
                       {scan.projectName || '—'}
                     </p>
-                    <p className="text-xs text-faint">{formatDateTime(scan.startedAt)}</p>
+                    <p className="text-xs text-faint">{formatDateTimeShort(scan.startedAt) ?? '—'}</p>
                   </div>
-                  <GradeChip scan={scan} />
+                  <ScanGradeChip scan={scan} />
                 </li>
               ))}
             </ul>

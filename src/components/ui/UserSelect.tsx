@@ -1,21 +1,34 @@
 import { useTranslation } from 'react-i18next';
 import { FIELD_INPUT_CLASS, FormField } from '@/components/common/FormField';
 import { SelectField } from '@/components/common/SelectField';
-import { useAssignableUsers } from '@/features/user/hooks/useUsers';
+
+export interface AssignableUser {
+  id: string;
+  username: string;
+}
 
 interface UserSelectProps {
   id: string;
   value: string;
   onChange: (value: string) => void;
+  users: AssignableUser[];
+  isPending?: boolean;
+  isError?: boolean;
   error?: string;
 }
 
-export function UserSelect({ id, value, onChange, error }: UserSelectProps) {
+export function UserSelect({
+  id,
+  value,
+  onChange,
+  users,
+  isPending,
+  isError,
+  error,
+}: UserSelectProps) {
   const { t } = useTranslation();
-  const { data, isPending, isError } = useAssignableUsers();
-  const users = data ?? [];
   const isEmpty = !isPending && !isError && users.length === 0;
-  const unavailable = isError || isEmpty;
+  const unavailable = Boolean(isError) || isEmpty;
 
   let unavailableMessage: string | undefined;
   if (isError) {

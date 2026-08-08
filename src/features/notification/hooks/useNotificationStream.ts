@@ -11,8 +11,8 @@ import { useRealtimeTopic } from '@/lib/realtime/useRealtimeTopic';
 import { GLOBAL_NOTIFICATIONS_TOPIC, userNotificationsTopic } from '@/lib/realtime/topics';
 import type { NotificationEvent } from '@/lib/realtime/types';
 import { notificationsQueryKey } from '@/features/notification/hooks/useNotifications';
-import { useNotificationSettings } from '@/features/setting/hooks/useNotificationSettings';
 import type { AppNotification } from '@/features/notification/types';
+import type { NotificationSettings } from '@/features/setting/types';
 
 const TOAST_BUFFER_MS = 2000;
 
@@ -39,13 +39,12 @@ function toNotification(event: NotificationEvent): AppNotification {
   };
 }
 
-export function useNotificationStream(): void {
+export function useNotificationStream(settings?: NotificationSettings): void {
   const { t } = useTranslation();
   const { user } = useAuth();
   const userId = user?.id ?? '';
   const queryClient = useQueryClient();
   const { showToast } = useToast();
-  const { data: settings } = useNotificationSettings();
 
   const settingsRef = useRef(settings);
   const buffer = useRef<AppNotification[]>([]);

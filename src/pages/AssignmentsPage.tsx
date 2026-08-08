@@ -5,8 +5,9 @@ import { ArrowRight, ClipboardList, Loader2, TriangleAlert } from 'lucide-react'
 import { PageHeader } from '@/components/common/PageHeader';
 import { useAuth } from '@/lib/auth/auth-context';
 import { useIssues } from '@/features/issue/hooks/useIssues';
+import { useAssignableUsers } from '@/features/user/hooks/useUsers';
 import { AssignIssueModal } from '@/features/issue/components/AssignIssueModal';
-import type { Issue } from '@/features/issue/types';
+import type { Issue } from '@/types/issue';
 
 const SEVERITY_DOT: Record<string, string> = {
   BLOCKER: 'bg-blocker',
@@ -48,6 +49,7 @@ export function AssignmentsPage() {
   const { t } = useTranslation();
   const { user } = useAuth();
   const issuesQuery = useIssues();
+  const assignableUsers = useAssignableUsers();
   const [statusTarget, setStatusTarget] = useState<Issue | null>(null);
 
   const assignments = useMemo(
@@ -158,6 +160,9 @@ export function AssignmentsPage() {
           issue={statusTarget}
           mode="status"
           onClose={() => setStatusTarget(null)}
+          users={assignableUsers.data ?? []}
+          usersPending={assignableUsers.isPending}
+          usersError={assignableUsers.isError}
         />
       ) : null}
     </div>

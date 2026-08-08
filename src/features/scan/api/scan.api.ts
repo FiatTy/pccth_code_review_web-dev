@@ -1,5 +1,6 @@
 import { apiClient } from '@/lib/api-client';
-import { mapIssue, type RawIssue } from '@/features/issue/api/issue.api';
+import { mapIssue } from '@/lib/mappers/issue-mapper';
+import type { RawIssue } from '@/types/issue';
 import type {
   AnalysisLog,
   Scan,

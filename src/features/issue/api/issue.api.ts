@@ -1,58 +1,12 @@
 import { apiClient } from '@/lib/api-client';
+import { mapIssue } from '@/lib/mappers/issue-mapper';
+import type { Issue, RawComment, RawIssue } from '@/types/issue';
 import type {
   AddCommentPayload,
-  Issue,
   IssueAnalysis,
   IssueComment,
   IssueWithComments,
 } from '@/features/issue/types';
-
-interface RawComment {
-  id?: string;
-  issue?: string;
-  user?: { id?: string; username?: string } | null;
-  comment?: string;
-  createdAt?: string;
-  parentCommentId?: string;
-}
-
-export interface RawIssue {
-  id: string;
-  scanId: string;
-  projectId?: string;
-  projectData?: { id?: string; name?: string } | null;
-  issueKey: string;
-  type?: string;
-  severity?: string;
-  ruleKey?: string;
-  component?: string;
-  line?: number;
-  message?: string;
-  status?: string;
-  assignedTo?: { id?: string; username?: string } | null;
-  createdAt?: string;
-  commentData?: RawComment[] | null;
-}
-
-export function mapIssue(raw: RawIssue): Issue {
-  return {
-    id: raw.id,
-    scanId: raw.scanId,
-    projectId: raw.projectId ?? raw.projectData?.id,
-    projectName: raw.projectData?.name ?? '',
-    issueKey: raw.issueKey,
-    type: (raw.type ?? '').toUpperCase(),
-    severity: (raw.severity ?? '').toUpperCase(),
-    ruleKey: raw.ruleKey,
-    component: raw.component ?? '',
-    line: raw.line,
-    message: raw.message ?? '',
-    status: (raw.status ?? 'OPEN').toUpperCase().replace(/\s+/g, '_'),
-    assignedId: raw.assignedTo?.id,
-    assignedName: raw.assignedTo?.username,
-    createdAt: raw.createdAt ?? '',
-  };
-}
 
 export async function getAllIssues(): Promise<Issue[]> {
   const response = await apiClient.get<RawIssue[]>('/api/issues');

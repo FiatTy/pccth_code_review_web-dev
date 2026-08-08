@@ -14,7 +14,7 @@ export interface ScanMetrics {
   securityRating?: string;
 }
 
-import type { Issue } from '@/features/issue/types';
+import type { Issue } from '@/types/issue';
 
 export interface Scan {
   id: string;

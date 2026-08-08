@@ -3,8 +3,6 @@ import { useNavigate, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import {
   ArrowLeft,
-  Check,
-  Copy,
   CornerDownRight,
   Download,
   Loader2,
@@ -13,10 +11,13 @@ import {
   Sparkles,
   TriangleAlert,
   UserPlus,
-  type LucideIcon,
 } from 'lucide-react';
 import { useAuth } from '@/lib/auth/auth-context';
 import { useToast } from '@/lib/toast/toast-context';
+import { InfoRow } from '@/components/ui/InfoRow';
+import { formatDateTime } from '@/lib/format-date';
+import { CodeBlock } from '@/features/issue/components/CodeBlock';
+import { IssueCommentItem } from '@/features/issue/components/IssueCommentItem';
 import { AssignIssueModal } from '@/features/issue/components/AssignIssueModal';
 import {
   useAddIssueComment,
@@ -25,6 +26,7 @@ import {
   useTriggerAiFix,
 } from '@/features/issue/hooks/useIssue';
 import { useIssueCommentStream } from '@/features/issue/hooks/useIssueCommentStream';
+import { useAssignableUsers } from '@/features/user/hooks/useUsers';
 import type { IssueComment } from '@/features/issue/types';
 
 const SEVERITY_BADGE: Record<string, string> = {
@@ -43,138 +45,8 @@ const STATUS_BADGE: Record<string, string> = {
   RESOLVED: 'bg-success/12 text-success',
 };
 
-function formatDateTime(value?: string): string {
-  if (!value) return '—';
-  const date = new Date(value);
-  return Number.isNaN(date.getTime())
-    ? '—'
-    : date.toLocaleString(undefined, {
-        year: 'numeric',
-        month: 'short',
-        day: '2-digit',
-        hour: '2-digit',
-        minute: '2-digit',
-      });
-}
 
-function InfoRow({ label, value, mono }: { label: string; value: string; mono?: boolean }) {
-  return (
-    <div className="flex items-baseline justify-between gap-4 border-b border-border py-2.5 last:border-0">
-      <span className="shrink-0 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-faint">
-        {label}
-      </span>
-      <span
-        className={`min-w-0 truncate text-right text-sm text-fg ${mono ? 'font-mono text-xs' : ''}`}
-      >
-        {value}
-      </span>
-    </div>
-  );
-}
 
-function CodeBlock({
-  title,
-  icon: Icon,
-  content,
-  onCopy,
-  copied,
-  copyLabel,
-}: {
-  title: string;
-  icon: LucideIcon;
-  content: string;
-  onCopy?: () => void;
-  copied?: boolean;
-  copyLabel?: string;
-}) {
-  return (
-    <div className="overflow-hidden rounded-lg border border-border">
-      <div className="flex items-center justify-between gap-2 border-b border-border bg-surface-2/50 px-4 py-2.5">
-        <span className="flex items-center gap-2 text-xs font-semibold text-fg">
-          <Icon size={14} className="text-muted" />
-          {title}
-        </span>
-        {onCopy ? (
-          <button
-            type="button"
-            onClick={onCopy}
-            aria-label={copyLabel}
-            title={copyLabel}
-            className="inline-flex h-7 w-7 items-center justify-center rounded-md text-faint transition-colors hover:bg-surface-2 hover:text-fg"
-          >
-            {copied ? <Check size={14} className="text-success" /> : <Copy size={14} />}
-          </button>
-        ) : null}
-      </div>
-      <pre className="max-h-96 overflow-auto whitespace-pre-wrap break-words bg-surface px-4 py-3 font-mono text-xs leading-relaxed text-fg">
-        {content}
-      </pre>
-    </div>
-  );
-}
-
-function CommentItem({
-  comment,
-  replies,
-  onReply,
-}: {
-  comment: IssueComment;
-  replies: IssueComment[];
-  onReply: (comment: IssueComment) => void;
-}) {
-  const { t } = useTranslation();
-  const initial = comment.username?.charAt(0).toUpperCase() || '?';
-  return (
-    <li className="px-5 py-4">
-      <div className="flex gap-3">
-        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary-subtle text-xs font-semibold text-primary">
-          {initial}
-        </span>
-        <div className="min-w-0 flex-1">
-          <div className="flex flex-wrap items-baseline gap-2">
-            <span className="text-sm font-medium text-fg">{comment.username || '—'}</span>
-            <span className="font-mono text-[11px] text-faint">
-              {formatDateTime(comment.createdAt)}
-            </span>
-            <button
-              type="button"
-              onClick={() => onReply(comment)}
-              className="ml-auto inline-flex items-center gap-1 text-[11px] font-medium text-primary transition-opacity hover:underline"
-            >
-              <CornerDownRight size={11} />
-              {t('ISSUE_DETAIL.REPLY')}
-            </button>
-          </div>
-          <p className="mt-1 whitespace-pre-wrap break-words text-sm text-muted">
-            {comment.comment}
-          </p>
-        </div>
-      </div>
-      {replies.length > 0 ? (
-        <ul className="mt-3 space-y-3 border-l border-border pl-4 sm:ml-11">
-          {replies.map((reply) => (
-            <li key={reply.id} className="flex gap-3">
-              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-surface-2 text-[11px] font-semibold text-muted">
-                {reply.username?.charAt(0).toUpperCase() || '?'}
-              </span>
-              <div className="min-w-0 flex-1">
-                <div className="flex flex-wrap items-baseline gap-2">
-                  <span className="text-sm font-medium text-fg">{reply.username || '—'}</span>
-                  <span className="font-mono text-[11px] text-faint">
-                    {formatDateTime(reply.createdAt)}
-                  </span>
-                </div>
-                <p className="mt-1 whitespace-pre-wrap break-words text-sm text-muted">
-                  {reply.comment}
-                </p>
-              </div>
-            </li>
-          ))}
-        </ul>
-      ) : null}
-    </li>
-  );
-}
 
 export function IssueDetailPage() {
   const { t } = useTranslation();
@@ -185,6 +57,7 @@ export function IssueDetailPage() {
 
   const issueQuery = useIssue(issuesId);
   const analysisQuery = useIssueAnalysis(issuesId);
+  const assignableUsers = useAssignableUsers();
   useIssueCommentStream(issuesId);
   const addComment = useAddIssueComment();
   const triggerAiFix = useTriggerAiFix();
@@ -446,7 +319,7 @@ export function IssueDetailPage() {
             ) : (
               <ul className="divide-y divide-border">
                 {roots.map((comment) => (
-                  <CommentItem
+                  <IssueCommentItem
                     key={comment.id}
                     comment={comment}
                     replies={repliesByParent.get(comment.id) ?? []}
@@ -527,7 +400,7 @@ export function IssueDetailPage() {
                 label={t('ISSUE_DETAIL.LINE')}
                 value={issue.line != null ? String(issue.line) : '—'}
               />
-              <InfoRow label={t('ISSUE_DETAIL.CREATED')} value={formatDateTime(issue.createdAt)} />
+              <InfoRow label={t('ISSUE_DETAIL.CREATED')} value={formatDateTime(issue.createdAt) ?? '—'} />
             </div>
           </div>
 
@@ -576,7 +449,14 @@ export function IssueDetailPage() {
       </div>
 
       {modalMode ? (
-        <AssignIssueModal issue={issue} mode={modalMode} onClose={() => setModalMode(null)} />
+        <AssignIssueModal
+            issue={issue}
+            mode={modalMode}
+            onClose={() => setModalMode(null)}
+            users={assignableUsers.data ?? []}
+            usersPending={assignableUsers.isPending}
+            usersError={assignableUsers.isError}
+          />
       ) : null}
     </div>
   );

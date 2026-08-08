@@ -1,4 +1,5 @@
 import axios, { type AxiosError, type InternalAxiosRequestConfig } from 'axios';
+import { API_BASE, BASE_URL } from '@/config/env';
 import type { RefreshResponse } from '@/types/user';
 import {
   clearSession,
@@ -6,8 +7,6 @@ import {
   hasAccessToken,
   setAccessToken,
 } from '@/lib/auth/token-store';
-
-export const API_BASE = import.meta.env.VITE_API_BASE ?? '/backend';
 
 const PUBLIC_PATH_FRAGMENTS = [
   '/login',
@@ -57,7 +56,7 @@ function redirectToRoot(): void {
     navigateHandler('/');
     return;
   }
-  window.location.assign(import.meta.env.BASE_URL);
+  window.location.assign(BASE_URL);
 }
 
 function handleSessionExpired(): void {

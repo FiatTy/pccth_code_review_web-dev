@@ -14,46 +14,20 @@ import {
   Sparkles,
   TriangleAlert,
   XCircle,
-  type LucideIcon,
 } from 'lucide-react';
 import { useAuth } from '@/lib/auth/auth-context';
 import { useToast } from '@/lib/toast/toast-context';
 import { GateStatus } from '@/components/common/GateStatus';
+import { StatCard } from '@/components/ui/StatCard';
 import { useScan, useSendScanReportEmail } from '@/features/scan/hooks/useScan';
 import {
   averageRating,
-  formatDateTime,
   formatDuration,
   hotspotReviewRating,
   ratingTone,
 } from '@/features/scan/lib/scan-rating';
+import { formatDateTime } from '@/lib/format-date';
 import type { ScanDetail } from '@/features/scan/types';
-
-function MetricTile({
-  icon: Icon,
-  label,
-  value,
-  tone,
-}: {
-  icon: LucideIcon;
-  label: string;
-  value: string;
-  tone: string;
-}) {
-  return (
-    <div className="rounded-xl border border-border bg-surface p-5">
-      <div className="flex items-center justify-between">
-        <span className="text-[13px] font-medium uppercase tracking-[0.08em] text-muted">
-          {label}
-        </span>
-        <span className={`flex h-8 w-8 items-center justify-center rounded-lg ${tone}`}>
-          <Icon size={16} />
-        </span>
-      </div>
-      <p className="mt-3 text-2xl font-semibold tracking-tight text-fg">{value}</p>
-    </div>
-  );
-}
 
 function buildReportHtml(scan: ScanDetail, passedLabel: string, failedLabel: string): string {
   const metrics = scan.metrics;
@@ -61,8 +35,8 @@ function buildReportHtml(scan: ScanDetail, passedLabel: string, failedLabel: str
   const markdown = `# Scan Results: ${scan.projectName || '-'}
 
 ## Scan Info
-- **Started At**: ${formatDateTime(scan.startedAt)}
-- **Completed At**: ${formatDateTime(scan.completedAt)}
+- **Started At**: ${formatDateTime(scan.startedAt) ?? '—'}
+- **Completed At**: ${formatDateTime(scan.completedAt) ?? '—'}
 - **Quality Gate**: ${scan.qualityGate === 'OK' ? passedLabel : failedLabel}
 
 ## Overall Gates
@@ -288,13 +262,13 @@ export function ScanResultPage() {
               <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-faint">
                 {t('SCAN_RESULT.STARTED')}
               </p>
-              <p className="mt-0.5 text-sm text-fg">{formatDateTime(scan.startedAt)}</p>
+              <p className="mt-0.5 text-sm text-fg">{formatDateTime(scan.startedAt) ?? '—'}</p>
             </div>
             <div>
               <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-faint">
                 {t('SCAN_RESULT.COMPLETED')}
               </p>
-              <p className="mt-0.5 text-sm text-fg">{formatDateTime(scan.completedAt)}</p>
+              <p className="mt-0.5 text-sm text-fg">{formatDateTime(scan.completedAt) ?? '—'}</p>
             </div>
             <div>
               <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-faint">
@@ -310,25 +284,25 @@ export function ScanResultPage() {
         {t('SCAN_RESULT.METRICS_OVERVIEW')}
       </p>
       <div className="mb-5 grid grid-cols-2 gap-3 lg:grid-cols-4">
-        <MetricTile
+        <StatCard
           icon={Bug}
           label={t('SCAN_RESULT.BUGS')}
           value={String(metrics?.bugs ?? 0)}
           tone="bg-blocker/12 text-blocker"
         />
-        <MetricTile
+        <StatCard
           icon={ShieldAlert}
           label={t('SCAN_RESULT.SECURITY')}
           value={String(metrics?.vulnerabilities ?? 0)}
           tone="bg-major/12 text-major"
         />
-        <MetricTile
+        <StatCard
           icon={Sparkles}
           label={t('SCAN_RESULT.CODE_SMELLS')}
           value={String(metrics?.codeSmells ?? 0)}
           tone="bg-primary-subtle text-primary"
         />
-        <MetricTile
+        <StatCard
           icon={Gauge}
           label={t('SCAN_RESULT.COVERAGE')}
           value={metrics?.coverage != null ? `${metrics.coverage}%` : '—'}

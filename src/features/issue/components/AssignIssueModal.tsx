@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next';
 import { Loader2, X } from 'lucide-react';
 import { FIELD_INPUT_CLASS, FormField } from '@/components/common/FormField';
 import { SelectField } from '@/components/common/SelectField';
-import { UserSelect } from '@/features/user/components/UserSelect';
+import { UserSelect, type AssignableUser } from '@/components/ui/UserSelect';
 import { useUpdateIssue } from '@/features/issue/hooks/useIssue';
-import type { Issue } from '@/features/issue/types';
+import type { Issue } from '@/types/issue';
 
 const STATUS_OPTIONS = [
   { value: 'OPEN', labelKey: 'ISSUE.OPEN' },
@@ -18,9 +18,20 @@ interface AssignIssueModalProps {
   mode: 'assign' | 'status';
   onClose: () => void;
   onSaved?: () => void;
+  users: AssignableUser[];
+  usersPending?: boolean;
+  usersError?: boolean;
 }
 
-export function AssignIssueModal({ issue, mode, onClose, onSaved }: AssignIssueModalProps) {
+export function AssignIssueModal({
+  issue,
+  mode,
+  onClose,
+  onSaved,
+  users,
+  usersPending,
+  usersError,
+}: AssignIssueModalProps) {
   const { t } = useTranslation();
   const updateIssue = useUpdateIssue();
 
@@ -101,7 +112,14 @@ export function AssignIssueModal({ issue, mode, onClose, onSaved }: AssignIssueM
           </div>
 
           {mode === 'assign' ? (
-            <UserSelect id="assignedTo" value={assignedTo} onChange={setAssignedTo} />
+            <UserSelect
+              id="assignedTo"
+              value={assignedTo}
+              onChange={setAssignedTo}
+              users={users}
+              isPending={usersPending}
+              isError={usersError}
+            />
           ) : (
             <FormField id="issueStatus" label={t('ISSUE_MODAL.STATUS')} error={error}>
               <SelectField

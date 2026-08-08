@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import {
@@ -9,49 +9,22 @@ import {
   ChevronRight,
   RefreshCw,
   Search,
-  ShieldAlert,
   UserPlus,
-  Waves,
 } from 'lucide-react';
 import { PageHeader } from '@/components/common/PageHeader';
 import { SelectField } from '@/components/common/SelectField';
 import { SkeletonTable } from '@/components/common/Skeleton';
 import { useIssues } from '@/features/issue/hooks/useIssues';
+import { useAssignableUsers } from '@/features/user/hooks/useUsers';
 import { AssignIssueModal } from '@/features/issue/components/AssignIssueModal';
 import { BulkAssignModal } from '@/features/issue/components/BulkAssignModal';
-import type { Issue } from '@/features/issue/types';
+import { IssueTypeCell } from '@/features/issue/components/IssueTypeCell';
+import { IssueSeverityCell } from '@/features/issue/components/IssueSeverityCell';
+import type { Issue } from '@/types/issue';
 
 const PAGE_SIZE = 10;
 
-const TYPE_META: Record<string, { labelKey: string; icon: typeof Bug; tone: string }> = {
-  BUG: { labelKey: 'ISSUE.BUG', icon: Bug, tone: 'text-blocker' },
-  VULNERABILITY: {
-    labelKey: 'ISSUE.SECURITY',
-    icon: ShieldAlert,
-    tone: 'text-major',
-  },
-  CODE_SMELL: {
-    labelKey: 'ISSUE.CODE_SMELL',
-    icon: Waves,
-    tone: 'text-primary',
-  },
-};
 
-const SEVERITY_META: Record<string, { labelKey: string; text: string; dot: string }> = {
-  BLOCKER: {
-    labelKey: 'ISSUE.BLOCKER',
-    text: 'text-blocker',
-    dot: 'bg-blocker',
-  },
-  CRITICAL: {
-    labelKey: 'ISSUE.CRITICAL',
-    text: 'text-critical',
-    dot: 'bg-critical',
-  },
-  MAJOR: { labelKey: 'ISSUE.MAJOR', text: 'text-major', dot: 'bg-major' },
-  MINOR: { labelKey: 'ISSUE.MINOR', text: 'text-minor', dot: 'bg-minor' },
-  INFO: { labelKey: 'ISSUE.INFO', text: 'text-faint', dot: 'bg-faint' },
-};
 
 function statusMeta(status: string): { labelKey: string; cls: string } {
   switch (status) {
@@ -72,36 +45,12 @@ function statusMeta(status: string): { labelKey: string; cls: string } {
   }
 }
 
-function TypeCell({ issue }: { issue: Issue }) {
-  const { t } = useTranslation();
-  const meta = TYPE_META[issue.type] ?? {
-    labelKey: 'ISSUE.TITLE',
-    icon: Bug,
-    tone: 'text-muted',
-  };
-  const Icon = meta.icon;
-  return (
-    <div className="flex items-center gap-2">
-      <Icon size={15} className={meta.tone} />
-      <span className="whitespace-nowrap text-sm text-fg">{t(meta.labelKey)}</span>
-    </div>
-  );
-}
 
-function SeverityCell({ severity }: { severity: string }) {
-  const { t } = useTranslation();
-  const meta = SEVERITY_META[severity] ?? SEVERITY_META.INFO;
-  return (
-    <div className="flex items-center gap-1.5">
-      <span className={`h-2 w-2 rounded-full ${meta.dot}`} />
-      <span className={`text-sm font-medium ${meta.text}`}>{t(meta.labelKey)}</span>
-    </div>
-  );
-}
 
 export function IssuesPage() {
   const { t } = useTranslation();
   const { data, isPending, isError, refetch, isFetching } = useIssues();
+  const assignableUsers = useAssignableUsers();
 
   const [searchParams] = useSearchParams();
   const [type, setType] = useState('all');
@@ -110,7 +59,9 @@ export function IssuesPage() {
   const [project, setProject] = useState(() => searchParams.get('project') ?? 'all');
   const [search, setSearch] = useState(() => searchParams.get('search') ?? searchParams.get('q') ?? '');
 
-  useEffect(() => {
+  const [lastSearchParams, setLastSearchParams] = useState(searchParams);
+  if (searchParams !== lastSearchParams) {
+    setLastSearchParams(searchParams);
     const searchVal = searchParams.get('search') ?? searchParams.get('q');
     if (searchVal !== null) {
       setSearch(searchVal);
@@ -119,7 +70,7 @@ export function IssuesPage() {
     if (projVal !== null) {
       setProject(projVal);
     }
-  }, [searchParams]);
+  }
   const [page, setPage] = useState(1);
   const [assignTarget, setAssignTarget] = useState<Issue | null>(null);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
@@ -340,10 +291,10 @@ export function IssuesPage() {
                         />
                       </td>
                       <td className="px-4 py-3">
-                        <TypeCell issue={issue} />
+                        <IssueTypeCell issue={issue} />
                       </td>
                       <td className="px-4 py-3">
-                        <SeverityCell severity={issue.severity} />
+                        <IssueSeverityCell severity={issue.severity} />
                       </td>
                       <td className="whitespace-nowrap px-4 py-3 text-muted">
                         {issue.projectName || '—'}
@@ -452,6 +403,9 @@ export function IssuesPage() {
           issue={assignTarget}
           mode="assign"
           onClose={() => setAssignTarget(null)}
+          users={assignableUsers.data ?? []}
+          usersPending={assignableUsers.isPending}
+          usersError={assignableUsers.isError}
         />
       ) : null}
 
@@ -460,6 +414,9 @@ export function IssuesPage() {
           issues={selectedIssues}
           onClose={() => setShowBulkAssign(false)}
           onDone={() => setSelectedIds([])}
+          users={assignableUsers.data ?? []}
+          usersPending={assignableUsers.isPending}
+          usersError={assignableUsers.isError}
         />
       ) : null}
     </div>
