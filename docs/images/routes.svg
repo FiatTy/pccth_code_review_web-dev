@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="600" viewBox="0 0 900 600" font-family="Inter, 'IBM Plex Sans Thai', 'Segoe UI', 'Noto Sans Thai', Tahoma, sans-serif" role="img" aria-labelledby="ttl desc">
+  <title id="ttl">เส้นทางในเว็บและชั้นของ guard</title>
+  <desc id="desc">AuthBoundary ครอบทั้งหมด ข้างในมีหน้าสาธารณะ และ ProtectedRoute ซึ่งครอบ RealtimeBoundary RootLayout และ RoleRoute สำหรับ ADMIN</desc>
+
+  <rect x="0.5" y="0.5" width="899" height="599" rx="12" fill="#ffffff" stroke="#e3e7ec"/>
+
+  <text x="28" y="30" font-size="10" font-weight="600" letter-spacing="1.8" fill="#8b95a3">ROUTES</text>
+  <text x="872" y="30" text-anchor="end" font-size="10.5" fill="#8b95a3">27 หน้า &#183; react-router 7 data mode &#183; กล่องซ้อนกัน = guard ซ้อนกัน</text>
+
+  <rect x="20" y="48" width="860" height="482" rx="10" fill="#fbfcfd" stroke="#cfd5dd"/>
+  <text x="38" y="72" font-family="ui-monospace, 'JetBrains Mono', Consolas, monospace" font-size="11.5" font-weight="600" fill="#4a5766">AuthBoundary</text>
+  <text x="146" y="72" font-size="10" fill="#8b95a3">login อยู่แล้วเข้าหน้าสาธารณะไม่ได้ จะเด้งไป /dashboard</text>
+
+  <rect x="38" y="84" width="824" height="64" rx="8" fill="#ffffff" stroke="#cfd5dd"/>
+  <text x="54" y="106" font-size="10" font-weight="600" fill="#55606f">สาธารณะ &#8212; ไม่ต้อง login</text>
+  <text x="54" y="126" font-family="ui-monospace, 'JetBrains Mono', Consolas, monospace" font-size="10" fill="#0e1620" opacity="0.8">/    /login    /register    /forgot-password</text>
+  <text x="54" y="142" font-family="ui-monospace, 'JetBrains Mono', Consolas, monospace" font-size="10" fill="#0e1620" opacity="0.8">/reset-password  /verify-email  /verify-success  /verify-failed</text>
+  <text x="846" y="142" text-anchor="end" font-family="ui-monospace, 'JetBrains Mono', Consolas, monospace" font-size="10" fill="#8b95a3">path อื่น &#8594; redirect /</text>
+
+  <rect x="38" y="164" width="824" height="354" rx="9" fill="#f7f9fb" stroke="#cfd5dd"/>
+  <text x="56" y="188" font-family="ui-monospace, 'JetBrains Mono', Consolas, monospace" font-size="11.5" font-weight="600" fill="#4a5766">ProtectedRoute</text>
+  <text x="176" y="188" font-size="10" fill="#8b95a3">ไม่มี token เด้งไป /login</text>
+
+  <rect x="56" y="198" width="788" height="308" rx="9" fill="#f2f5f8" stroke="#cfd5dd"/>
+  <text x="74" y="222" font-family="ui-monospace, 'JetBrains Mono', Consolas, monospace" font-size="11.5" font-weight="600" fill="#4a5766">RealtimeBoundary</text>
+  <text x="212" y="222" font-size="10" fill="#8b95a3">ต่อ STOMP ครั้งเดียวให้ทุกหน้าที่อยู่ข้างใน</text>
+
+  <rect x="74" y="232" width="752" height="262" rx="9" fill="#eef2f6" stroke="#cfd5dd"/>
+  <text x="90" y="256" font-family="ui-monospace, 'JetBrains Mono', Consolas, monospace" font-size="11.5" font-weight="600" fill="#4a5766">RootLayout</text>
+  <text x="182" y="256" font-size="10" fill="#8b95a3">sidebar + topbar + global search</text>
+
+  <rect x="88" y="270" width="172" height="100" rx="7" fill="#ffffff" stroke="#1570ef" stroke-opacity="0.35"/>
+  <text x="100" y="292" font-size="10.5" font-weight="600" fill="#1257ba">dashboard</text>
+  <text x="100" y="312" font-family="ui-monospace, 'JetBrains Mono', Consolas, monospace" font-size="9" fill="#0e1620" opacity="0.8">/dashboard</text>
+
+  <rect x="272" y="270" width="172" height="100" rx="7" fill="#ffffff" stroke="#1570ef" stroke-opacity="0.35"/>
+  <text x="284" y="292" font-size="10.5" font-weight="600" fill="#1257ba">repository</text>
+  <text x="284" y="312" font-family="ui-monospace, 'JetBrains Mono', Consolas, monospace" font-size="9" fill="#0e1620" opacity="0.8">/repositories</text>
+  <text x="284" y="328" font-family="ui-monospace, 'JetBrains Mono', Consolas, monospace" font-size="9" fill="#0e1620" opacity="0.8">/addrepository</text>
+  <text x="284" y="344" font-family="ui-monospace, 'JetBrains Mono', Consolas, monospace" font-size="9" fill="#0e1620" opacity="0.8">/settingrepo/:id</text>
+  <text x="284" y="360" font-family="ui-monospace, 'JetBrains Mono', Consolas, monospace" font-size="9" fill="#0e1620" opacity="0.8">/detailrepo/:id</text>
+
+  <rect x="456" y="270" width="172" height="100" rx="7" fill="#ffffff" stroke="#1570ef" stroke-opacity="0.35"/>
+  <text x="468" y="292" font-size="10.5" font-weight="600" fill="#1257ba">scan</text>
+  <text x="468" y="312" font-family="ui-monospace, 'JetBrains Mono', Consolas, monospace" font-size="9" fill="#0e1620" opacity="0.8">/scanhistory</text>
+  <text x="468" y="328" font-family="ui-monospace, 'JetBrains Mono', Consolas, monospace" font-size="9" fill="#0e1620" opacity="0.8">/scanresult/:id</text>
+  <text x="468" y="344" font-family="ui-monospace, 'JetBrains Mono', Consolas, monospace" font-size="9" fill="#0e1620" opacity="0.8">/logviewer/:id</text>
+
+  <rect x="640" y="270" width="172" height="100" rx="7" fill="#ffffff" stroke="#1570ef" stroke-opacity="0.35"/>
+  <text x="652" y="292" font-size="10.5" font-weight="600" fill="#1257ba">issue</text>
+  <text x="652" y="312" font-family="ui-monospace, 'JetBrains Mono', Consolas, monospace" font-size="9" fill="#0e1620" opacity="0.8">/issue</text>
+  <text x="652" y="328" font-family="ui-monospace, 'JetBrains Mono', Consolas, monospace" font-size="9" fill="#0e1620" opacity="0.8">/issuedetail/:id</text>
+  <text x="652" y="344" font-family="ui-monospace, 'JetBrains Mono', Consolas, monospace" font-size="9" fill="#0e1620" opacity="0.8">/assignment</text>
+
+  <rect x="88" y="382" width="172" height="100" rx="7" fill="#ffffff" stroke="#1570ef" stroke-opacity="0.35"/>
+  <text x="100" y="404" font-size="10.5" font-weight="600" fill="#1257ba">analysis</text>
+  <text x="100" y="424" font-family="ui-monospace, 'JetBrains Mono', Consolas, monospace" font-size="9" fill="#0e1620" opacity="0.8">/analysis</text>
+  <text x="100" y="440" font-family="ui-monospace, 'JetBrains Mono', Consolas, monospace" font-size="9" fill="#0e1620" opacity="0.8">/security-dashboard</text>
+  <text x="100" y="456" font-family="ui-monospace, 'JetBrains Mono', Consolas, monospace" font-size="9" fill="#0e1620" opacity="0.8">/technical-debt</text>
+
+  <rect x="272" y="382" width="172" height="100" rx="7" fill="#ffffff" stroke="#1570ef" stroke-opacity="0.35"/>
+  <text x="284" y="404" font-size="10.5" font-weight="600" fill="#1257ba">report</text>
+  <text x="284" y="424" font-family="ui-monospace, 'JetBrains Mono', Consolas, monospace" font-size="9" fill="#0e1620" opacity="0.8">/generatereport</text>
+  <text x="284" y="440" font-family="ui-monospace, 'JetBrains Mono', Consolas, monospace" font-size="9" fill="#0e1620" opacity="0.8">/reporthistory</text>
+
+  <rect x="456" y="382" width="172" height="100" rx="7" fill="#ffffff" stroke="#1570ef" stroke-opacity="0.35"/>
+  <text x="468" y="404" font-size="10.5" font-weight="600" fill="#1257ba">setting</text>
+  <text x="468" y="424" font-family="ui-monospace, 'JetBrains Mono', Consolas, monospace" font-size="9" fill="#0e1620" opacity="0.8">/sonarqubeconfig</text>
+  <text x="468" y="440" font-family="ui-monospace, 'JetBrains Mono', Consolas, monospace" font-size="9" fill="#0e1620" opacity="0.8">/notificationsetting</text>
+  <text x="468" y="456" font-family="ui-monospace, 'JetBrains Mono', Consolas, monospace" font-size="9" fill="#0e1620" opacity="0.8">/components</text>
+
+  <rect x="640" y="382" width="172" height="100" rx="7" fill="#fdf3f2" stroke="#d92d20" stroke-opacity="0.45"/>
+  <text x="652" y="404" font-family="ui-monospace, 'JetBrains Mono', Consolas, monospace" font-size="10" font-weight="600" fill="#b42318">RoleRoute ADMIN</text>
+  <text x="652" y="422" font-size="9.5" fill="#55606f">role อื่นเข้าไม่ได้</text>
+  <text x="652" y="446" font-family="ui-monospace, 'JetBrains Mono', Consolas, monospace" font-size="9" fill="#0e1620" opacity="0.8">/usermanagement</text>
+
+  <text x="28" y="562" font-size="11" fill="#55606f">ทุกหน้าโหลดแบบ lazy แยก chunk ให้อัตโนมัติ &#8212; เพิ่ม route ใหม่ใช้ helper <tspan font-family="ui-monospace, Consolas, monospace" fill="#0e1620">lazyRoute()</tspan> ใน <tspan font-family="ui-monospace, Consolas, monospace" fill="#0e1620">app/router.tsx</tspan> และ path ใน <tspan font-family="ui-monospace, Consolas, monospace" fill="#0e1620">import()</tspan> ต้องเป็น string literal</text>
+</svg>

@@ -14,5 +14,6 @@ landing*.png
 .vscode/*
 !.vscode/extensions.json
 .idea
-docs
+docs/*
+!docs/images/
 .claude

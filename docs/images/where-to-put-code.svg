@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="520" viewBox="0 0 900 520" font-family="Inter, 'IBM Plex Sans Thai', 'Segoe UI', 'Noto Sans Thai', Tahoma, sans-serif" role="img" aria-labelledby="ttl desc">
+  <title id="ttl">โค้ดใหม่ควรวางไว้ตรงไหน</title>
+  <desc id="desc">ผังตัดสินใจว่าไฟล์ใหม่ควรอยู่ใน pages, app, features หรือชั้นของกลาง</desc>
+
+  <defs>
+    <marker id="tip" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M1 1 L11 6 L1 11 Z" fill="#8b95a3"/>
+    </marker>
+  </defs>
+
+  <rect x="0.5" y="0.5" width="899" height="519" rx="12" fill="#ffffff" stroke="#e3e7ec"/>
+
+  <text x="28" y="30" font-size="10" font-weight="600" letter-spacing="1.8" fill="#8b95a3">WHERE TO PUT NEW CODE</text>
+  <text x="872" y="30" text-anchor="end" font-size="10.5" fill="#8b95a3">ห้ามสร้าง barrel file &#8212; import ชี้ไฟล์จริงตรง ๆ เสมอ</text>
+
+  <rect x="28" y="232" width="196" height="58" rx="8" fill="#0e1620"/>
+  <text x="126" y="257" text-anchor="middle" font-size="13" font-weight="600" fill="#ffffff">โค้ดใหม่ 1 ก้อน</text>
+  <text x="126" y="275" text-anchor="middle" font-size="10.5" fill="#8b95a3">จะวางไว้ที่ไหน?</text>
+
+  <line x1="224" y1="261" x2="250" y2="261" stroke="#cfd5dd" stroke-width="1.4"/>
+  <line x1="250" y1="97" x2="250" y2="424" stroke="#cfd5dd" stroke-width="1.4"/>
+
+  <line x1="250" y1="97" x2="268" y2="97" stroke="#cfd5dd" stroke-width="1.4"/>
+  <line x1="250" y1="167" x2="268" y2="167" stroke="#cfd5dd" stroke-width="1.4"/>
+  <line x1="250" y1="285" x2="268" y2="285" stroke="#cfd5dd" stroke-width="1.4"/>
+  <line x1="250" y1="424" x2="268" y2="424" stroke="#cfd5dd" stroke-width="1.4"/>
+
+  <rect x="268" y="70" width="200" height="54" rx="7" fill="#ffffff" stroke="#cfd5dd"/>
+  <text x="368" y="102" text-anchor="middle" font-size="11.5" fill="#0e1620">เป็นหน้าจอทั้งหน้า</text>
+  <line x1="468" y1="97" x2="492" y2="97" stroke="#8b95a3" stroke-width="1.4" marker-end="url(#tip)"/>
+  <rect x="492" y="70" width="380" height="54" rx="7" fill="#eef4fe" stroke="#1570ef" stroke-opacity="0.4"/>
+  <text x="510" y="93" font-family="ui-monospace, 'JetBrains Mono', Consolas, monospace" font-size="12" font-weight="600" fill="#1257ba">pages/XxxPage.tsx</text>
+  <text x="510" y="111" font-size="10.5" fill="#55606f">แล้วลงทะเบียน route ใน app/router.tsx ด้วย</text>
+
+  <rect x="268" y="140" width="200" height="54" rx="7" fill="#ffffff" stroke="#cfd5dd"/>
+  <text x="368" y="164" text-anchor="middle" font-size="11.5" fill="#0e1620">ต้องรู้จักหลาย feature</text>
+  <text x="368" y="181" text-anchor="middle" font-size="11.5" fill="#0e1620">พร้อมกัน</text>
+  <line x1="468" y1="167" x2="492" y2="167" stroke="#8b95a3" stroke-width="1.4" marker-end="url(#tip)"/>
+  <rect x="492" y="140" width="380" height="54" rx="7" fill="#faf6ef" stroke="#b08d57" stroke-opacity="0.45"/>
+  <text x="510" y="163" font-family="ui-monospace, 'JetBrains Mono', Consolas, monospace" font-size="12" font-weight="600" fill="#8a6d3f">app/</text>
+  <text x="510" y="181" font-size="10.5" fill="#55606f">เช่น realtime sync, global search &#8212; ห้ามไปไว้ที่ lib/</text>
+
+  <rect x="268" y="258" width="200" height="54" rx="7" fill="#ffffff" stroke="#cfd5dd"/>
+  <text x="368" y="290" text-anchor="middle" font-size="11.5" fill="#0e1620">เป็นเรื่องของงานใดงานหนึ่ง</text>
+  <line x1="468" y1="285" x2="492" y2="285" stroke="#8b95a3" stroke-width="1.4" marker-end="url(#tip)"/>
+  <rect x="492" y="206" width="380" height="158" rx="8" fill="#f2faf8" stroke="#0d9488" stroke-opacity="0.35"/>
+
+  <rect x="504" y="212" width="356" height="32" rx="5" fill="#ffffff" stroke="#0d9488" stroke-opacity="0.3"/>
+  <text x="516" y="232" font-family="ui-monospace, 'JetBrains Mono', Consolas, monospace" font-size="10" font-weight="600" fill="#0b7a70">features/&lt;งาน&gt;/api/</text>
+  <text x="848" y="232" text-anchor="end" font-size="10" fill="#55606f">ยิง backend ไม่รู้จัก React</text>
+
+  <rect x="504" y="250" width="356" height="32" rx="5" fill="#ffffff" stroke="#0d9488" stroke-opacity="0.3"/>
+  <text x="516" y="270" font-family="ui-monospace, 'JetBrains Mono', Consolas, monospace" font-size="10" font-weight="600" fill="#0b7a70">features/&lt;งาน&gt;/hooks/</text>
+  <text x="848" y="270" text-anchor="end" font-size="10" fill="#55606f">ห่อ api &#8212; หน้าเว็บเรียกตัวนี้</text>
+
+  <rect x="504" y="288" width="356" height="32" rx="5" fill="#ffffff" stroke="#0d9488" stroke-opacity="0.3"/>
+  <text x="516" y="308" font-family="ui-monospace, 'JetBrains Mono', Consolas, monospace" font-size="10" font-weight="600" fill="#0b7a70">features/&lt;งาน&gt;/components/</text>
+  <text x="848" y="308" text-anchor="end" font-size="10" fill="#55606f">UI เฉพาะงานนี้</text>
+
+  <rect x="504" y="326" width="356" height="32" rx="5" fill="#ffffff" stroke="#0d9488" stroke-opacity="0.3"/>
+  <text x="516" y="346" font-family="ui-monospace, 'JetBrains Mono', Consolas, monospace" font-size="10" font-weight="600" fill="#0b7a70">features/&lt;งาน&gt;/lib/</text>
+  <text x="848" y="346" text-anchor="end" font-size="10" fill="#55606f">สูตรคำนวณล้วน + เขียนเทสต์</text>
+
+  <rect x="268" y="397" width="200" height="54" rx="7" fill="#ffffff" stroke="#cfd5dd"/>
+  <text x="368" y="421" text-anchor="middle" font-size="11.5" fill="#0e1620">เป็นของกลาง</text>
+  <text x="368" y="438" text-anchor="middle" font-size="11.5" fill="#0e1620">ไม่รู้จักธุรกิจเลย</text>
+  <line x1="468" y1="424" x2="492" y2="424" stroke="#8b95a3" stroke-width="1.4" marker-end="url(#tip)"/>
+
+  <rect x="492" y="374" width="380" height="96" rx="8" fill="#f8fafb" stroke="#64748b" stroke-opacity="0.3"/>
+  <rect x="504" y="380" width="356" height="38" rx="6" fill="#ffffff" stroke="#64748b" stroke-opacity="0.35"/>
+  <text x="516" y="404" font-family="ui-monospace, 'JetBrains Mono', Consolas, monospace" font-size="10" font-weight="600" fill="#4a5766">components/ui/   components/common/</text>
+  <text x="848" y="404" text-anchor="end" font-size="10" fill="#55606f">เป็น UI</text>
+
+  <rect x="504" y="426" width="356" height="38" rx="6" fill="#ffffff" stroke="#64748b" stroke-opacity="0.35"/>
+  <text x="516" y="450" font-family="ui-monospace, 'JetBrains Mono', Consolas, monospace" font-size="10" font-weight="600" fill="#4a5766">lib/</text>
+  <text x="848" y="450" text-anchor="end" font-size="10" fill="#55606f">ไม่ใช่ UI เช่น util, mapper</text>
+
+  <text x="28" y="497" font-size="11" fill="#55606f">ยังไม่แน่ใจ ให้เก็บไว้ใน feature ก่อนเสมอ แล้วค่อยย้ายขึ้นชั้นของกลางเมื่อมี feature ที่สองต้องใช้จริง &#8212; ไม่ใช่เพราะคิดว่าน่าจะได้ใช้อีก</text>
+</svg>

@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="400" viewBox="0 0 900 400" font-family="Inter, 'IBM Plex Sans Thai', 'Segoe UI', 'Noto Sans Thai', Tahoma, sans-serif" role="img" aria-labelledby="ttl desc">
+  <title id="ttl">ข้อมูลไหลยังไง</title>
+  <desc id="desc">หน้าเว็บเรียก hooks ซึ่งเรียก api ผ่าน api-client ไปยัง backend และมีช่องทางเรียลไทม์ผ่าน STOMP กลับเข้ามา invalidate cache</desc>
+
+  <defs>
+    <marker id="tip" viewBox="0 0 12 12" refX="10" refY="6" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M1 1 L11 6 L1 11 Z" fill="#8b95a3"/>
+    </marker>
+  </defs>
+
+  <rect x="0.5" y="0.5" width="899" height="399" rx="12" fill="#ffffff" stroke="#e3e7ec"/>
+
+  <text x="28" y="30" font-size="10" font-weight="600" letter-spacing="1.8" fill="#8b95a3">DATA FLOW</text>
+  <text x="872" y="30" text-anchor="end" font-size="10.5" fill="#8b95a3">TanStack Query 5 &#183; axios &#183; STOMP / SockJS</text>
+
+  <rect x="34" y="96" width="144" height="68" rx="8" fill="#eef4fe" stroke="#1570ef" stroke-opacity="0.4"/>
+  <text x="106" y="118" text-anchor="middle" font-size="8.5" letter-spacing="0.8" fill="#8b95a3">SCREEN</text>
+  <text x="106" y="138" text-anchor="middle" font-family="ui-monospace, 'JetBrains Mono', Consolas, monospace" font-size="12.5" font-weight="600" fill="#1257ba">pages/</text>
+  <text x="106" y="154" text-anchor="middle" font-size="9.5" fill="#55606f">จัดวาง + เรียก hook</text>
+
+  <line x1="180" y1="130" x2="204" y2="130" stroke="#8b95a3" stroke-width="1.4" marker-end="url(#tip)"/>
+
+  <rect x="206" y="96" width="144" height="68" rx="8" fill="#e9f7f4" stroke="#0d9488" stroke-opacity="0.45"/>
+  <text x="278" y="118" text-anchor="middle" font-size="8.5" letter-spacing="0.8" fill="#8b95a3">features/&lt;งาน&gt;</text>
+  <text x="278" y="138" text-anchor="middle" font-family="ui-monospace, 'JetBrains Mono', Consolas, monospace" font-size="12.5" font-weight="600" fill="#0b7a70">hooks/</text>
+  <text x="278" y="154" text-anchor="middle" font-size="9.5" fill="#55606f">cache + loading + error</text>
+
+  <line x1="352" y1="130" x2="376" y2="130" stroke="#8b95a3" stroke-width="1.4" marker-end="url(#tip)"/>
+
+  <rect x="378" y="96" width="144" height="68" rx="8" fill="#e9f7f4" stroke="#0d9488" stroke-opacity="0.45"/>
+  <text x="450" y="118" text-anchor="middle" font-size="8.5" letter-spacing="0.8" fill="#8b95a3">features/&lt;งาน&gt;</text>
+  <text x="450" y="138" text-anchor="middle" font-family="ui-monospace, 'JetBrains Mono', Consolas, monospace" font-size="12.5" font-weight="600" fill="#0b7a70">api/</text>
+  <text x="450" y="154" text-anchor="middle" font-size="9.5" fill="#55606f">ไม่รู้จัก React</text>
+
+  <line x1="524" y1="130" x2="548" y2="130" stroke="#8b95a3" stroke-width="1.4" marker-end="url(#tip)"/>
+
+  <rect x="550" y="96" width="144" height="68" rx="8" fill="#f4f6f8" stroke="#64748b" stroke-opacity="0.45"/>
+  <text x="622" y="118" text-anchor="middle" font-size="8.5" letter-spacing="0.8" fill="#8b95a3">lib/</text>
+  <text x="622" y="138" text-anchor="middle" font-family="ui-monospace, 'JetBrains Mono', Consolas, monospace" font-size="12.5" font-weight="600" fill="#4a5766">api-client</text>
+  <text x="622" y="154" text-anchor="middle" font-size="9.5" fill="#55606f">axios + แนบ token</text>
+
+  <line x1="696" y1="130" x2="720" y2="130" stroke="#8b95a3" stroke-width="1.4" marker-end="url(#tip)"/>
+
+  <rect x="722" y="96" width="144" height="68" rx="8" fill="#0e1620"/>
+  <text x="794" y="118" text-anchor="middle" font-size="8.5" letter-spacing="0.8" fill="#8b95a3">EXTERNAL</text>
+  <text x="794" y="138" text-anchor="middle" font-family="ui-monospace, 'JetBrains Mono', Consolas, monospace" font-size="12.5" font-weight="600" fill="#2dd4bf">Backend :8080</text>
+  <text x="794" y="154" text-anchor="middle" font-size="9.5" fill="#97a1b0">Spring Boot</text>
+
+  <path d="M 770 166 V 196 H 106 V 168" fill="none" stroke="#cfd5dd" stroke-width="1.4" marker-end="url(#tip)"/>
+  <text x="438" y="214" text-anchor="middle" font-size="10.5" fill="#55606f">ข้อมูลกลับมาเป็น <tspan font-family="ui-monospace, Consolas, monospace" fill="#0e1620">{ data, isPending, isError }</tspan> ครบทั้งตอนโหลดและตอน error</text>
+
+  <path d="M 826 166 V 244" fill="none" stroke="#cfd5dd" stroke-width="1.4" marker-end="url(#tip)"/>
+
+  <rect x="556" y="248" width="310" height="64" rx="8" fill="#f4f6f8" stroke="#64748b" stroke-opacity="0.45"/>
+  <text x="574" y="272" font-family="ui-monospace, 'JetBrains Mono', Consolas, monospace" font-size="11.5" font-weight="600" fill="#4a5766">lib/realtime &#8212; STOMP / SockJS</text>
+  <text x="574" y="292" font-size="10" fill="#55606f">subscribe topic ผ่าน hook useRealtimeTopic</text>
+
+  <line x1="548" y1="280" x2="382" y2="280" stroke="#8b95a3" stroke-width="1.4" marker-end="url(#tip)"/>
+  <text x="465" y="270" text-anchor="middle" font-size="10" fill="#55606f">event เข้ามา</text>
+
+  <rect x="34" y="248" width="340" height="64" rx="8" fill="#faf6ef" stroke="#b08d57" stroke-opacity="0.45"/>
+  <text x="52" y="272" font-family="ui-monospace, 'JetBrains Mono', Consolas, monospace" font-size="11.5" font-weight="600" fill="#8a6d3f">app/realtime/useAppRealtimeSync</text>
+  <text x="52" y="292" font-size="10" fill="#55606f">invalidate query cache แล้วหน้าจออัปเดตเอง</text>
+
+  <path d="M 54 248 V 168" fill="none" stroke="#cfd5dd" stroke-width="1.4" marker-end="url(#tip)"/>
+
+  <text x="28" y="342" font-size="11" fill="#55606f">เรียลไทม์ &#8212; backend ดันเหตุการณ์มาเอง ผู้ใช้ไม่ต้องกดรีเฟรช</text>
+  <text x="28" y="372" font-size="11" fill="#b42318">หน้าเว็บเรียก hooks/ เท่านั้น ห้ามเรียก api/ ตรง &#183; ยิง HTTP ผ่าน lib/api-client.ts เท่านั้น &#183; ห้ามต่อ STOMP client เอง</text>
+</svg>
