@@ -31,8 +31,6 @@ npm run dev                   # เปิด http://localhost:5173
 | `npm run lint` | ESLint ตรวจโค้ด + ตรวจกฎโครงสร้าง |
 | `npm test` | unit test (vitest) |
 
-ก่อน push ให้รันครบ 4 ตัวนี้แล้วเขียว: `npx tsc -b` → `npm test` → `npm run lint` → `npm run build`
-
 ---
 
 ## โครงสร้างโค้ด
@@ -40,7 +38,6 @@ npm run dev                   # เปิด http://localhost:5173
 ![ชั้นของโค้ดและทิศทางการ import](docs/images/layers.svg)
 
 โค้ดแบ่งเป็น 4 ชั้น import ไหลขึ้นทางเดียว ชั้นล่างไม่รู้จักชั้นบนเลย
-กฎนี้ **ESLint บังคับจริง** ไม่ใช่แค่ข้อตกลง — `npm run lint` จะ error ถ้าละเมิด และ CI รันให้ทุก PR
 
 ```
 src/
@@ -99,7 +96,7 @@ src/
 
 ---
 
-**กฎทั้งหมดกอยู่ใน [`CLAUDE.md`](CLAUDE.md)** — อ่านก่อนเริ่มแก้
+**กฎทั้งหมดกอยู่ใน [`CLAUDE.md`](CLAUDE.md)** — ควรให้ Ai อ่านก่อนแก้ไข Code
 
 ---
 
