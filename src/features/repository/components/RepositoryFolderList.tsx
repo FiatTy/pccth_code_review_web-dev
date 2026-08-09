@@ -81,7 +81,7 @@ export function RepositoryFolderList({
                     onToggleFolder(folderName);
                   }
                 }}
-                className={`flex cursor-pointer items-center justify-between select-none px-4 py-3.5 transition-colors ${
+                className={`flex cursor-pointer flex-col gap-2 px-4 py-3 select-none transition-colors sm:flex-row sm:items-center sm:justify-between sm:px-5 sm:py-3.5 ${
                   !isCollapsed ? 'bg-surface-2/40' : 'hover:bg-surface-2/50'
                 }`}
               >
@@ -96,22 +96,22 @@ export function RepositoryFolderList({
                   </span>
                 </div>
 
-                <div className="flex items-center gap-3 shrink-0 text-xs">
+                <div className="flex flex-wrap items-center gap-2 text-xs sm:shrink-0 sm:gap-3">
                   {activeCount > 0 && (
-                    <span className="inline-flex items-center gap-1.5 text-[12px] font-medium text-success">
-                      <span className="h-2 w-2 rounded-full bg-success" />
+                    <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-success sm:text-xs">
+                      <span className="h-2 w-2 rounded-full bg-success shrink-0" />
                       {activeCount} active
                     </span>
                   )}
                   {scanningCount > 0 && (
-                    <span className="inline-flex items-center gap-1.5 text-[12px] font-medium text-primary">
-                      <span className="h-2 w-2 rounded-full bg-primary animate-pulse" />
+                    <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-primary sm:text-xs">
+                      <span className="h-2 w-2 rounded-full bg-primary animate-pulse shrink-0" />
                       {scanningCount} scanning
                     </span>
                   )}
                   {errorCount > 0 && (
-                    <span className="inline-flex items-center gap-1.5 text-[12px] font-medium text-danger">
-                      <span className="h-2 w-2 rounded-full bg-danger" />
+                    <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-danger sm:text-xs">
+                      <span className="h-2 w-2 rounded-full bg-danger shrink-0" />
                       {errorCount} {errorCount === 1 ? 'error' : 'errors'}
                     </span>
                   )}
@@ -125,12 +125,78 @@ export function RepositoryFolderList({
                     const isScanning = repo.status === 'Scanning';
                     const isError = repo.status === 'Error';
 
+                    const actionButtons = (
+                      <>
+                        {repo.status === 'Active' ? (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onScan(repo);
+                            }}
+                            disabled={scanningId === repo.projectId}
+                            title={t('REPOSITORY.TOOLTIP_RUN')}
+                            className="inline-flex h-7 w-7 items-center justify-center rounded-md text-primary transition-colors hover:bg-primary-subtle"
+                          >
+                            {scanningId === repo.projectId ? (
+                              <Loader2 size={13} className="animate-spin" />
+                            ) : (
+                              <Play size={13} />
+                            )}
+                          </button>
+                        ) : null}
+                        {repo.status === 'Error' ? (
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onScan(repo);
+                            }}
+                            disabled={scanningId === repo.projectId}
+                            title={t('REPOSITORY.TOOLTIP_RETRY')}
+                            className="inline-flex h-7 w-7 items-center justify-center rounded-md text-warning transition-colors hover:bg-warning/15"
+                          >
+                            {scanningId === repo.projectId ? (
+                              <Loader2 size={13} className="animate-spin" />
+                            ) : (
+                              <RotateCw size={13} />
+                            )}
+                          </button>
+                        ) : null}
+                        <Link
+                          to={`/detailrepo/${repo.projectId}`}
+                          title={t('REPOSITORY.TOOLTIP_VIEW')}
+                          className="inline-flex h-7 w-7 items-center justify-center rounded-md text-muted transition-colors hover:bg-surface-2 hover:text-fg"
+                        >
+                          <ExternalLink size={13} />
+                        </Link>
+                        <Link
+                          to={`/settingrepo/${repo.projectId}`}
+                          title={t('REPOSITORY.TOOLTIP_SETTINGS')}
+                          className="inline-flex h-7 w-7 items-center justify-center rounded-md text-muted transition-colors hover:bg-surface-2 hover:text-fg"
+                        >
+                          <Settings2 size={13} />
+                        </Link>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onDelete(repo);
+                          }}
+                          title={t('REPOSITORY.TOOLTIP_DELETE')}
+                          className="inline-flex h-7 w-7 items-center justify-center rounded-md text-muted transition-colors hover:bg-danger/10 hover:text-danger"
+                        >
+                          <Trash2 size={13} />
+                        </button>
+                      </>
+                    );
+
                     return (
                       <div
                         key={repo.projectId}
-                        className="group flex items-center justify-between gap-3 px-6 py-3 transition-colors hover:bg-surface-2/60"
+                        className="group flex flex-col gap-2 px-4 py-3 transition-colors hover:bg-surface-2/60 sm:flex-row sm:items-center sm:justify-between sm:gap-3 sm:px-6"
                       >
-                        <div className="flex items-center gap-3 min-w-0">
+                        <div className="flex items-center gap-2.5 min-w-0 sm:flex-1">
                           <span
                             className={`h-2 w-2 rounded-full shrink-0 ${
                               repo.status === 'Active'
@@ -142,96 +208,37 @@ export function RepositoryFolderList({
                           />
                           <Link
                             to={`/detailrepo/${repo.projectId}`}
-                            className="truncate text-sm font-semibold text-fg hover:text-primary transition-colors"
+                            className="truncate text-sm font-semibold text-fg hover:text-primary transition-colors min-w-0 shrink"
+                            title={repo.name}
                           >
                             {repo.name}
                           </Link>
                           {repo.projectTypeLabel ? (
-                            <span className="rounded-md border border-border/60 bg-surface-2/40 px-2 py-0.5 font-mono text-[11px] text-muted">
+                            <span className="shrink-0 whitespace-nowrap rounded-md border border-border/60 bg-surface-2/40 px-2 py-0.5 font-mono text-[10px] text-muted sm:text-[11px]">
                               {repo.projectTypeLabel}
                             </span>
                           ) : null}
                         </div>
 
-                        <div className="flex items-center gap-4 shrink-0">
-                          <div className="text-right">
+                        <div className="flex items-center justify-between gap-3 pl-4.5 sm:pl-0 sm:justify-end sm:shrink-0">
+                          <div className="text-xs text-muted sm:text-right">
                             {isError ? (
-                              <span className="text-xs font-medium text-danger">
+                              <span className="font-medium text-danger">
                                 Scan failed
                               </span>
                             ) : isScanning ? (
-                              <span className="text-xs font-medium text-primary">
+                              <span className="font-medium text-primary">
                                 {t('REPOSITORY.ANALYZING')}
                               </span>
                             ) : (
-                              <span className="text-xs text-muted">
+                              <span className="text-muted">
                                 {lastScanTime ? `Scanned ${lastScanTime}` : t('REPOSITORY.NEVER_SCANNED')}
                               </span>
                             )}
                           </div>
 
-                          <div className="flex items-center gap-1 opacity-60 group-hover:opacity-100 transition-opacity">
-                            {repo.status === 'Active' ? (
-                              <button
-                                type="button"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  onScan(repo);
-                                }}
-                                disabled={scanningId === repo.projectId}
-                                title={t('REPOSITORY.TOOLTIP_RUN')}
-                                className="inline-flex h-7 w-7 items-center justify-center rounded-md text-primary transition-colors hover:bg-primary-subtle"
-                              >
-                                {scanningId === repo.projectId ? (
-                                  <Loader2 size={13} className="animate-spin" />
-                                ) : (
-                                  <Play size={13} />
-                                )}
-                              </button>
-                            ) : null}
-                            {repo.status === 'Error' ? (
-                              <button
-                                type="button"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  onScan(repo);
-                                }}
-                                disabled={scanningId === repo.projectId}
-                                title={t('REPOSITORY.TOOLTIP_RETRY')}
-                                className="inline-flex h-7 w-7 items-center justify-center rounded-md text-warning transition-colors hover:bg-warning/15"
-                              >
-                                {scanningId === repo.projectId ? (
-                                  <Loader2 size={13} className="animate-spin" />
-                                ) : (
-                                  <RotateCw size={13} />
-                                )}
-                              </button>
-                            ) : null}
-                            <Link
-                              to={`/detailrepo/${repo.projectId}`}
-                              title={t('REPOSITORY.TOOLTIP_VIEW')}
-                              className="inline-flex h-7 w-7 items-center justify-center rounded-md text-muted transition-colors hover:bg-surface-2 hover:text-fg"
-                            >
-                              <ExternalLink size={13} />
-                            </Link>
-                            <Link
-                              to={`/settingrepo/${repo.projectId}`}
-                              title={t('REPOSITORY.TOOLTIP_SETTINGS')}
-                              className="inline-flex h-7 w-7 items-center justify-center rounded-md text-muted transition-colors hover:bg-surface-2 hover:text-fg"
-                            >
-                              <Settings2 size={13} />
-                            </Link>
-                            <button
-                              type="button"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                onDelete(repo);
-                              }}
-                              title={t('REPOSITORY.TOOLTIP_DELETE')}
-                              className="inline-flex h-7 w-7 items-center justify-center rounded-md text-muted transition-colors hover:bg-danger/10 hover:text-danger"
-                            >
-                              <Trash2 size={13} />
-                            </button>
+                          <div className="flex items-center gap-1 opacity-80 group-hover:opacity-100 transition-opacity">
+                            {actionButtons}
                           </div>
                         </div>
                       </div>

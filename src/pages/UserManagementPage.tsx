@@ -229,95 +229,155 @@ export function UserManagementPage() {
         ) : filteredUsers.length === 0 ? (
           <p className="px-5 py-14 text-center text-sm text-muted">{t('USER_MGT.NO_USERS')}</p>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[46rem] text-left text-sm">
-              <caption className="sr-only">{t('USER_MGT.TABLE_CAPTION')}</caption>
-              <thead>
-                <tr className="border-b border-border">
-                  {[
-                    'SETTING.USER.USERNAME',
-                    'SETTING.USER.EMAIL',
-                    'USER_MGT.PHONE',
-                    'SETTING.USER.ROLE',
-                    'SETTING.USER.STATUS',
-                  ].map((key) => (
-                    <th
-                      key={key}
-                      className="px-5 py-3 font-mono text-xs font-semibold uppercase tracking-[0.14em] text-muted"
-                    >
-                      {t(key)}
-                    </th>
-                  ))}
-                  <th className="px-5 py-3 text-right font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-faint">
-                    {t('SETTING.USER.ACTIONS')}
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border">
-                {filteredUsers.map((user) => {
-                  const status = (user.status ?? '').toUpperCase();
-                  return (
-                    <tr key={user.id} className="transition-colors hover:bg-surface-2/50">
-                      <td className="px-5 py-3">
-                        <div className="flex items-center gap-2.5">
-                          <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary-subtle text-xs font-semibold uppercase text-primary">
-                            {user.username?.charAt(0) || '?'}
-                          </span>
-                          <span className="font-medium text-fg">{user.username}</span>
-                        </div>
-                      </td>
-                      <td className="px-5 py-3 text-muted">{user.email}</td>
-                      <td className="px-5 py-3 font-mono text-xs text-muted">
-                        {user.phone || '—'}
-                      </td>
-                      <td className="px-5 py-3">
+          <>
+            {/* Mobile Card List View (< md) */}
+            <div className="space-y-3 p-3.5 md:hidden">
+              {filteredUsers.map((user) => {
+                const status = (user.status ?? '').toUpperCase();
+                return (
+                  <div
+                    key={user.id}
+                    className="rounded-xl border border-border bg-surface p-4 shadow-2xs space-y-3 transition-colors hover:border-border-strong"
+                  >
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-2.5 min-w-0">
+                        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary-subtle text-xs font-semibold uppercase text-primary">
+                          {user.username?.charAt(0) || '?'}
+                        </span>
+                        <span className="truncate text-sm font-semibold text-fg">{user.username}</span>
+                      </div>
+                      <span
+                        className={`shrink-0 rounded-full px-2 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wide ${
+                          ROLE_BADGE[user.role] ?? 'bg-surface-2 text-muted'
+                        }`}
+                      >
+                        {user.role}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center justify-between gap-2 border-t border-b border-border/50 py-2.5 text-xs">
+                      <span className="truncate text-muted">{user.email}</span>
+                      {status ? (
                         <span
-                          className={`rounded-full px-2 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wide ${
-                            ROLE_BADGE[user.role] ?? 'bg-surface-2 text-muted'
+                          className={`shrink-0 rounded-full px-2 py-0.5 text-[11px] font-medium ${
+                            STATUS_BADGE[status] ?? 'bg-surface-2 text-muted'
                           }`}
                         >
-                          {user.role}
+                          {status}
                         </span>
-                      </td>
-                      <td className="px-5 py-3">
-                        {status ? (
+                      ) : null}
+                    </div>
+
+                    <div className="flex justify-end gap-2 pt-0.5">
+                      <button
+                        type="button"
+                        onClick={() => openEditUser(user)}
+                        className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-border px-3 text-xs font-medium text-muted transition-colors hover:bg-surface-2 hover:text-fg"
+                      >
+                        <Pencil size={13} />
+                        {t('COMMON.EDIT')}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setPendingDelete(user)}
+                        className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-danger/30 bg-danger/10 px-3 text-xs font-medium text-danger transition-colors hover:bg-danger/20"
+                      >
+                        <Trash2 size={13} />
+                        {t('COMMON.DELETE')}
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Desktop Table View (>= md) */}
+            <div className="hidden md:block overflow-x-auto">
+              <table className="w-full min-w-[46rem] text-left text-sm">
+                <caption className="sr-only">{t('USER_MGT.TABLE_CAPTION')}</caption>
+                <thead>
+                  <tr className="border-b border-border">
+                    {[
+                      'SETTING.USER.USERNAME',
+                      'SETTING.USER.EMAIL',
+                      'SETTING.USER.ROLE',
+                      'SETTING.USER.STATUS',
+                    ].map((key) => (
+                      <th
+                        key={key}
+                        className="px-5 py-3 font-mono text-xs font-semibold uppercase tracking-[0.14em] text-muted"
+                      >
+                        {t(key)}
+                      </th>
+                    ))}
+                    <th className="px-5 py-3 text-right font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-faint">
+                      {t('SETTING.USER.ACTIONS')}
+                    </th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border">
+                  {filteredUsers.map((user) => {
+                    const status = (user.status ?? '').toUpperCase();
+                    return (
+                      <tr key={user.id} className="transition-colors hover:bg-surface-2/50">
+                        <td className="px-5 py-3">
+                          <div className="flex items-center gap-2.5">
+                            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-primary-subtle text-xs font-semibold uppercase text-primary">
+                              {user.username?.charAt(0) || '?'}
+                            </span>
+                            <span className="font-medium text-fg">{user.username}</span>
+                          </div>
+                        </td>
+                        <td className="px-5 py-3 text-muted">{user.email}</td>
+                        <td className="px-5 py-3">
                           <span
-                            className={`rounded-full px-2 py-0.5 text-[11px] font-medium ${
-                              STATUS_BADGE[status] ?? 'bg-surface-2 text-muted'
+                            className={`rounded-full px-2 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wide ${
+                              ROLE_BADGE[user.role] ?? 'bg-surface-2 text-muted'
                             }`}
                           >
-                            {status}
+                            {user.role}
                           </span>
-                        ) : (
-                          <span className="text-faint">—</span>
-                        )}
-                      </td>
-                      <td className="px-5 py-3">
-                        <div className="flex justify-end gap-1.5">
-                          <button
-                            type="button"
-                            aria-label={t('COMMON.EDIT')}
-                            onClick={() => openEditUser(user)}
-                            className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-border text-muted transition-colors hover:bg-surface-2 hover:text-fg"
-                          >
-                            <Pencil size={14} />
-                          </button>
-                          <button
-                            type="button"
-                            aria-label={t('COMMON.DELETE')}
-                            onClick={() => setPendingDelete(user)}
-                            className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-border text-muted transition-colors hover:border-danger/40 hover:bg-danger/10 hover:text-danger"
-                          >
-                            <Trash2 size={14} />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+                        </td>
+                        <td className="px-5 py-3">
+                          {status ? (
+                            <span
+                              className={`rounded-full px-2 py-0.5 text-[11px] font-medium ${
+                                STATUS_BADGE[status] ?? 'bg-surface-2 text-muted'
+                              }`}
+                            >
+                              {status}
+                            </span>
+                          ) : (
+                            <span className="text-faint">—</span>
+                          )}
+                        </td>
+                        <td className="px-5 py-3">
+                          <div className="flex justify-end gap-1.5">
+                            <button
+                              type="button"
+                              aria-label={t('COMMON.EDIT')}
+                              onClick={() => openEditUser(user)}
+                              className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-border text-muted transition-colors hover:bg-surface-2 hover:text-fg"
+                            >
+                              <Pencil size={14} />
+                            </button>
+                            <button
+                              type="button"
+                              aria-label={t('COMMON.DELETE')}
+                              onClick={() => setPendingDelete(user)}
+                              className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-border text-muted transition-colors hover:border-danger/40 hover:bg-danger/10 hover:text-danger"
+                            >
+                              <Trash2 size={14} />
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </>
         )}
       </section>
 
@@ -386,21 +446,6 @@ export function UserManagementPage() {
                   </div>
                 </FormField>
               ) : null}
-
-              <FormField
-                id="phone"
-                label={t('USER_MGT.PHONE')}
-                error={submitted && !modalUser.phone ? t('USER_MGT.PHONE_REQUIRED') : ''}
-              >
-                <input
-                  id="phone"
-                  type="text"
-                  inputMode="numeric"
-                  className={FIELD_INPUT_CLASS}
-                  value={modalUser.phone ?? ''}
-                  onChange={(event) => patchModal({ phone: event.target.value })}
-                />
-              </FormField>
 
               <FormField
                 id="email"

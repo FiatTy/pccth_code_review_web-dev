@@ -11,6 +11,7 @@ interface DateFieldProps {
   placeholder?: string;
   minDate?: string;
   maxDate?: string;
+  align?: 'left' | 'right' | 'auto';
 }
 
 function pad(n: number): string {
@@ -52,20 +53,42 @@ export function DateField({
   placeholder,
   minDate,
   maxDate,
+  align = 'auto',
 }: DateFieldProps) {
   const { t, i18n } = useTranslation();
   const locale = i18n.resolvedLanguage === 'th' ? 'th' : 'en';
 
   const [open, setOpen] = useState(false);
+  const [popoverAlign, setPopoverAlign] = useState<'left' | 'right'>('left');
   const selected = useMemo(() => parseISO(value), [value]);
   const [viewMonth, setViewMonth] = useState<Date>(() => selected ?? new Date());
   const rootRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (open) {
-      setViewMonth(selected ?? new Date());
+    if (!open) {
+      return;
     }
-  }, [open, selected]);
+    setViewMonth(selected ?? new Date());
+
+    function updateAlignment() {
+      if (!rootRef.current) {
+        return;
+      }
+      const rect = rootRef.current.getBoundingClientRect();
+      const spaceOnRight = window.innerWidth - rect.left;
+      if (align === 'right' || (align !== 'left' && spaceOnRight < 290)) {
+        setPopoverAlign('right');
+      } else {
+        setPopoverAlign('left');
+      }
+    }
+
+    updateAlignment();
+    window.addEventListener('resize', updateAlignment);
+    return () => {
+      window.removeEventListener('resize', updateAlignment);
+    };
+  }, [open, selected, align]);
 
   useEffect(() => {
     if (!open) {
@@ -135,7 +158,9 @@ export function DateField({
       {open ? (
         <div
           role="dialog"
-          className="dialog-enter absolute left-0 top-full z-50 mt-2 w-72 rounded-xl border border-border bg-surface p-3 shadow-xl"
+          className={`dialog-enter absolute top-full z-50 mt-2 w-[280px] max-w-[calc(100vw-1.5rem)] rounded-xl border border-border bg-surface p-3 shadow-2xl overscroll-contain ${
+            popoverAlign === 'right' ? 'right-0 left-auto' : 'left-0 right-auto'
+          }`}
         >
           <div className="flex items-center justify-between px-1">
             <button

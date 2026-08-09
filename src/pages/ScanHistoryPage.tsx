@@ -146,8 +146,8 @@ export function ScanHistoryPage() {
     <div>
       <PageHeader title={t('SCAN.TITLE')} subtitle={t('SCAN.SUBTITLE')} />
 
-      <div className="mb-6 flex flex-wrap items-end gap-3 rounded-2xl border border-border bg-surface p-5 shadow-sm">
-        <label className="flex flex-col gap-1">
+      <div className="mb-6 flex flex-col gap-3.5 rounded-2xl border border-border bg-surface p-5 shadow-sm sm:flex-row sm:flex-wrap sm:items-end">
+        <label className="flex w-full flex-col gap-1 sm:w-auto">
           <span className="font-mono text-[10px] uppercase tracking-wide text-faint">
             {t('SCAN.PROJECT')}
           </span>
@@ -157,7 +157,7 @@ export function ScanHistoryPage() {
               setProject(next);
               setPage(1);
             }}
-            className={`${selectClass} min-w-44`}
+            className={`${selectClass} w-full sm:w-auto sm:min-w-44`}
             options={[
               { value: 'all', label: t('SCAN.ALL_PROJECTS') },
               ...projects.map((name) => ({ value: name, label: name })),
@@ -165,7 +165,7 @@ export function ScanHistoryPage() {
           />
         </label>
 
-        <label className="flex flex-col gap-1">
+        <label className="flex w-full flex-col gap-1 sm:w-auto">
           <span className="font-mono text-[10px] uppercase tracking-wide text-faint">
             {t('SCAN.SCAN_STATUS')}
           </span>
@@ -175,7 +175,7 @@ export function ScanHistoryPage() {
               setStatus(next as StatusFilter);
               setPage(1);
             }}
-            className={`${selectClass} min-w-40`}
+            className={`${selectClass} w-full sm:w-auto sm:min-w-40`}
             options={[
               { value: 'all', label: t('SCAN.ALL') },
               { value: 'SUCCESS', label: t('SCAN.COMPLETED') },
@@ -185,41 +185,44 @@ export function ScanHistoryPage() {
           />
         </label>
 
-        <label className="flex flex-col gap-1">
-          <span className="font-mono text-[10px] uppercase tracking-wide text-faint">
-            {t('SCAN.START_DATE')}
-          </span>
-          <DateField
-            value={startDate}
-            maxDate={endDate || undefined}
-            onChange={handleStartDateChange}
-            className={selectClass}
-          />
-        </label>
+        <div className="grid w-full grid-cols-2 gap-3 sm:flex sm:w-auto sm:items-center sm:gap-3">
+          <label className="flex flex-col gap-1">
+            <span className="font-mono text-[10px] uppercase tracking-wide text-faint">
+              {t('SCAN.START_DATE')}
+            </span>
+            <DateField
+              value={startDate}
+              maxDate={endDate || undefined}
+              onChange={handleStartDateChange}
+              className={`${selectClass} w-full`}
+            />
+          </label>
 
-        <label className="flex flex-col gap-1">
-          <span className="font-mono text-[10px] uppercase tracking-wide text-faint">
-            {t('SCAN.END_DATE')}
-          </span>
-          <DateField
-            value={endDate}
-            minDate={startDate || undefined}
-            onChange={handleEndDateChange}
-            className={selectClass}
-          />
-        </label>
+          <label className="flex flex-col gap-1">
+            <span className="font-mono text-[10px] uppercase tracking-wide text-faint">
+              {t('SCAN.END_DATE')}
+            </span>
+            <DateField
+              value={endDate}
+              minDate={startDate || undefined}
+              onChange={handleEndDateChange}
+              className={`${selectClass} w-full`}
+              align="right"
+            />
+          </label>
+        </div>
 
         <button
           type="button"
           onClick={resetFilters}
-          className="inline-flex h-11 items-center gap-1.5 rounded-xl border border-border bg-surface px-4 text-sm font-medium text-muted shadow-sm transition-all hover:border-border-strong hover:text-fg active:scale-[0.99]"
+          className="inline-flex h-11 w-full items-center justify-center gap-1.5 rounded-xl border border-border bg-surface px-4 text-sm font-medium text-muted shadow-sm transition-all hover:border-border-strong hover:text-fg active:scale-[0.99] sm:w-auto"
         >
           <RefreshCw size={14} />
           {t('SCAN.CLEAR_FILTER')}
         </button>
 
-        <div className="ml-auto flex items-center gap-3">
-          <span className="text-xs text-faint">
+        <div className="flex w-full flex-col gap-2 pt-2 border-t border-border/60 sm:ml-auto sm:w-auto sm:flex-row sm:items-center sm:gap-3 sm:border-0 sm:pt-0">
+          <span className="text-xs text-muted sm:text-faint text-center sm:text-left">
             {selectedIds.length > 0
               ? t('SCAN.COMPARE_SELECTED', { count: selectedIds.length })
               : t('SCAN.COMPARE_HINT')}
@@ -228,10 +231,10 @@ export function ScanHistoryPage() {
             type="button"
             onClick={() => setShowCompare(true)}
             disabled={selectedIds.length < 2}
-            className="brand-gradient-bg inline-flex h-11 items-center gap-1.5 rounded-xl px-4 text-sm font-semibold text-primary-fg shadow-lg shadow-primary/25 transition-all hover:-translate-y-0.5 hover:shadow-primary/35 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none disabled:hover:translate-y-0"
+            className="brand-gradient-bg inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold text-primary-fg shadow-lg shadow-primary/25 transition-all hover:-translate-y-0.5 hover:shadow-primary/35 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none disabled:hover:translate-y-0 whitespace-nowrap sm:w-auto"
           >
-            <GitCompare size={14} />
-            {t('SCAN.COMPARE_SCANS')}
+            <GitCompare size={14} className="shrink-0" />
+            <span className="whitespace-nowrap">{t('SCAN.COMPARE_SCANS')}</span>
           </button>
         </div>
       </div>
@@ -265,7 +268,75 @@ export function ScanHistoryPage() {
         </div>
       ) : (
         <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-sm">
-          <div className="overflow-x-auto">
+          {/* Mobile Card List View (< md) */}
+          <div className="space-y-3 p-3.5 md:hidden">
+            {pageRows.map((scan) => (
+              <div
+                key={scan.id}
+                className="rounded-xl border border-border bg-surface p-4 shadow-2xs space-y-3 transition-colors hover:border-border-strong"
+              >
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <input
+                      type="checkbox"
+                      aria-label={`${t('SCAN.COL_SELECT')} ${scan.projectName}`}
+                      checked={selectedIds.includes(scan.id)}
+                      disabled={!selectedIds.includes(scan.id) && selectedIds.length >= 3}
+                      onChange={() => toggleSelected(scan.id)}
+                      className="h-4 w-4 shrink-0 cursor-pointer accent-[var(--color-primary)] disabled:cursor-not-allowed disabled:opacity-40"
+                    />
+                    <span className="truncate text-sm font-semibold text-fg">
+                      {scan.projectName || '—'}
+                    </span>
+                  </div>
+                  <div className="shrink-0">
+                    <ScanGradeChip scan={scan} size="sm" spinner />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-2 gap-2 text-xs border-t border-b border-border/50 py-2.5">
+                  <div>
+                    <span className="font-mono text-[10px] uppercase text-faint block mb-0.5">
+                      {t('SCAN.COL_DATE_TIME')}
+                    </span>
+                    <span className="text-muted font-medium">
+                      {formatDateTime(scan.startedAt) ?? '—'}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="font-mono text-[10px] uppercase text-faint block mb-0.5">
+                      {t('SCAN.COL_ISSUES')}
+                    </span>
+                    <span className="text-fg font-semibold">
+                      {issuesCount(scan)}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-end gap-2 pt-0.5">
+                  <Link
+                    to={`/logviewer/${scan.id}`}
+                    title={t('SCAN.VIEW_LOG_TOOLTIP')}
+                    className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-border bg-surface-2/40 px-3 text-xs font-medium text-muted transition-colors hover:bg-surface-2 hover:text-fg"
+                  >
+                    <ScrollText size={14} />
+                    {t('SCAN.COL_LOG')}
+                  </Link>
+                  <Link
+                    to={`/scanresult/${scan.id}`}
+                    title={t('SCAN.VIEW_RESULT_TOOLTIP')}
+                    className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-primary-subtle px-3 text-xs font-semibold text-primary transition-colors hover:bg-primary/20"
+                  >
+                    <FileBarChart size={14} />
+                    {t('SCAN.COL_RESULT')}
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Desktop Table View (>= md) */}
+          <div className="hidden md:block overflow-x-auto">
             <table className="w-full min-w-[720px] text-sm">
               <thead>
                 <tr className="border-b border-border bg-surface-2/50 text-left">

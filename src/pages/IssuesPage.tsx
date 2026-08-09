@@ -142,14 +142,14 @@ export function IssuesPage() {
     <div>
       <PageHeader title={t('ISSUE.TITLE_MGT')} subtitle={t('ISSUE.TABLE_CAPTION')} />
 
-      <div className="mb-5 flex flex-wrap items-center gap-2 rounded-xl border border-border bg-surface p-4">
+      <div className="mb-5 flex flex-col gap-3 rounded-xl border border-border bg-surface p-4 sm:flex-row sm:flex-wrap sm:items-center">
         <SelectField
           value={type}
           onChange={(next) => {
             setType(next);
             setPage(1);
           }}
-          className={`${selectClass} min-w-40`}
+          className={`${selectClass} w-full sm:w-auto sm:min-w-40`}
           options={[
             { value: 'all', label: t('ISSUE.ALL_TYPES') },
             { value: 'BUG', label: t('ISSUE.BUG') },
@@ -163,7 +163,7 @@ export function IssuesPage() {
             setSeverity(next);
             setPage(1);
           }}
-          className={`${selectClass} min-w-40`}
+          className={`${selectClass} w-full sm:w-auto sm:min-w-40`}
           options={[
             { value: 'all', label: t('ISSUE.ALL_SEVERITY') },
             { value: 'BLOCKER', label: t('ISSUE.BLOCKER') },
@@ -179,7 +179,7 @@ export function IssuesPage() {
             setStatus(next);
             setPage(1);
           }}
-          className={`${selectClass} min-w-40`}
+          className={`${selectClass} w-full sm:w-auto sm:min-w-40`}
           options={[
             { value: 'all', label: t('ISSUE.ALL_STATUS') },
             { value: 'OPEN', label: t('ISSUE.OPEN') },
@@ -194,14 +194,14 @@ export function IssuesPage() {
             setProject(next);
             setPage(1);
           }}
-          className={`${selectClass} min-w-44`}
+          className={`${selectClass} w-full sm:w-auto sm:min-w-44`}
           options={[
             { value: 'all', label: t('ISSUE.ALL_PROJECTS') },
             ...projects.map((name) => ({ value: name, label: name })),
           ]}
         />
 
-        <div className="relative ml-auto w-full sm:w-56">
+        <div className="relative w-full sm:ml-auto sm:w-56">
           <Search
             size={15}
             className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-faint"
@@ -250,7 +250,78 @@ export function IssuesPage() {
         </div>
       ) : (
         <div className="overflow-hidden rounded-xl border border-border bg-surface">
-          <div className="overflow-x-auto">
+          {/* Mobile Card List View (< md) */}
+          <div className="space-y-3 p-3.5 md:hidden">
+            {pageRows.map((issue) => {
+              const badge = statusMeta(issue.status);
+              return (
+                <div
+                  key={issue.id}
+                  className="rounded-xl border border-border bg-surface p-4 shadow-2xs space-y-3 transition-colors hover:border-border-strong"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <input
+                        type="checkbox"
+                        aria-label={`${t('ISSUE.SELECT_ALL')} ${issue.issueKey}`}
+                        checked={selectedIds.includes(issue.id)}
+                        onChange={() => toggleSelected(issue.id)}
+                        className="h-4 w-4 shrink-0 cursor-pointer accent-[var(--color-primary)]"
+                      />
+                      <IssueTypeCell issue={issue} />
+                      <IssueSeverityCell severity={issue.severity} />
+                    </div>
+                    <span
+                      className={`inline-flex shrink-0 whitespace-nowrap rounded-full px-2.5 py-0.5 text-[11px] font-medium ${badge.cls}`}
+                    >
+                      {t(badge.labelKey)}
+                    </span>
+                  </div>
+
+                  <div className="space-y-1">
+                    <p className="text-sm font-semibold text-fg leading-snug">{issue.message || '—'}</p>
+                    <p className="truncate font-mono text-xs text-muted" title={issue.component}>
+                      {issue.component || '—'}
+                    </p>
+                  </div>
+
+                  <div className="flex items-center justify-between gap-2 border-t border-border/50 pt-2.5 text-xs">
+                    <div className="flex items-center gap-1.5 min-w-0">
+                      <span className="font-mono text-[10px] uppercase text-faint shrink-0">
+                        {t('ISSUE.COL_PROJECT')}:
+                      </span>
+                      <span className="truncate text-muted font-medium">{issue.projectName || '—'}</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setAssignTarget(issue)}
+                      title={t('ISSUE_MODAL.ASSIGN_ISSUE')}
+                      className="shrink-0 rounded-md px-2 py-1 text-xs transition-colors hover:bg-surface-2"
+                    >
+                      {issue.assignedName ? (
+                        <span className="font-medium text-fg">{issue.assignedName}</span>
+                      ) : (
+                        <span className="text-faint">{t('ISSUE.UNASSIGNED')}</span>
+                      )}
+                    </button>
+                  </div>
+
+                  <div className="flex items-center justify-end pt-1">
+                    <Link
+                      to={`/issuedetail/${issue.id}`}
+                      className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-primary-subtle px-3 text-xs font-semibold text-primary transition-colors hover:bg-primary/20"
+                    >
+                      <span>{t('ISSUE.COL_VIEW')}</span>
+                      <ArrowRight size={14} />
+                    </Link>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Desktop Table View (>= md) */}
+          <div className="hidden md:block overflow-x-auto">
             <table className="w-full min-w-[900px] text-sm">
               <thead>
                 <tr className="border-b border-border bg-surface-2/50 text-left">

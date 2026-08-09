@@ -132,7 +132,74 @@ export function ReportHistoryPage() {
           </p>
         ) : (
           <>
-            <div className="overflow-x-auto">
+            {/* Mobile Card List View (< md) */}
+            <div className="space-y-3 p-3.5 md:hidden">
+              {rows.map((report) => (
+                <div
+                  key={report.id}
+                  className="rounded-xl border border-border bg-surface p-4 shadow-2xs space-y-3 transition-colors hover:border-border-strong"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-surface-2 text-muted">
+                        <FileText size={15} />
+                      </span>
+                      <div className="min-w-0">
+                        <p className="truncate text-sm font-semibold text-fg">{report.projectName}</p>
+                        <p className="font-mono text-[11px] text-faint">
+                          {formatBytes(report.fileSizeBytes)}
+                        </p>
+                      </div>
+                    </div>
+                    <span className="shrink-0 rounded-md bg-surface-2 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wide text-muted">
+                      {report.format}
+                    </span>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2 text-xs border-t border-b border-border/50 py-2.5">
+                    <div>
+                      <span className="font-mono text-[10px] uppercase text-faint block mb-0.5">
+                        {t('REPORT_HISTORY.DATE_RANGE')}
+                      </span>
+                      <span className="font-mono text-[11px] text-muted block">
+                        {report.dateFrom} {t('REPORT_HISTORY.TO')} {report.dateTo}
+                      </span>
+                    </div>
+                    <div>
+                      <span className="font-mono text-[10px] uppercase text-faint block mb-0.5">
+                        {t('REPORT_HISTORY.GENERATED_BY')}
+                      </span>
+                      <span className="text-muted font-medium block">
+                        {report.generatedBy}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between gap-2 pt-0.5 text-xs">
+                    <span className="text-muted">
+                      {formatDateTime(report.generatedAt) ?? '—'}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => void handleDownload(report)}
+                      disabled={downloadingId === report.id}
+                      title={t('REPORT_HISTORY.DOWNLOAD_FILE')}
+                      className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-primary-subtle px-3 text-xs font-semibold text-primary transition-colors hover:bg-primary/20 disabled:cursor-not-allowed disabled:opacity-50"
+                    >
+                      {downloadingId === report.id ? (
+                        <Loader2 size={14} className="animate-spin" />
+                      ) : (
+                        <Download size={14} />
+                      )}
+                      <span>{t('REPORT_HISTORY.EXPORT')}</span>
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Desktop Table View (>= md) */}
+            <div className="hidden md:block overflow-x-auto">
               <table className="w-full min-w-[52rem] text-left text-sm">
                 <thead>
                   <tr className="border-b border-border">

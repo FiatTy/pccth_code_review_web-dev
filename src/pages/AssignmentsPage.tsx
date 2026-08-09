@@ -90,68 +90,135 @@ export function AssignmentsPage() {
             {t('MY_ASSIGNMENTS.NO_ASSIGNMENTS')}
           </p>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[52rem] text-left text-sm">
-              <caption className="sr-only">{t('MY_ASSIGNMENTS.TABLE_CAPTION')}</caption>
-              <thead>
-                <tr className="border-b border-border">
-                  <th className={headCell}>{t('MY_ASSIGNMENTS.COL_ISSUE')}</th>
-                  <th className={headCell}>{t('MY_ASSIGNMENTS.COL_SEVERITY')}</th>
-                  <th className={headCell}>{t('ISSUE.COL_PROJECT')}</th>
-                  <th className={headCell}>{t('MY_ASSIGNMENTS.COL_CREATE_DATE')}</th>
-                  <th className={headCell}>{t('MY_ASSIGNMENTS.COL_STATUS')}</th>
-                  <th className={`${headCell} text-center`}>{t('ISSUE.COL_VIEW')}</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border">
-                {assignments.map((issue) => (
-                  <tr key={issue.id} className="transition-colors hover:bg-surface-2/50">
-                    <td className="max-w-md px-5 py-3">
-                      <p className="truncate text-fg" title={issue.message}>
-                        {issue.message || '—'}
+          <>
+            {/* Mobile Card List View (< md) */}
+            <div className="space-y-3 p-3.5 md:hidden">
+              {assignments.map((issue) => (
+                <div
+                  key={issue.id}
+                  className="rounded-xl border border-border bg-surface p-4 shadow-2xs space-y-3 transition-colors hover:border-border-strong"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="space-y-1 min-w-0">
+                      <p className="text-sm font-semibold text-fg leading-snug">{issue.message || '—'}</p>
+                      <p className="truncate font-mono text-xs text-muted" title={issue.component}>
+                        {issue.component || '—'}
                       </p>
-                      <p className="truncate font-mono text-[11px] text-faint">{issue.component}</p>
-                    </td>
-                    <td className="px-5 py-3">
-                      <span className="inline-flex items-center gap-1.5 text-xs text-muted">
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setStatusTarget(issue)}
+                      title={t('ISSUE_MODAL.CHANGE_STATUS')}
+                      className={`shrink-0 rounded-full px-2.5 py-0.5 text-[11px] font-medium transition-opacity hover:opacity-80 ${
+                        STATUS_BADGE[issue.status] ?? 'bg-surface-2 text-muted'
+                      }`}
+                    >
+                      {t(STATUS_LABEL[issue.status] ?? 'ISSUE.OPEN')}
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-2 text-xs border-t border-b border-border/50 py-2.5">
+                    <div>
+                      <span className="font-mono text-[10px] uppercase text-faint block mb-0.5">
+                        {t('MY_ASSIGNMENTS.COL_SEVERITY')}
+                      </span>
+                      <span className="inline-flex items-center gap-1.5 text-muted font-medium">
                         <span
                           className={`h-2 w-2 rounded-full ${SEVERITY_DOT[issue.severity] ?? 'bg-faint'}`}
                         />
                         {issue.severity}
                       </span>
-                    </td>
-                    <td className="whitespace-nowrap px-5 py-3 text-muted">
-                      {issue.projectName || '—'}
-                    </td>
-                    <td className="whitespace-nowrap px-5 py-3 text-muted">
+                    </div>
+                    <div>
+                      <span className="font-mono text-[10px] uppercase text-faint block mb-0.5">
+                        {t('ISSUE.COL_PROJECT')}
+                      </span>
+                      <span className="truncate text-muted font-medium block">
+                        {issue.projectName || '—'}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center justify-between gap-2 pt-0.5">
+                    <span className="text-xs text-faint">
                       {formatDate(issue.createdAt)}
-                    </td>
-                    <td className="px-5 py-3">
-                      <button
-                        type="button"
-                        onClick={() => setStatusTarget(issue)}
-                        title={t('ISSUE_MODAL.CHANGE_STATUS')}
-                        className={`rounded-full px-2.5 py-1 text-[11px] font-medium transition-opacity hover:opacity-80 ${
-                          STATUS_BADGE[issue.status] ?? 'bg-surface-2 text-muted'
-                        }`}
-                      >
-                        {t(STATUS_LABEL[issue.status] ?? 'ISSUE.OPEN')}
-                      </button>
-                    </td>
-                    <td className="px-5 py-3 text-center">
-                      <Link
-                        to={`/issuedetail/${issue.id}`}
-                        aria-label={t('ISSUE.COL_VIEW')}
-                        className="inline-flex h-8 w-8 items-center justify-center rounded-md text-primary transition-colors hover:bg-primary-subtle"
-                      >
-                        <ArrowRight size={15} />
-                      </Link>
-                    </td>
+                    </span>
+                    <Link
+                      to={`/issuedetail/${issue.id}`}
+                      className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-primary-subtle px-3 text-xs font-semibold text-primary transition-colors hover:bg-primary/20"
+                    >
+                      <span>{t('ISSUE.COL_VIEW')}</span>
+                      <ArrowRight size={14} />
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Desktop Table View (>= md) */}
+            <div className="hidden md:block overflow-x-auto">
+              <table className="w-full min-w-[52rem] text-left text-sm">
+                <caption className="sr-only">{t('MY_ASSIGNMENTS.TABLE_CAPTION')}</caption>
+                <thead>
+                  <tr className="border-b border-border">
+                    <th className={headCell}>{t('MY_ASSIGNMENTS.COL_ISSUE')}</th>
+                    <th className={headCell}>{t('MY_ASSIGNMENTS.COL_SEVERITY')}</th>
+                    <th className={headCell}>{t('ISSUE.COL_PROJECT')}</th>
+                    <th className={headCell}>{t('MY_ASSIGNMENTS.COL_CREATE_DATE')}</th>
+                    <th className={headCell}>{t('MY_ASSIGNMENTS.COL_STATUS')}</th>
+                    <th className={`${headCell} text-center`}>{t('ISSUE.COL_VIEW')}</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+                </thead>
+                <tbody className="divide-y divide-border">
+                  {assignments.map((issue) => (
+                    <tr key={issue.id} className="transition-colors hover:bg-surface-2/50">
+                      <td className="max-w-md px-5 py-3">
+                        <p className="truncate text-fg" title={issue.message}>
+                          {issue.message || '—'}
+                        </p>
+                        <p className="truncate font-mono text-[11px] text-faint">{issue.component}</p>
+                      </td>
+                      <td className="px-5 py-3">
+                        <span className="inline-flex items-center gap-1.5 text-xs text-muted">
+                          <span
+                            className={`h-2 w-2 rounded-full ${SEVERITY_DOT[issue.severity] ?? 'bg-faint'}`}
+                          />
+                          {issue.severity}
+                        </span>
+                      </td>
+                      <td className="whitespace-nowrap px-5 py-3 text-muted">
+                        {issue.projectName || '—'}
+                      </td>
+                      <td className="whitespace-nowrap px-5 py-3 text-muted">
+                        {formatDate(issue.createdAt)}
+                      </td>
+                      <td className="px-5 py-3">
+                        <button
+                          type="button"
+                          onClick={() => setStatusTarget(issue)}
+                          title={t('ISSUE_MODAL.CHANGE_STATUS')}
+                          className={`rounded-full px-2.5 py-1 text-[11px] font-medium transition-opacity hover:opacity-80 ${
+                            STATUS_BADGE[issue.status] ?? 'bg-surface-2 text-muted'
+                          }`}
+                        >
+                          {t(STATUS_LABEL[issue.status] ?? 'ISSUE.OPEN')}
+                        </button>
+                      </td>
+                      <td className="px-5 py-3 text-center">
+                        <Link
+                          to={`/issuedetail/${issue.id}`}
+                          aria-label={t('ISSUE.COL_VIEW')}
+                          className="inline-flex h-8 w-8 items-center justify-center rounded-md text-primary transition-colors hover:bg-primary-subtle"
+                        >
+                          <ArrowRight size={15} />
+                        </Link>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </>
         )}
       </section>
 
