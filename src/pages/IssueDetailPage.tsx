@@ -181,8 +181,8 @@ export function IssueDetailPage() {
   const isAiRecommendation = Boolean(analysis?.recommendedFixByAi);
 
   return (
-    <div>
-      <div className="mb-6">
+    <div className="w-full max-w-full min-w-0 overflow-x-hidden space-y-6">
+      <div className="w-full max-w-full min-w-0">
         <button
           type="button"
           onClick={() => navigate(-1)}
@@ -191,10 +191,10 @@ export function IssueDetailPage() {
           <ArrowLeft size={14} />
           {t('ISSUE_DETAIL.BACK_TO_ISSUE')}
         </button>
-        <h1 className="mt-2 text-2xl font-semibold leading-snug tracking-tight text-fg">
+        <h1 className="mt-2 text-xl sm:text-2xl font-semibold leading-snug tracking-tight text-fg break-words [overflow-wrap:anywhere]">
           {issue.message}
         </h1>
-        <div className="mt-3 flex flex-wrap items-center gap-2">
+        <div className="mt-3 flex flex-wrap items-center gap-2 min-w-0 w-full">
           <span className="rounded-md bg-surface-2 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wide text-muted">
             {issue.type.replace(/_/g, ' ')}
           </span>
@@ -212,17 +212,17 @@ export function IssueDetailPage() {
           >
             {issue.status.replace(/_/g, ' ')}
           </span>
-          <span className="font-mono text-xs text-faint">{issue.projectName}</span>
+          <span className="font-mono text-xs text-faint truncate">{issue.projectName}</span>
         </div>
       </div>
 
-      <div className="grid items-start gap-4 lg:grid-cols-3">
-        <div className="space-y-4 lg:col-span-2">
-          <section className="rounded-xl border border-border bg-surface">
+      <div className="grid items-start gap-4 lg:grid-cols-3 w-full max-w-full min-w-0">
+        <div className="space-y-4 lg:col-span-2 w-full max-w-full min-w-0">
+          <section className="w-full max-w-full min-w-0 overflow-hidden rounded-xl border border-border bg-surface">
             <div className="card-header border-b border-border px-5 py-4">
               <h2 className="text-sm font-semibold text-fg">{t('ISSUE_DETAIL.DESC_ANALYSIS')}</h2>
             </div>
-            <div className="space-y-4 px-5 py-5">
+            <div className="space-y-4 px-5 py-5 min-w-0 w-full">
               {analysisQuery.isLoading ? (
                 <div className="flex items-center justify-center gap-2 py-8 text-sm text-muted">
                   <Loader2 size={15} className="animate-spin" />
@@ -231,7 +231,7 @@ export function IssueDetailPage() {
               ) : (
                 <>
                   {analysis?.description ? (
-                    <p className="whitespace-pre-wrap text-sm leading-relaxed text-muted">
+                    <p className="whitespace-pre-wrap break-words [overflow-wrap:anywhere] text-sm leading-relaxed text-muted">
                       {analysis.description}
                     </p>
                   ) : null}
@@ -247,8 +247,8 @@ export function IssueDetailPage() {
                     />
                   ) : null}
 
-                  <div>
-                    <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+                  <div className="min-w-0 w-full">
+                    <div className="mb-2 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
                       <span className="flex items-center gap-2 text-xs font-semibold text-fg">
                         {t('ISSUE_DETAIL.RECOMMENDATION')}
                         {isAiRecommendation ? (
@@ -258,7 +258,7 @@ export function IssueDetailPage() {
                           </span>
                         ) : null}
                       </span>
-                      <div className="flex items-center gap-2">
+                      <div className="flex flex-wrap items-center gap-2">
                         {recommendation ? (
                           <button
                             type="button"
@@ -289,8 +289,8 @@ export function IssueDetailPage() {
                       </div>
                     </div>
                     {recommendation ? (
-                      <div className="overflow-hidden rounded-lg border border-border">
-                        <pre className="max-h-[28rem] overflow-auto whitespace-pre-wrap break-words bg-surface-2/40 px-4 py-3 font-mono text-xs leading-relaxed text-fg">
+                      <div className="w-full max-w-full min-w-0 overflow-hidden rounded-lg border border-border">
+                        <pre className="max-h-[28rem] w-full max-w-full min-w-0 overflow-x-auto whitespace-pre-wrap break-words [overflow-wrap:anywhere] bg-surface-2/40 px-4 py-3 font-mono text-xs leading-relaxed text-fg overscroll-contain">
                           {recommendation}
                         </pre>
                       </div>
@@ -305,7 +305,7 @@ export function IssueDetailPage() {
             </div>
           </section>
 
-          <section className="rounded-xl border border-border bg-surface">
+          <section className="w-full max-w-full min-w-0 overflow-hidden rounded-xl border border-border bg-surface">
             <div className="flex items-center gap-2 card-header border-b border-border px-5 py-4">
               <MessageSquare size={15} className="text-primary" />
               <h2 className="text-sm font-semibold text-fg">{t('ISSUE_DETAIL.COMMENTS')}</h2>
@@ -387,8 +387,8 @@ export function IssueDetailPage() {
           </section>
         </div>
 
-        <aside className="space-y-4 lg:sticky lg:top-20">
-          <div className="rounded-xl border border-border bg-surface px-5 py-4">
+        <aside className="space-y-4 lg:sticky lg:top-20 w-full max-w-full min-w-0">
+          <div className="w-full max-w-full min-w-0 overflow-hidden rounded-xl border border-border bg-surface px-5 py-4">
             <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.15em] text-faint">
               {t('ISSUE_DETAIL.BASIC_INFO')}
             </p>
@@ -404,7 +404,7 @@ export function IssueDetailPage() {
             </div>
           </div>
 
-          <div className="rounded-xl border border-border bg-surface px-5 py-4">
+          <div className="w-full max-w-full min-w-0 overflow-hidden rounded-xl border border-border bg-surface px-5 py-4">
             <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.15em] text-faint">
               {t('ISSUE_DETAIL.ASSIGNMENT')}
             </p>
@@ -429,7 +429,7 @@ export function IssueDetailPage() {
             </button>
           </div>
 
-          <div className="rounded-xl border border-border bg-surface px-5 py-4">
+          <div className="w-full max-w-full min-w-0 overflow-hidden rounded-xl border border-border bg-surface px-5 py-4">
             <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.15em] text-faint">
               {t('ISSUE_DETAIL.STATUS_PRIORITY')}
             </p>

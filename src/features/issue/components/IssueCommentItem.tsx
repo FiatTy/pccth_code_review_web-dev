@@ -35,7 +35,7 @@ export function IssueCommentItem({
               {t('ISSUE_DETAIL.REPLY')}
             </button>
           </div>
-          <p className="mt-1 whitespace-pre-wrap break-words text-sm text-muted">
+          <p className="mt-1 whitespace-pre-wrap break-words [overflow-wrap:anywhere] text-sm text-muted">
             {comment.comment}
           </p>
         </div>
@@ -54,7 +54,7 @@ export function IssueCommentItem({
                     {formatDateTime(reply.createdAt) ?? '—'}
                   </span>
                 </div>
-                <p className="mt-1 whitespace-pre-wrap break-words text-sm text-muted">
+                <p className="mt-1 whitespace-pre-wrap break-words [overflow-wrap:anywhere] text-sm text-muted">
                   {reply.comment}
                 </p>
               </div>
