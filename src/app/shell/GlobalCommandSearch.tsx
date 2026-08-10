@@ -354,7 +354,7 @@ export function GlobalCommandSearch() {
             'NAV.SEARCH_PLACEHOLDER',
             'พิมพ์ / เลือกคำสั่งค้นหา เช่น /Repositories Pcc-Code-Review',
           )}
-          className="h-10 w-full rounded-xl border border-border bg-surface-2/60 pl-10 pr-16 text-sm text-fg shadow-2xs outline-none transition-all placeholder:text-faint hover:border-border-strong focus:border-primary focus:bg-surface focus:ring-4 focus:ring-primary/15"
+          className="h-10 w-full rounded-full border border-border bg-surface-2/60 pl-10 pr-16 text-sm text-fg shadow-2xs outline-none transition-all placeholder:text-faint hover:border-border-strong focus:border-primary focus:bg-surface focus:ring-4 focus:ring-primary/15"
         />
         {query ? (
           <button

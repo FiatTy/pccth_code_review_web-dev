@@ -259,7 +259,7 @@ export function RootLayout() {
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="app-header app-header--main sticky top-0 z-20 flex h-16 items-center gap-2.5 px-4 lg:px-6">
+        <header className="app-header app-header--main sticky top-0 z-20 flex h-16 items-center gap-2.5 sm:gap-3.5 px-4 lg:px-6">
           <button
             type="button"
             aria-label={t('NAV.OPEN_MENU')}
@@ -269,16 +269,30 @@ export function RootLayout() {
             <Menu size={18} />
           </button>
 
-          <div className="flex-1 max-w-md mr-auto">
+          {/* 1. Search Bar */}
+          <div className="flex-1 max-w-md mr-auto min-w-0">
             <GlobalCommandSearch />
           </div>
 
-          <NotificationBell />
+          {/* Right Controls: Language -> Theme -> Notification Bell -> User Profile */}
+          <div className="flex items-center gap-2 sm:gap-3">
+            {/* 2. Language Switcher (EN/TH) */}
+            <div className="hidden lg:block">
+              <LanguageSwitcher />
+            </div>
 
-          <div className="hidden lg:flex lg:items-center lg:gap-2.5">
-            <LanguageSwitcher />
-            <ThemeToggle />
-            <ProfileMenu direction="down" />
+            {/* 3. Theme Switcher (Dark/Light Mode) */}
+            <div className="hidden lg:block">
+              <ThemeToggle />
+            </div>
+
+            {/* 4. Notification Bell Icon */}
+            <NotificationBell />
+
+            {/* 5. User Profile / Avatar */}
+            <div className="hidden lg:block">
+              <ProfileMenu direction="down" />
+            </div>
           </div>
         </header>
 
