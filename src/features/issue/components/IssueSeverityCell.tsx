@@ -20,9 +20,9 @@ export function IssueSeverityCell({ severity }: { severity: string }) {
   const { t } = useTranslation();
   const meta = SEVERITY_META[severity] ?? SEVERITY_META.INFO;
   return (
-    <div className="flex items-center gap-1.5">
-      <span className={`h-2 w-2 rounded-full ${meta.dot}`} />
-      <span className={`text-sm font-medium ${meta.text}`}>{t(meta.labelKey)}</span>
+    <div className="flex items-center gap-1.5 shrink-0 whitespace-nowrap">
+      <span className={`h-2 w-2 rounded-full shrink-0 ${meta.dot}`} />
+      <span className={`text-xs sm:text-sm font-medium ${meta.text}`}>{t(meta.labelKey)}</span>
     </div>
   );
 }

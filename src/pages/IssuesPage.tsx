@@ -194,6 +194,7 @@ export function IssuesPage() {
             setProject(next);
             setPage(1);
           }}
+          searchable
           className={`${selectClass} w-full sm:w-auto sm:min-w-44`}
           options={[
             { value: 'all', label: t('ISSUE.ALL_PROJECTS') },
@@ -259,8 +260,8 @@ export function IssuesPage() {
                   key={issue.id}
                   className="rounded-xl border border-border bg-surface p-4 shadow-2xs space-y-3 transition-colors hover:border-border-strong"
                 >
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="flex items-center gap-2.5 min-w-0">
+                  <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="flex items-center gap-2.5 min-w-0 flex-1">
                       <input
                         type="checkbox"
                         aria-label={`${t('ISSUE.SELECT_ALL')} ${issue.issueKey}`}
@@ -268,14 +269,19 @@ export function IssuesPage() {
                         onChange={() => toggleSelected(issue.id)}
                         className="h-4 w-4 shrink-0 cursor-pointer accent-[var(--color-primary)]"
                       />
-                      <IssueTypeCell issue={issue} />
-                      <IssueSeverityCell severity={issue.severity} />
+                      <div className="min-w-0 flex-1 truncate">
+                        <IssueTypeCell issue={issue} />
+                      </div>
                     </div>
-                    <span
-                      className={`inline-flex shrink-0 whitespace-nowrap rounded-full px-2.5 py-0.5 text-[11px] font-medium ${badge.cls}`}
-                    >
-                      {t(badge.labelKey)}
-                    </span>
+
+                    <div className="flex items-center gap-2 shrink-0 self-start sm:self-auto">
+                      <IssueSeverityCell severity={issue.severity} />
+                      <span
+                        className={`inline-flex shrink-0 whitespace-nowrap rounded-full px-2.5 py-0.5 text-[11px] font-medium ${badge.cls}`}
+                      >
+                        {t(badge.labelKey)}
+                      </span>
+                    </div>
                   </div>
 
                   <div className="space-y-1">

@@ -269,7 +269,9 @@
     "INFO": "ข้อเสนอแนะ",
     "SWITCH_LIGHT": "เปลี่ยนเป็นโหมดสว่าง",
     "SWITCH_DARK": "เปลี่ยนเป็นโหมดมืด",
-    "DATE_PLACEHOLDER": "วว/ดด/ปปปป"
+    "DATE_PLACEHOLDER": "วว/ดด/ปปปป",
+    "SEARCH": "ค้นหา...",
+    "NO_RESULTS": "ไม่พบข้อมูล"
   },
   "LANDING": {
     "HERO_SUBTITLE_1": "การปรับปรุงคุณภาพโค้ดอัตโนมัติ:",

@@ -25,9 +25,9 @@ export function IssueTypeCell({ issue }: { issue: Issue }) {
   };
   const Icon = meta.icon;
   return (
-    <div className="flex items-center gap-2">
-      <Icon size={15} className={meta.tone} />
-      <span className="whitespace-nowrap text-sm text-fg">{t(meta.labelKey)}</span>
+    <div className="flex items-center gap-2 min-w-0">
+      <Icon size={15} className={`shrink-0 ${meta.tone}`} />
+      <span className="truncate text-sm font-medium text-fg" title={t(meta.labelKey)}>{t(meta.labelKey)}</span>
     </div>
   );
 }

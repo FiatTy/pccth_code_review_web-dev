@@ -188,6 +188,7 @@ export function GenerateReportPage() {
                 className={FIELD_INPUT_CLASS}
                 value={projectId}
                 onChange={setProjectId}
+                searchable
                 placeholder={t('GENERATE_REPORT.SELECT_PROJECT')}
                 options={repositories.map((repo) => ({
                   value: repo.projectId,

@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
-import { Check, ChevronDown } from 'lucide-react';
+import { useEffect, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { Check, ChevronDown, Search, X } from 'lucide-react';
 
 export interface SelectOption {
   value: string;
@@ -14,6 +15,8 @@ interface SelectFieldProps {
   id?: string;
   className?: string;
   disabled?: boolean;
+  searchable?: boolean;
+  searchPlaceholder?: string;
 }
 
 /**
@@ -30,10 +33,29 @@ export function SelectField({
   id,
   className = '',
   disabled,
+  searchable,
+  searchPlaceholder,
 }: SelectFieldProps) {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
   const rootRef = useRef<HTMLDivElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
   const selected = options.find((option) => option.value === value);
+
+  useEffect(() => {
+    if (!open) {
+      return;
+    }
+    if (searchable) {
+      setSearchTerm('');
+      const timer = window.setTimeout(() => {
+        searchInputRef.current?.focus();
+      }, 50);
+      return () => window.clearTimeout(timer);
+    }
+  }, [open, searchable]);
 
   useEffect(() => {
     if (!open) {
@@ -56,6 +78,18 @@ export function SelectField({
       document.removeEventListener('keydown', handleKey);
     };
   }, [open]);
+
+  const filteredOptions = useMemo(() => {
+    if (!searchable || !searchTerm.trim()) {
+      return options;
+    }
+    const keyword = searchTerm.trim().toLowerCase();
+    return options.filter(
+      (option) =>
+        option.label.toLowerCase().includes(keyword) ||
+        option.value.toLowerCase().includes(keyword),
+    );
+  }, [options, searchable, searchTerm]);
 
   return (
     <div ref={rootRef} className="relative">
@@ -80,31 +114,64 @@ export function SelectField({
       {open && !disabled ? (
         <div
           role="listbox"
-          className="dialog-enter absolute left-0 top-full z-50 mt-2 max-h-[228px] w-full min-w-max overflow-y-auto rounded-xl border border-border bg-surface p-1.5 shadow-xl"
+          className="dialog-enter absolute left-0 top-full z-50 mt-1.5 flex max-h-72 w-full min-w-[200px] flex-col overflow-hidden rounded-xl border border-border bg-surface shadow-xl"
         >
-          {options.map((option) => {
-            const active = option.value === value;
-            return (
-              <button
-                key={option.value}
-                type="button"
-                role="option"
-                aria-selected={active}
-                onClick={() => {
-                  onChange(option.value);
-                  setOpen(false);
-                }}
-                className={`flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2 text-left text-sm transition-colors ${
-                  active
-                    ? 'bg-primary/10 font-medium text-primary'
-                    : 'text-fg hover:bg-surface-2'
-                }`}
-              >
-                <span className="truncate">{option.label}</span>
-                {active ? <Check size={15} className="shrink-0 text-primary" /> : null}
-              </button>
-            );
-          })}
+          {searchable ? (
+            <div className="sticky top-0 z-10 border-b border-border bg-surface-2/50 p-2">
+              <div className="relative flex items-center">
+                <Search size={14} className="pointer-events-none absolute left-2.5 text-faint" />
+                <input
+                  ref={searchInputRef}
+                  type="text"
+                  value={searchTerm}
+                  onChange={(event) => setSearchTerm(event.target.value)}
+                  placeholder={searchPlaceholder ?? t('COMMON.SEARCH')}
+                  className="h-8 w-full rounded-lg border border-border bg-surface pl-8 pr-7 text-xs text-fg placeholder:text-faint outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
+                />
+                {searchTerm ? (
+                  <button
+                    type="button"
+                    onClick={() => setSearchTerm('')}
+                    className="absolute right-2 text-faint transition-colors hover:text-fg"
+                  >
+                    <X size={13} />
+                  </button>
+                ) : null}
+              </div>
+            </div>
+          ) : null}
+
+          <div className="max-h-56 overflow-y-auto p-1.5 space-y-0.5 overscroll-contain">
+            {filteredOptions.length === 0 ? (
+              <p className="px-3 py-4 text-center text-xs text-muted">
+                {t('COMMON.NO_RESULTS')}
+              </p>
+            ) : (
+              filteredOptions.map((option) => {
+                const active = option.value === value;
+                return (
+                  <button
+                    key={option.value}
+                    type="button"
+                    role="option"
+                    aria-selected={active}
+                    onClick={() => {
+                      onChange(option.value);
+                      setOpen(false);
+                    }}
+                    className={`flex w-full items-center justify-between gap-3 rounded-lg px-3 py-2 text-left text-sm transition-colors ${
+                      active
+                        ? 'bg-primary/10 font-medium text-primary'
+                        : 'text-fg hover:bg-surface-2'
+                    }`}
+                  >
+                    <span className="truncate">{option.label}</span>
+                    {active ? <Check size={15} className="shrink-0 text-primary" /> : null}
+                  </button>
+                );
+              })
+            )}
+          </div>
         </div>
       ) : null}
     </div>

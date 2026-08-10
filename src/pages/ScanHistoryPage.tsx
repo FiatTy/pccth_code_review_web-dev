@@ -157,6 +157,7 @@ export function ScanHistoryPage() {
               setProject(next);
               setPage(1);
             }}
+            searchable
             className={`${selectClass} w-full sm:w-auto sm:min-w-44`}
             options={[
               { value: 'all', label: t('SCAN.ALL_PROJECTS') },

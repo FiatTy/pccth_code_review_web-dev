@@ -269,7 +269,9 @@
     "INFO": "Info",
     "SWITCH_LIGHT": "Switch to Light Mode",
     "SWITCH_DARK": "Switch to Dark Mode",
-    "DATE_PLACEHOLDER": "dd/mm/yyyy"
+    "DATE_PLACEHOLDER": "dd/mm/yyyy",
+    "SEARCH": "Search...",
+    "NO_RESULTS": "No results found"
   },
   "LANDING": {
     "HERO_SUBTITLE_1": "Automated code quality improvement:",
