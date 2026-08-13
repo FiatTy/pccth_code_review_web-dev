@@ -21,6 +21,7 @@ import { StatCard } from '@/components/ui/StatCard';
 import { formatDateTimeShort } from '@/lib/format-date';
 import { ScanGradeChip } from '@/features/scan/components/ScanGradeChip';
 import { buildDailyTrend } from '@/features/scan/lib/scan-trends';
+import { useDashboardTour } from '@/features/onboarding/hooks/useDashboardTour';
 
 const OPEN_STATUSES = new Set(['OPEN', 'IN_PROGRESS', 'PENDING']);
 const RESOLVED_STATUSES = new Set(['DONE', 'RESOLVED']);
@@ -45,6 +46,7 @@ export function DashboardPage() {
   const repositoriesQuery = useRepositories();
   const scansQuery = useScanHistory();
   const issuesQuery = useIssues();
+  useDashboardTour();
 
   const repos = useMemo(() => repositoriesQuery.data ?? [], [repositoriesQuery.data]);
   const scans = useMemo(() => scansQuery.data ?? [], [scansQuery.data]);
@@ -142,7 +144,7 @@ export function DashboardPage() {
 
   return (
     <div>
-      <div className="mb-6">
+      <div id="tour-dashboard-greeting" className="mb-6">
         <h1 className="flex flex-wrap items-center text-4xl font-bold tracking-tight text-fg sm:text-5xl">
           {t('DASHBOARD.WELCOME_BACK')} {user?.username}
           <GreetingMascot />
@@ -150,7 +152,7 @@ export function DashboardPage() {
         <p className="mt-2 text-lg text-muted">{t('DASHBOARD.WELCOME_TEXT')}</p>
       </div>
 
-      <div className="mb-4 grid grid-cols-2 gap-3 lg:grid-cols-4">
+      <div id="tour-stat-cards" className="mb-4 grid grid-cols-2 gap-3 lg:grid-cols-4">
         <StatCard
           size="lg"
           icon={FolderGit2}

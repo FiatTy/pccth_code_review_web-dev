@@ -1,4 +1,18 @@
 {
+  "TOUR": {
+    "DASHBOARD": {
+      "WELCOME_TITLE": "Welcome to Dashboard!",
+      "WELCOME_DESC": "This is your main dashboard. Let us show you around.",
+      "STATS_TITLE": "Overview Statistics",
+      "STATS_DESC": "Here you can see the overall metrics of your code repositories and scans.",
+      "SIDEBAR_TITLE": "Main Navigation",
+      "SIDEBAR_DESC": "Use the sidebar to navigate through repositories, issues, analysis, and settings.",
+      "SEARCH_TITLE": "Global Search",
+      "SEARCH_DESC": "Quickly find what you need by searching across your entire workspace.",
+      "PROFILE_TITLE": "Profile & Settings",
+      "PROFILE_DESC": "Manage your account settings, language, and theme preferences here."
+    }
+  },
   "NAV": {
     "DASHBOARD": "Dashboard",
     "REPOSITORIES": "Repositories",
