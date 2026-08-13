@@ -139,6 +139,7 @@ export function ProfileMenu({ direction = 'down', variant = 'default' }: Profile
 
       {isOpen ? (
         <div
+          id="tour-profile-dropdown"
           className={`absolute right-0 z-50 w-60 overflow-hidden rounded-xl border border-border bg-surface py-1 shadow-xl shadow-black/10 ${
             direction === 'up' ? 'bottom-11' : 'top-11'
           }`}

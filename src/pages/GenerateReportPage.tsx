@@ -1,3 +1,4 @@
+import { useGenerateReportTour } from '@/features/onboarding/hooks/useGenerateReportTour';
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
@@ -49,6 +50,7 @@ const DEFAULT_SECTIONS: ReportSections = {
 };
 
 export function GenerateReportPage() {
+  useGenerateReportTour();
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { user } = useAuth();
@@ -168,7 +170,7 @@ export function GenerateReportPage() {
   }
 
   return (
-    <div>
+    <div id="tour-genreport-header">
       <PageHeader title={t('GENERATE_REPORT.TITLE')} subtitle={t('GENERATE_REPORT.SUBTITLE')} />
 
       <div className="grid items-start gap-4 lg:grid-cols-3">

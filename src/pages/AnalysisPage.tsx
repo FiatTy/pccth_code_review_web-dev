@@ -1,3 +1,4 @@
+import { useAnalysisTour } from '@/features/onboarding/hooks/useAnalysisTour';
 import { useMemo } from 'react';
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
@@ -28,6 +29,7 @@ const PRIORITY_LABEL: Record<string, string> = {
 };
 
 export function AnalysisPage() {
+  useAnalysisTour();
   const { t } = useTranslation();
   const metricsQuery = useSecurityMetrics();
   const scansQuery = useScanHistory();
@@ -45,7 +47,7 @@ export function AnalysisPage() {
   const hotIssues = metricsQuery.data?.hotIssues ?? [];
 
   return (
-    <div>
+    <div id="tour-analysis-header">
       <PageHeader title={t('ANALYTICS.TITLE')} subtitle={t('ANALYTICS.QUALITY_OVERVIEW')} />
 
       <div className="mb-4 grid gap-3 sm:grid-cols-2">

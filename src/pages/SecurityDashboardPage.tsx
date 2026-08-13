@@ -1,3 +1,4 @@
+import { useSecurityDashboardTour } from '@/features/onboarding/hooks/useSecurityDashboardTour';
 import { useMemo } from 'react';
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
@@ -50,6 +51,7 @@ const RISK_TONE: Record<string, string> = {
 
 
 export function SecurityDashboardPage() {
+  useSecurityDashboardTour();
   const { t } = useTranslation();
   const metricsQuery = useSecurityMetrics();
   const scansQuery = useScanHistory();
@@ -71,7 +73,7 @@ export function SecurityDashboardPage() {
 
   if (metricsQuery.isLoading) {
     return (
-      <div className="flex items-center justify-center gap-2 py-24 text-sm text-muted">
+      <div id="tour-security-header" className="flex items-center justify-center gap-2 py-24 text-sm text-muted">
         <Loader2 size={16} className="animate-spin" />
         {t('COMMON.LOADING')}
       </div>

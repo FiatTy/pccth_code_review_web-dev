@@ -1,3 +1,4 @@
+import { useReportHistoryTour } from '@/features/onboarding/hooks/useReportHistoryTour';
 import { useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
@@ -20,6 +21,7 @@ function formatBytes(bytes?: number): string {
 }
 
 export function ReportHistoryPage() {
+  useReportHistoryTour();
   const { t } = useTranslation();
   const { showToast } = useToast();
   const historyQuery = useReportHistory();
@@ -95,7 +97,7 @@ export function ReportHistoryPage() {
     'px-5 py-3 font-mono text-xs font-semibold uppercase tracking-[0.14em] text-muted';
 
   return (
-    <div>
+    <div id="tour-reporthistory-header">
       <PageHeader title={t('REPORT_HISTORY.TITLE')} subtitle={t('REPORT_HISTORY.SUBTITLE')} />
 
       <div className="mb-4 relative sm:max-w-xs">

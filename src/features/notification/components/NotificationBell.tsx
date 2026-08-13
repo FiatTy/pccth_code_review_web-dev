@@ -193,7 +193,7 @@ export function NotificationBell() {
   }
 
   return (
-    <div className="relative" ref={containerRef}>
+    <div id="tour-notification-bell" className="relative" ref={containerRef}>
       <button
         type="button"
         aria-label={t('NOTIFICATION.TITLE')}
@@ -210,7 +210,10 @@ export function NotificationBell() {
       </button>
 
       {isOpen ? (
-        <div className="fixed inset-0 z-50 flex flex-col bg-surface shadow-2xl transition-all md:absolute md:right-0 md:top-11 md:inset-auto md:z-50 md:h-auto md:w-[22rem] md:max-w-[calc(100vw-2rem)] md:overflow-hidden md:rounded-xl md:border md:border-border md:shadow-xl md:shadow-black/10">
+        <div
+          id="tour-notification-dropdown"
+          className="fixed inset-0 z-50 flex flex-col bg-surface shadow-2xl transition-all md:absolute md:right-0 md:top-11 md:inset-auto md:z-50 md:h-auto md:w-[22rem] md:max-w-[calc(100vw-2rem)] md:overflow-hidden md:rounded-xl md:border md:border-border md:shadow-xl md:shadow-black/10"
+        >
           <div className="flex h-14 items-center justify-between gap-2 border-b border-border px-4 py-3 md:h-auto">
             <div className="flex items-center gap-2 min-w-0">
               <button

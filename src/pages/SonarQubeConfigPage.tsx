@@ -1,3 +1,4 @@
+import { useSonarQubeConfigTour } from '@/features/onboarding/hooks/useSonarQubeConfigTour';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import axios from 'axios';
@@ -67,6 +68,7 @@ function readErrorMessage(error: unknown, fallback: string): string {
 }
 
 export function SonarQubeConfigPage() {
+  useSonarQubeConfigTour();
   const { t } = useTranslation();
   const { user } = useAuth();
   const { showToast } = useToast();
@@ -257,7 +259,7 @@ export function SonarQubeConfigPage() {
 
   if (configQuery.isLoading) {
     return (
-      <div>
+      <div id="tour-sonar-header">
         <PageHeader title={t('SONARQUBE_CONFIG.TITLE')} subtitle={t('SONARQUBE_CONFIG.SUBTITLE')} />
         <div className="grid gap-4 lg:grid-cols-3">
           <div className="space-y-4 lg:col-span-2">

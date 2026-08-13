@@ -1,3 +1,4 @@
+import { useScanHistoryTour } from '@/features/onboarding/hooks/useScanHistoryTour';
 import { useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
@@ -56,6 +57,7 @@ function withinDate(value: string, start: string, end: string): boolean {
 }
 
 export function ScanHistoryPage() {
+  useScanHistoryTour();
   const { t } = useTranslation();
   const { data, isPending, isError, refetch, isFetching } = useScanHistory();
 
@@ -143,7 +145,7 @@ export function ScanHistoryPage() {
     'h-11 rounded-xl border border-border bg-surface px-3.5 text-sm text-fg shadow-sm outline-none transition hover:border-border-strong focus:border-primary focus:ring-4 focus:ring-primary/15';
 
   return (
-    <div>
+    <div id="tour-scan-header">
       <PageHeader title={t('SCAN.TITLE')} subtitle={t('SCAN.SUBTITLE')} />
 
       <div className="mb-6 flex flex-col gap-3.5 rounded-2xl border border-border bg-surface p-5 shadow-sm sm:flex-row sm:flex-wrap sm:items-end">

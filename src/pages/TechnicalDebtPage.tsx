@@ -1,3 +1,4 @@
+import { useTechnicalDebtTour } from '@/features/onboarding/hooks/useTechnicalDebtTour';
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
@@ -47,6 +48,7 @@ const CATEGORY_COLORS = [
 ];
 
 export function TechnicalDebtPage() {
+  useTechnicalDebtTour();
   const { t } = useTranslation();
   const scansQuery = useScanHistory();
   const repositoriesQuery = useRepositories();
@@ -92,7 +94,7 @@ export function TechnicalDebtPage() {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center gap-2 py-24 text-sm text-muted">
+      <div id="tour-techdebt-header" className="flex items-center justify-center gap-2 py-24 text-sm text-muted">
         <Loader2 size={16} className="animate-spin" />
         {t('COMMON.LOADING')}
       </div>

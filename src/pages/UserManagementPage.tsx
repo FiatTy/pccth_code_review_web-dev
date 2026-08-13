@@ -1,3 +1,4 @@
+import { useUserManagementTour } from '@/features/onboarding/hooks/useUserManagementTour';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -51,6 +52,7 @@ function emptyUser(): UserInfo {
 }
 
 export function UserManagementPage() {
+  useUserManagementTour();
   const { t } = useTranslation();
   const { showToast } = useToast();
   const usersQuery = useUsers();
@@ -180,7 +182,7 @@ export function UserManagementPage() {
   }
 
   return (
-    <div>
+    <div id="tour-user-header">
       <PageHeader
         title={t('SETTING.USER.TITLE')}
         subtitle={t('USER_MGT.SUBTITLE')}

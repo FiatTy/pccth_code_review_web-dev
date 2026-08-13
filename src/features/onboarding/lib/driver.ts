@@ -6,10 +6,7 @@ export function createTour(steps: DriveStep[], onComplete: () => void) {
   const driverObj = driver({
     showProgress: true,
     steps,
-    onDestroyStarted: () => {
-      if (driverObj.hasNextStep()) {
-        driverObj.destroy();
-      }
+    onDestroyed: () => {
       onComplete();
     },
     popoverClass: 'driverjs-theme',

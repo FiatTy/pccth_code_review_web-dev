@@ -1,3 +1,4 @@
+import { useNotificationSettingsTour } from '@/features/onboarding/hooks/useNotificationSettingsTour';
 import { useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -67,6 +68,7 @@ const NOTIFICATION_TYPES: {
 ];
 
 export function NotificationSettingsPage() {
+  useNotificationSettingsTour();
   const { t } = useTranslation();
   const { user } = useAuth();
   const { showToast } = useToast();
@@ -131,7 +133,7 @@ export function NotificationSettingsPage() {
   }
 
   return (
-    <div>
+    <div id="tour-notification-header">
       <PageHeader
         title={t('NOTIFICATION_SETTINGS.TITLE')}
         subtitle={t('NOTIFICATION_SETTINGS.SUBTITLE')}

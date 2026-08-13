@@ -254,14 +254,16 @@ export function RootLayout() {
               <ThemeToggle />
             </div>
           </div>
-
-          <ProfileMenu variant="card" direction="up" />
+          <div id="tour-profile-menu-mobile">
+            <ProfileMenu variant="card" direction="up" />
+          </div>
         </div>
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="app-header app-header--main sticky top-0 z-20 flex h-16 items-center gap-2.5 sm:gap-3.5 px-4 lg:px-6">
           <button
+            id="tour-hamburger-menu"
             type="button"
             aria-label={t('NAV.OPEN_MENU')}
             className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border bg-surface/60 text-muted shadow-sm backdrop-blur transition-all hover:border-border-strong hover:text-fg lg:hidden"
@@ -291,7 +293,7 @@ export function RootLayout() {
             <NotificationBell />
 
             {/* 5. User Profile / Avatar */}
-            <div id="tour-profile-menu" className="hidden lg:block">
+            <div id="tour-profile-menu-desktop" className="hidden lg:block">
               <ProfileMenu direction="down" />
             </div>
           </div>

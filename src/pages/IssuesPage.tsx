@@ -1,3 +1,4 @@
+import { useIssuesTour } from '@/features/onboarding/hooks/useIssuesTour';
 import { useMemo, useState } from 'react';
 import { Link, useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
@@ -48,6 +49,7 @@ function statusMeta(status: string): { labelKey: string; cls: string } {
 
 
 export function IssuesPage() {
+  useIssuesTour();
   const { t } = useTranslation();
   const { data, isPending, isError, refetch, isFetching } = useIssues();
   const assignableUsers = useAssignableUsers();
@@ -139,7 +141,7 @@ export function IssuesPage() {
     'px-4 py-3 font-mono text-xs font-semibold uppercase tracking-wide text-muted';
 
   return (
-    <div>
+    <div id="tour-issue-header">
       <PageHeader title={t('ISSUE.TITLE_MGT')} subtitle={t('ISSUE.TABLE_CAPTION')} />
 
       <div className="mb-5 flex flex-col gap-3 rounded-xl border border-border bg-surface p-4 sm:flex-row sm:flex-wrap sm:items-center">

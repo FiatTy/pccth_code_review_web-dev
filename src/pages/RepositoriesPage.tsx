@@ -1,3 +1,4 @@
+import { useRepositoriesTour } from '@/features/onboarding/hooks/useRepositoriesTour';
 import { useMemo, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
@@ -37,6 +38,7 @@ const SCAN_BRANCH = 'dev';
 const VIEW_MODE_KEY = 'codereview_repo_view_mode';
 
 export function RepositoriesPage() {
+  useRepositoriesTour();
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { showToast } = useToast();
@@ -197,7 +199,7 @@ export function RepositoriesPage() {
   }
 
   return (
-    <div>
+    <div id="tour-repo-header">
       <PageHeader
         title={t('REPOSITORY.TITLE')}
         subtitle={t('REPOSITORY.SUBTITLE')}

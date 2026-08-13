@@ -1,3 +1,4 @@
+import { useAssignmentsTour } from '@/features/onboarding/hooks/useAssignmentsTour';
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
@@ -46,6 +47,7 @@ function formatDate(value?: string): string {
 }
 
 export function AssignmentsPage() {
+  useAssignmentsTour();
   const { t } = useTranslation();
   const { user } = useAuth();
   const issuesQuery = useIssues();
@@ -62,7 +64,7 @@ export function AssignmentsPage() {
     'px-5 py-3 font-mono text-xs font-semibold uppercase tracking-[0.14em] text-muted';
 
   return (
-    <div>
+    <div id="tour-assignment-header">
       <PageHeader
         title={t('MY_ASSIGNMENTS.TITLE')}
         subtitle={t('MY_ASSIGNMENTS.SUBTITLE')}

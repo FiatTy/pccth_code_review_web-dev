@@ -9,8 +9,64 @@
       "SIDEBAR_DESC": "Use the sidebar to navigate through repositories, issues, analysis, and settings.",
       "SEARCH_TITLE": "Global Search",
       "SEARCH_DESC": "Quickly find what you need by searching across your entire workspace.",
+      "HAMBURGER_TITLE": "Main Menu",
+      "HAMBURGER_DESC": "Click here to open the main navigation menu.",
+      "NOTI_TITLE": "Notifications",
+      "NOTI_DESC": "Click on the bell icon to see your latest updates and alerts.",
+      "NOTI_OPTIONS_TITLE": "Your Updates",
+      "NOTI_OPTIONS_DESC": "Here you can filter notifications by type or mark them as read.",
       "PROFILE_TITLE": "Profile & Settings",
-      "PROFILE_DESC": "Manage your account settings, language, and theme preferences here."
+      "PROFILE_DESC": "Manage your account settings, language, and theme preferences here.",
+      "PROFILE_OPTIONS_TITLE": "Account Options",
+      "PROFILE_OPTIONS_DESC": "Here you can change your password, verify your email, and safely log out."
+    },
+    "REPOSITORIES": {
+      "HEADER_TITLE": "Repositories Overview",
+      "HEADER_DESC": "Manage your repositories here."
+    },
+    "SCANHISTORY": {
+      "HEADER_TITLE": "Scan History",
+      "HEADER_DESC": "View past code scans."
+    },
+    "ISSUES": {
+      "HEADER_TITLE": "Issues",
+      "HEADER_DESC": "Review and triage issues."
+    },
+    "ASSIGNMENTS": {
+      "HEADER_TITLE": "Assignments",
+      "HEADER_DESC": "Check assigned tasks."
+    },
+    "ANALYSIS": {
+      "HEADER_TITLE": "Analysis Overview",
+      "HEADER_DESC": "Dive deep into code metrics."
+    },
+    "SECURITYDASHBOARD": {
+      "HEADER_TITLE": "Security Dashboard",
+      "HEADER_DESC": "Monitor vulnerabilities."
+    },
+    "TECHNICALDEBT": {
+      "HEADER_TITLE": "Technical Debt",
+      "HEADER_DESC": "Track technical debt over time."
+    },
+    "GENERATEREPORT": {
+      "HEADER_TITLE": "Generate Report",
+      "HEADER_DESC": "Export scan results to PDF."
+    },
+    "REPORTHISTORY": {
+      "HEADER_TITLE": "Report History",
+      "HEADER_DESC": "Download previously generated reports."
+    },
+    "SONARQUBECONFIG": {
+      "HEADER_TITLE": "SonarQube Config",
+      "HEADER_DESC": "Configure connection settings."
+    },
+    "NOTIFICATIONSETTINGS": {
+      "HEADER_TITLE": "Notification Settings",
+      "HEADER_DESC": "Manage alerts."
+    },
+    "USERMANAGEMENT": {
+      "HEADER_TITLE": "User Management",
+      "HEADER_DESC": "Administer system users."
     }
   },
   "NAV": {
