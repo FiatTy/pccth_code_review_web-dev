@@ -172,7 +172,7 @@ export function RootLayout() {
       ) : null}
 
       <aside
-        className={`fixed inset-y-0 left-0 z-40 flex w-64 shrink-0 flex-col bg-surface shadow-2xl border-r border-border transition-transform duration-200 lg:sticky lg:top-0 lg:h-screen lg:shadow-none lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-40 flex w-64 shrink-0 flex-col bg-surface shadow-2xl transition-transform duration-200 lg:sticky lg:top-0 lg:h-screen lg:shadow-none lg:translate-x-0 ${
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
@@ -188,7 +188,7 @@ export function RootLayout() {
           </button>
         </div>
 
-        <nav className="scroll-slim flex-1 space-y-6 overflow-y-auto px-3 py-5">
+        <nav className="scroll-slim flex-1 space-y-6 overflow-y-auto border-r border-border px-3 py-5">
           {NAV_SECTIONS.map((section) => {
             const items = section.items.filter((item) => !item.adminOnly || isAdmin);
             if (items.length === 0) {
@@ -243,7 +243,7 @@ export function RootLayout() {
         </nav>
 
         {/* Sidebar Footer (Mobile responsive drawer) */}
-        <div className="border-t border-border bg-surface-2/40 p-3.5 space-y-3 lg:hidden">
+        <div className="border-t border-r border-border bg-surface-2/40 p-3.5 space-y-3 lg:hidden">
           <div className="flex items-center justify-between gap-2 px-1">
             <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-faint">
               {t('NAV.PREFERENCES', 'Preferences')}

@@ -19,7 +19,8 @@ import { formatDateTime } from '@/lib/format-date';
 import { StatCard } from '@/components/ui/StatCard';
 import { useRepositoryDetail } from '@/features/repository/hooks/useRepository';
 import { useIssues } from '@/features/issue/hooks/useIssues';
-import { ScanGradeChip } from '@/features/scan/components/ScanGradeChip';
+import { ScanStatusChip } from '@/features/scan/components/ScanStatusChip';
+import { QualityGateChip } from '@/features/scan/components/QualityGateChip';
 import { parseGitUrl } from '@/lib/git-utils';
 
 type DetailTab = 'overview' | 'issues' | 'history';
@@ -372,12 +373,13 @@ export function RepositoryDetailPage() {
             </p>
           ) : (
             <div className="overflow-x-auto">
-              <table className="w-full min-w-[40rem] text-left text-sm">
+              <table className="w-full min-w-[48rem] text-left text-sm">
                 <thead>
                   <tr className="border-b border-border">
                     {[
                       'DETAIL_REPO.COL_DATE',
                       'DETAIL_REPO.COL_METRICS',
+                      'SCAN.COL_SCAN_STATUS',
                       'DETAIL_REPO.QUALITY_GATE',
                     ].map((key) => (
                       <th
@@ -405,7 +407,10 @@ export function RepositoryDetailPage() {
                           : '—'}
                       </td>
                       <td className="px-5 py-3">
-                        <ScanGradeChip
+                        <ScanStatusChip status={scan.status} />
+                      </td>
+                      <td className="px-5 py-3">
+                        <QualityGateChip
                           scan={scan}
                           labels={{ passed: t('DETAIL_REPO.PASSED'), failed: t('DETAIL_REPO.FAILED') }}
                         />

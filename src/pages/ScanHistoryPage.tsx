@@ -11,7 +11,8 @@ import {
   ScanLine,
   ScrollText,
 } from 'lucide-react';
-import { ScanGradeChip } from '@/features/scan/components/ScanGradeChip';
+import { ScanStatusChip } from '@/features/scan/components/ScanStatusChip';
+import { QualityGateChip } from '@/features/scan/components/QualityGateChip';
 import { formatDateTime } from '@/lib/format-date';
 import { PageHeader } from '@/components/common/PageHeader';
 import { DateField } from '@/components/common/DateField';
@@ -241,7 +242,7 @@ export function ScanHistoryPage() {
       </div>
 
       {isPending ? (
-        <SkeletonTable rows={6} columns={6} />
+        <SkeletonTable rows={6} columns={8} />
       ) : isError ? (
         <div className="flex flex-col items-center justify-center rounded-2xl border border-border bg-surface py-20 text-center shadow-sm">
           <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-danger/10 text-danger ring-1 ring-inset ring-danger/20">
@@ -290,12 +291,21 @@ export function ScanHistoryPage() {
                       {scan.projectName || '—'}
                     </span>
                   </div>
-                  <div className="shrink-0">
-                    <ScanGradeChip scan={scan} size="sm" spinner />
-                  </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-2 text-xs border-t border-b border-border/50 py-2.5">
+                <div className="grid grid-cols-2 gap-x-2 gap-y-3 text-xs border-t border-b border-border/50 py-2.5">
+                  <div>
+                    <span className="font-mono text-[10px] uppercase text-faint block mb-0.5">
+                      {t('SCAN.COL_SCAN_STATUS')}
+                    </span>
+                    <ScanStatusChip status={scan.status} />
+                  </div>
+                  <div>
+                    <span className="font-mono text-[10px] uppercase text-faint block mb-0.5">
+                      {t('SCAN.COL_QUALITY_GATE')}
+                    </span>
+                    <QualityGateChip scan={scan} />
+                  </div>
                   <div>
                     <span className="font-mono text-[10px] uppercase text-faint block mb-0.5">
                       {t('SCAN.COL_DATE_TIME')}
@@ -338,7 +348,7 @@ export function ScanHistoryPage() {
 
           {/* Desktop Table View (>= md) */}
           <div className="hidden md:block overflow-x-auto">
-            <table className="w-full min-w-[720px] text-sm">
+            <table className="w-full min-w-[840px] text-sm">
               <thead>
                 <tr className="border-b border-border bg-surface-2/50 text-left">
                   <th className="w-10 px-4 py-3">
@@ -350,8 +360,11 @@ export function ScanHistoryPage() {
                   <th className="px-4 py-3 font-mono text-xs font-semibold uppercase tracking-wide text-muted">
                     {t('SCAN.COL_PROJECT')}
                   </th>
-                  <th className="px-4 py-3 font-mono text-xs font-semibold uppercase tracking-wide text-muted">
-                    {t('SCAN.COL_GRADE')}
+                  <th className="whitespace-nowrap px-4 py-3 font-mono text-xs font-semibold uppercase tracking-wide text-muted">
+                    {t('SCAN.COL_SCAN_STATUS')}
+                  </th>
+                  <th className="whitespace-nowrap px-4 py-3 font-mono text-xs font-semibold uppercase tracking-wide text-muted">
+                    {t('SCAN.COL_QUALITY_GATE')}
                   </th>
                   <th className="px-4 py-3 text-right font-mono text-xs font-semibold uppercase tracking-wide text-muted">
                     {t('SCAN.COL_ISSUES')}
@@ -385,7 +398,10 @@ export function ScanHistoryPage() {
                     </td>
                     <td className="px-4 py-3 font-medium text-fg">{scan.projectName || '—'}</td>
                     <td className="px-4 py-3">
-                      <ScanGradeChip scan={scan} size="md" spinner />
+                      <ScanStatusChip status={scan.status} />
+                    </td>
+                    <td className="px-4 py-3">
+                      <QualityGateChip scan={scan} />
                     </td>
                     <td className="px-4 py-3 text-right font-medium text-fg">
                       {issuesCount(scan)}
