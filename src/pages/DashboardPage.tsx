@@ -215,44 +215,27 @@ export function DashboardPage() {
               {t('DASHBOARD.NO_RECENT_ACTIVITY')}
             </p>
           ) : (
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-border text-left">
-                  <th className="px-4 py-2.5 font-mono text-[10px] font-semibold uppercase tracking-wide text-muted sm:px-5">
-                    {t('DASHBOARD.COL_PROJECT')}
-                  </th>
-                  <th className="px-2 py-2.5 font-mono text-[10px] font-semibold uppercase tracking-wide text-muted sm:px-3">
-                    {t('DASHBOARD.COL_STATUS_SCAN')}
-                  </th>
-                  <th className="px-2 py-2.5 font-mono text-[10px] font-semibold uppercase tracking-wide text-muted sm:px-3">
-                    {t('DASHBOARD.COL_QUALITY_GATE')}
-                  </th>
-                  <th className="hidden px-5 py-2.5 text-right font-mono text-[10px] font-semibold uppercase tracking-wide text-muted sm:table-cell">
-                    {t('DASHBOARD.COL_TIME')}
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border">
-                {recentScans.map((scan) => (
-                  <tr key={scan.id} className="transition-colors hover:bg-surface-2/40">
-                    <td className="px-4 py-2.5 sm:px-5">
-                      <p className="max-w-[8rem] truncate font-medium text-fg sm:max-w-[16rem]">
-                        {scan.projectName || '—'}
-                      </p>
-                    </td>
-                    <td className="px-2 py-2.5 sm:px-3">
-                      <ScanStatusChip status={scan.status} />
-                    </td>
-                    <td className="px-2 py-2.5 sm:px-3">
-                      <QualityGateChip scan={scan} />
-                    </td>
-                    <td className="hidden whitespace-nowrap px-5 py-2.5 text-right text-xs text-faint sm:table-cell">
+            <ul className="divide-y divide-border">
+              {recentScans.map((scan) => (
+                <li
+                  key={scan.id}
+                  className="flex items-center justify-between gap-4 px-5 py-4 transition-colors hover:bg-surface-2/40"
+                >
+                  <div className="min-w-0">
+                    <p className="truncate text-sm font-medium text-fg">
+                      {scan.projectName || '—'}
+                    </p>
+                    <p className="mt-1 text-xs text-faint">
                       {formatDateTimeShort(scan.startedAt) ?? '—'}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                    </p>
+                  </div>
+                  <div className="flex shrink-0 flex-wrap items-center justify-end gap-1.5">
+                    <ScanStatusChip status={scan.status} />
+                    <QualityGateChip scan={scan} />
+                  </div>
+                </li>
+              ))}
+            </ul>
           )}
         </section>
 
