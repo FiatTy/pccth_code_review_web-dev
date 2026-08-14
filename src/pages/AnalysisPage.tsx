@@ -93,7 +93,7 @@ export function AnalysisPage() {
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <section className="rounded-xl border border-border bg-surface">
+        <section className="min-w-0 rounded-xl border border-border bg-surface">
           <div className="flex items-center gap-2 card-header border-b border-border px-5 py-4">
             <Flame size={15} className="text-danger" />
             <h2 className="text-sm font-semibold text-fg">{t('ANALYTICS.TOP_SECURITY_ISSUES')}</h2>
@@ -110,7 +110,7 @@ export function AnalysisPage() {
           </div>
         </section>
 
-        <section className="rounded-xl border border-border bg-surface">
+        <section className="min-w-0 rounded-xl border border-border bg-surface">
           <div className="flex items-center gap-2 card-header border-b border-border px-5 py-4">
             <Clock size={15} className="text-warning" />
             <h2 className="text-sm font-semibold text-fg">{t('ANALYTICS.TOP_TECHNICAL_DEBT')}</h2>
@@ -122,7 +122,10 @@ export function AnalysisPage() {
           ) : (
             <ul className="divide-y divide-border">
               {topDebtItems.map((item) => (
-                <li key={item.projectId} className="flex items-center gap-3 px-5 py-3">
+                <li
+                  key={item.projectId}
+                  className="flex flex-wrap items-center gap-x-3 gap-y-1 px-4 py-3 sm:flex-nowrap sm:px-5"
+                >
                   <span
                     className={`shrink-0 rounded-full px-2 py-0.5 text-[11px] font-medium ${
                       PRIORITY_BADGE[item.priority]

@@ -92,7 +92,7 @@ export function RepositoryFolderList({
                   <Folder size={17} className="text-muted shrink-0" />
                   <span className="truncate text-sm font-semibold text-fg">{folderName}</span>
                   <span className="text-xs text-muted font-normal shrink-0">
-                    {repos.length} {repos.length === 1 ? 'repo' : 'repos'}
+                    {t('REPOSITORY.ITEMS_COUNT', { count: repos.length })}
                   </span>
                 </div>
 
@@ -100,19 +100,19 @@ export function RepositoryFolderList({
                   {activeCount > 0 && (
                     <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-success sm:text-xs">
                       <span className="h-2 w-2 rounded-full bg-success shrink-0" />
-                      {activeCount} active
+                      {t('REPOSITORY.COUNT_SCAN_OK', { count: activeCount })}
                     </span>
                   )}
                   {scanningCount > 0 && (
                     <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-primary sm:text-xs">
                       <span className="h-2 w-2 rounded-full bg-primary animate-pulse shrink-0" />
-                      {scanningCount} scanning
+                      {t('REPOSITORY.COUNT_SCANNING', { count: scanningCount })}
                     </span>
                   )}
                   {errorCount > 0 && (
                     <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-danger sm:text-xs">
                       <span className="h-2 w-2 rounded-full bg-danger shrink-0" />
-                      {errorCount} {errorCount === 1 ? 'error' : 'errors'}
+                      {t('REPOSITORY.COUNT_SCAN_FAILED', { count: errorCount })}
                     </span>
                   )}
                 </div>
@@ -224,15 +224,17 @@ export function RepositoryFolderList({
                           <div className="text-xs text-muted sm:text-right">
                             {isError ? (
                               <span className="font-medium text-danger">
-                                Scan failed
+                                {t('REPOSITORY.STATUS_ERROR')}
                               </span>
                             ) : isScanning ? (
                               <span className="font-medium text-primary">
-                                {t('REPOSITORY.ANALYZING')}
+                                {t('REPOSITORY.STATUS_SCANNING')}
                               </span>
                             ) : (
                               <span className="text-muted">
-                                {lastScanTime ? `Scanned ${lastScanTime}` : t('REPOSITORY.NEVER_SCANNED')}
+                                {lastScanTime
+                                  ? t('REPOSITORY.SCANNED_AT', { time: lastScanTime })
+                                  : t('REPOSITORY.NEVER_SCANNED')}
                               </span>
                             )}
                           </div>

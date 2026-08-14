@@ -88,9 +88,7 @@ export function RepositoryCard({
           className={`inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-medium ${STATUS_BADGE[repo.status]}`}
         >
           {isScanning ? <Loader2 size={11} className="animate-spin" /> : null}
-          {isScanning
-            ? t('REPOSITORY.ANALYZING')
-            : t(`REPOSITORY.STATUS_${repo.status.toUpperCase()}`)}
+          {t(`REPOSITORY.STATUS_${repo.status.toUpperCase()}`)}
         </span>
       </div>
 
@@ -118,6 +116,9 @@ export function RepositoryCard({
         />
         <Metric icon={Gauge} value={coverage != null ? `${coverage}%` : '—'} tone="text-primary" />
         <div className="ml-auto flex items-center gap-1.5">
+          <span className="font-mono text-[10px] uppercase tracking-wide text-faint">
+            {t('REPOSITORY.QUALITY_GATE')}
+          </span>
           {repo.qualityGate ? (
             qualityPassed ? (
               <CheckCircle2 size={14} className="text-success" />
@@ -130,7 +131,9 @@ export function RepositoryCard({
               repo.qualityGate ? (qualityPassed ? 'text-success' : 'text-danger') : 'text-faint'
             }`}
           >
-            {repo.qualityGate ? t(`REPOSITORY.${qualityPassed ? 'PASSED' : 'FAILED'}`) : '—'}
+            {repo.qualityGate
+              ? t(qualityPassed ? 'SCAN.GATE_PASSED' : 'SCAN.GATE_FAILED')
+              : '—'}
           </span>
         </div>
       </div>
