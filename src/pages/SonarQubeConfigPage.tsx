@@ -301,21 +301,27 @@ export function SonarQubeConfigPage() {
 
       <div className="grid items-start gap-4 lg:grid-cols-3">
         <div className="space-y-4 lg:col-span-2">
-          <SonarServerSection
-            control={formControl}
-            showToken={showToken}
-            setShowToken={setShowToken}
-            showGitToken={showGitToken}
-            setShowGitToken={setShowGitToken}
-          />
+          <div id="tour-sonar-server">
+            <SonarServerSection
+              control={formControl}
+              showToken={showToken}
+              setShowToken={setShowToken}
+              showGitToken={showGitToken}
+              setShowGitToken={setShowGitToken}
+            />
+          </div>
 
-          <SonarScannerSection control={formControl} />
+          <div id="tour-sonar-scanner">
+            <SonarScannerSection control={formControl} />
+          </div>
 
-          <SonarQualityGateSection
-            control={formControl}
-            updateGate={updateGate}
-            gateFields={gateFields}
-          />
+          <div id="tour-sonar-quality-gate">
+            <SonarQualityGateSection
+              control={formControl}
+              updateGate={updateGate}
+              gateFields={gateFields}
+            />
+          </div>
         </div>
 
         <SonarConnectionPanel

@@ -1,10 +1,12 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router';
 import { usePageTour } from './usePageTour';
 import type { DriveStep } from 'driver.js';
 
 export function useRepositoryFormTour() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   
   const steps: DriveStep[] = useMemo(() => [
     {
@@ -45,5 +47,9 @@ export function useRepositoryFormTour() {
     }
   ], [t]);
 
-  return usePageTour('repository-form', steps);
+  return usePageTour('repository-form', steps, (element) => {
+    if (element && element.id === 'tour-repo-form-save') {
+      navigate('/repositories');
+    }
+  });
 }

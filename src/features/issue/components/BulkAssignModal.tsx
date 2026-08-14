@@ -70,6 +70,7 @@ export function BulkAssignModal({
             {t('ISSUE.BULK_ASSIGN_TITLE', { count: issues.length })}
           </h2>
           <button
+            id="tour-issue-bulk-assign-close"
             type="button"
             aria-label={t('COMMON.CLOSE')}
             onClick={onClose}
@@ -88,15 +89,17 @@ export function BulkAssignModal({
             ))}
           </ul>
 
-          <UserSelect
-            id="bulkAssignedTo"
-            value={assignedTo}
-            onChange={setAssignedTo}
-            error={error}
-            users={users}
-            isPending={usersPending}
-            isError={usersError}
-          />
+          <div id="tour-issue-bulk-assign-user-select">
+            <UserSelect
+              id="bulkAssignedTo"
+              value={assignedTo}
+              onChange={setAssignedTo}
+              error={error}
+              users={users}
+              isPending={usersPending}
+              isError={usersError}
+            />
+          </div>
         </div>
 
         <div className="flex justify-end gap-2 border-t border-border px-5 py-4">
@@ -108,6 +111,7 @@ export function BulkAssignModal({
             {t('ISSUE_MODAL.CANCEL')}
           </button>
           <button
+            id="tour-issue-bulk-assign-submit"
             type="button"
             onClick={() => void handleSubmit()}
             disabled={bulkAssign.isPending}

@@ -8,11 +8,38 @@ export function useSonarQubeConfigTour() {
   
   const steps: DriveStep[] = useMemo(() => [
     {
-      element: '#tour-sonar-header',
+      element: '#tour-sonar-server',
       popover: {
-        title: t('TOUR.SONARQUBECONFIG.HEADER_TITLE', 'SonarQubeConfig Overview'),
-        description: t('TOUR.SONARQUBECONFIG.HEADER_DESC', 'This page allows you to view and manage sonarqubeconfig.'),
+        title: t('TOUR.SONARQUBECONFIG.SERVER_TITLE', 'Server Configuration'),
+        description: t('TOUR.SONARQUBECONFIG.SERVER_DESC', 'Set up your SonarQube server URL and authentication tokens here.'),
         side: 'bottom',
+        align: 'start',
+      },
+    },
+    {
+      element: '#tour-sonar-scanner',
+      popover: {
+        title: t('TOUR.SONARQUBECONFIG.SCANNER_TITLE', 'Scanner Setup'),
+        description: t('TOUR.SONARQUBECONFIG.SCANNER_DESC', 'Provide your GitLab or GitHub access token for pulling source code during scans.'),
+        side: 'bottom',
+        align: 'start',
+      },
+    },
+    {
+      element: '#tour-sonar-quality-gate',
+      popover: {
+        title: t('TOUR.SONARQUBECONFIG.QUALITY_GATE_TITLE', 'Quality Gate Rules'),
+        description: t('TOUR.SONARQUBECONFIG.QUALITY_GATE_DESC', 'Define thresholds for code coverage, bugs, and vulnerabilities to pass the quality gate.'),
+        side: 'bottom',
+        align: 'start',
+      },
+    },
+    {
+      element: '#tour-sonar-connection',
+      popover: {
+        title: t('TOUR.SONARQUBECONFIG.CONNECTION_TITLE', 'Test & Save'),
+        description: t('TOUR.SONARQUBECONFIG.CONNECTION_DESC', 'Test your connection status and save the configuration when ready.'),
+        side: 'left',
         align: 'start',
       },
     }

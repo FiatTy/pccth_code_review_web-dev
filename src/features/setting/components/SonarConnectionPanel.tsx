@@ -28,7 +28,7 @@ export function SonarConnectionPanel({
   const { t } = useTranslation();
 
   return (
-  <aside className="space-y-4 lg:sticky lg:top-20">
+  <aside id="tour-sonar-connection" className="space-y-4 lg:sticky lg:top-20">
     <div className="rounded-xl border border-border bg-surface p-5">
       <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.15em] text-faint">
         {t('SONARQUBE_CONFIG.CONNECTION_STATUS')}

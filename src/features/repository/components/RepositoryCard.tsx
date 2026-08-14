@@ -67,7 +67,7 @@ export function RepositoryCard({
 
   return (
     <div
-      className={`hover-lift group flex flex-col rounded-2xl border bg-surface p-5 shadow-sm ${
+      className={`tour-repo-card hover-lift group flex flex-col rounded-2xl border bg-surface p-5 shadow-sm ${
         isScanning ? 'scan-card border-primary/40' : 'border-border'
       }`}
     >

@@ -2,12 +2,12 @@ import { driver, type DriveStep } from 'driver.js';
 import 'driver.js/dist/driver.css';
 import '@/styles/driver-theme.css'; // We will create this for Tailwind compatibility
 
-export function createTour(steps: DriveStep[], onComplete: () => void) {
+export function createTour(steps: DriveStep[], onComplete: (element?: Element, step?: DriveStep, options?: { state: any }) => void) {
   const driverObj = driver({
     showProgress: true,
     steps,
-    onDestroyed: () => {
-      onComplete();
+    onDestroyed: (element, step, options) => {
+      onComplete(element, step, options);
     },
     popoverClass: 'driverjs-theme',
   });

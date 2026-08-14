@@ -8,21 +8,23 @@ export function useRepositoriesTour() {
   
   const steps: DriveStep[] = useMemo(() => [
     {
-      element: '#tour-repo-header',
-      popover: {
-        title: t('TOUR.REPOSITORIES.HEADER_TITLE', 'Repositories Overview'),
-        description: t('TOUR.REPOSITORIES.HEADER_DESC', 'This page allows you to view and manage all your connected projects.'),
-        side: 'bottom',
-        align: 'start',
-      },
-    },
-    {
       element: '#tour-repo-new-btn',
       popover: {
         title: t('TOUR.REPOSITORIES.NEW_BTN_TITLE', 'New Repository'),
-        description: t('TOUR.REPOSITORIES.NEW_BTN_DESC', 'Click here to add a new repository to your workspace.'),
+        description: t('TOUR.REPOSITORIES.NEW_BTN_DESC', 'Click this button to add a new repository. The tour will continue when you return to this page.'),
         side: 'bottom',
         align: 'end',
+        showButtons: ['previous', 'close'],
+      },
+      onHighlighted: () => {
+        const btn = document.querySelector<HTMLButtonElement>('#tour-repo-new-btn');
+        if (btn) {
+          const handleClick = () => {
+            localStorage.setItem('resume_tour_repositories', '1');
+            btn.removeEventListener('click', handleClick);
+          };
+          btn.addEventListener('click', handleClick);
+        }
       },
     },
     {
@@ -44,7 +46,7 @@ export function useRepositoriesTour() {
       },
     },
     {
-      element: '#tour-repo-list',
+      element: '.tour-repo-card',
       popover: {
         title: t('TOUR.REPOSITORIES.LIST_TITLE', 'Repository List'),
         description: t('TOUR.REPOSITORIES.LIST_DESC', 'Here is your repository list. From here, you can manually trigger code scans or manage settings.'),

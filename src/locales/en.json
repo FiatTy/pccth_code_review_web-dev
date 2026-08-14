@@ -49,8 +49,18 @@
       "HEADER_DESC": "View past code scans."
     },
     "ISSUES": {
-      "HEADER_TITLE": "Issues",
-      "HEADER_DESC": "Review and triage issues."
+      "FILTERS_TITLE": "Filter Issues",
+      "FILTERS_DESC": "Use these filters to narrow down issues by type, severity, status, or project.",
+      "CHECKBOXES_TITLE": "Select Issues",
+      "CHECKBOXES_DESC": "Select one or more issues to assign them in bulk. Please click the checkbox to continue.",
+      "ASSIGN_BTN_TITLE": "Assign Selected",
+      "ASSIGN_BTN_DESC": "Click this button to assign the selected issues to a team member.",
+      "MODAL_USER_TITLE": "Select a Team Member",
+      "MODAL_USER_DESC": "Choose a user from the dropdown to assign the issues to them.",
+      "MODAL_SUBMIT_TITLE": "Submit",
+      "MODAL_SUBMIT_DESC": "Click here to save your changes and assign the issues.",
+      "VIEW_BTN_TITLE": "View Details",
+      "VIEW_BTN_DESC": "If you want to investigate an issue in depth, click this button to view its details and how to fix it."
     },
     "ASSIGNMENTS": {
       "HEADER_TITLE": "Assignments",
@@ -77,8 +87,14 @@
       "HEADER_DESC": "Download previously generated reports."
     },
     "SONARQUBECONFIG": {
-      "HEADER_TITLE": "SonarQube Config",
-      "HEADER_DESC": "Configure connection settings."
+      "SERVER_TITLE": "Server Configuration",
+      "SERVER_DESC": "Set up your SonarQube server URL, authentication token, and Git Access Token for pulling source code here.",
+      "SCANNER_TITLE": "Scanner Settings",
+      "SCANNER_DESC": "Configure the default scanner behavior for specific project types like Angular or Spring Boot (e.g., running npm install or setting exclusions).",
+      "QUALITY_GATE_TITLE": "Quality Gate Rules",
+      "QUALITY_GATE_DESC": "Define thresholds for code coverage, bugs, and vulnerabilities to pass the quality gate.",
+      "CONNECTION_TITLE": "Test & Save",
+      "CONNECTION_DESC": "Test your connection status and save the configuration when ready."
     },
     "NOTIFICATIONSETTINGS": {
       "HEADER_TITLE": "Notification Settings",

@@ -172,6 +172,7 @@ export function RootLayout() {
       ) : null}
 
       <aside
+        id="tour-sidebar"
         className={`fixed inset-y-0 left-0 z-40 flex w-64 shrink-0 flex-col bg-surface shadow-2xl transition-transform duration-200 lg:sticky lg:top-0 lg:h-screen lg:shadow-none lg:translate-x-0 ${
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         }`}

@@ -144,7 +144,7 @@ export function IssuesPage() {
     <div id="tour-issue-header">
       <PageHeader title={t('ISSUE.TITLE_MGT')} subtitle={t('ISSUE.TABLE_CAPTION')} />
 
-      <div className="mb-5 flex flex-col gap-3 rounded-xl border border-border bg-surface p-4 sm:flex-row sm:flex-wrap sm:items-center">
+      <div id="tour-issue-filters" className="mb-5 flex flex-col gap-3 rounded-xl border border-border bg-surface p-4 sm:flex-row sm:flex-wrap sm:items-center">
         <SelectField
           value={type}
           onChange={(next) => {
@@ -252,10 +252,10 @@ export function IssuesPage() {
           <p className="mt-1 max-w-sm text-sm text-muted">{t('ISSUE.NO_ISSUES_FOUND_DESC')}</p>
         </div>
       ) : (
-        <div className="overflow-hidden rounded-xl border border-border bg-surface">
+        <div id="tour-issue-list" className="overflow-hidden rounded-xl border border-border bg-surface">
           {/* Mobile Card List View (< md) */}
           <div className="space-y-3 p-3.5 md:hidden">
-            {pageRows.map((issue) => {
+            {pageRows.map((issue, index) => {
               const badge = statusMeta(issue.status);
               return (
                 <div
@@ -265,6 +265,7 @@ export function IssuesPage() {
                   <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
                     <div className="flex items-center gap-2.5 min-w-0 flex-1">
                       <input
+                        id={index === 0 ? 'tour-issue-checkboxes-mobile' : undefined}
                         type="checkbox"
                         aria-label={`${t('ISSUE.SELECT_ALL')} ${issue.issueKey}`}
                         checked={selectedIds.includes(issue.id)}
@@ -316,6 +317,7 @@ export function IssuesPage() {
 
                   <div className="flex items-center justify-end pt-1">
                     <Link
+                      id={index === 0 ? 'tour-issue-view-btn-mobile' : undefined}
                       to={`/issuedetail/${issue.id}`}
                       className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-primary-subtle px-3 text-xs font-semibold text-primary transition-colors hover:bg-primary/20"
                     >
@@ -333,7 +335,7 @@ export function IssuesPage() {
             <table className="w-full min-w-[900px] text-sm">
               <thead>
                 <tr className="border-b border-border bg-surface-2/50 text-left">
-                  <th className="w-10 px-4 py-3">
+                  <th id="tour-issue-checkboxes" className="w-10 px-4 py-3">
                     <input
                       type="checkbox"
                       aria-label={t('ISSUE.SELECT_ALL')}
@@ -353,7 +355,7 @@ export function IssuesPage() {
                 </tr>
               </thead>
               <tbody>
-                {pageRows.map((issue) => {
+                {pageRows.map((issue, index) => {
                   const badge = statusMeta(issue.status);
                   return (
                     <tr
@@ -414,6 +416,7 @@ export function IssuesPage() {
                       </td>
                       <td className="px-4 py-3 text-center">
                         <Link
+                          id={index === 0 ? 'tour-issue-view-btn' : undefined}
                           to={`/issuedetail/${issue.id}`}
                           aria-label={t('ISSUE.COL_VIEW')}
                           className="inline-flex h-8 w-8 items-center justify-center rounded-md text-primary transition-colors hover:bg-primary-subtle"
@@ -467,6 +470,7 @@ export function IssuesPage() {
             {t('ISSUE.CLEAR_SELECTION')}
           </button>
           <button
+            id="tour-issue-bulk-assign-btn"
             type="button"
             onClick={() => setShowBulkAssign(true)}
             className="ml-auto inline-flex h-9 items-center gap-2 rounded-lg bg-primary px-4 text-sm font-semibold text-primary-fg transition hover:bg-primary-hover active:scale-[0.99]"
