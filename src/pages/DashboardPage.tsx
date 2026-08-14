@@ -202,7 +202,7 @@ export function DashboardPage() {
       </div>
 
       <div className="grid gap-4 lg:grid-cols-3">
-        <section className="overflow-hidden rounded-2xl border border-border bg-surface shadow-sm lg:col-span-2">
+        <section id="tour-recent-activity" className="overflow-hidden rounded-2xl border border-border bg-surface shadow-sm lg:col-span-2">
           <div className="flex items-center justify-between card-header border-b border-border px-5 py-3.5">
             <h2 className="text-sm font-semibold text-fg">
               {t('DASHBOARD.RECENT_ACTIVITY')}

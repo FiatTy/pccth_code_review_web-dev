@@ -23,6 +23,7 @@ import {
 import { useSonarQubeConfig } from '@/features/setting/hooks/useSonarQubeConfig';
 import type { ProjectType } from '@/features/repository/types';
 import { parseGitUrl } from '@/lib/git-utils';
+import { useRepositoryFormTour } from '@/features/onboarding/hooks/useRepositoryFormTour';
 
 const MIN_COST_PER_DAY = 1000;
 const SCAN_BRANCH = 'dev';
@@ -61,6 +62,7 @@ function readErrorMessage(error: unknown, fallback: string): string {
 }
 
 export function RepositoryFormPage() {
+  useRepositoryFormTour();
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { projectId } = useParams<{ projectId: string }>();
@@ -254,23 +256,27 @@ export function RepositoryFormPage() {
 
       <div className="grid items-start gap-4 lg:grid-cols-3">
         <div className="space-y-4 lg:col-span-2">
-          <RepositoryDetailsSection
-            form={form}
-            errors={errors}
-            touched={touched}
-            update={update}
-            markTouched={markTouched}
-            handleUrlChange={handleUrlChange}
-            parsedGit={parsedGit}
-            isEditMode={isEditMode}
-            PROJECT_TYPES={PROJECT_TYPES}
-            MIN_COST_PER_DAY={MIN_COST_PER_DAY}
-          />
+          <div id="tour-repo-form-details">
+            <RepositoryDetailsSection
+              form={form}
+              errors={errors}
+              touched={touched}
+              update={update}
+              markTouched={markTouched}
+              handleUrlChange={handleUrlChange}
+              parsedGit={parsedGit}
+              isEditMode={isEditMode}
+              PROJECT_TYPES={PROJECT_TYPES}
+              MIN_COST_PER_DAY={MIN_COST_PER_DAY}
+            />
+          </div>
 
-          <RepositoryAnalysisSection projectKey={projectKey} serverUrl={serverUrl} />
+          <div id="tour-repo-form-analysis">
+            <RepositoryAnalysisSection projectKey={projectKey} serverUrl={serverUrl} />
+          </div>
         </div>
 
-        <aside className="space-y-4 lg:sticky lg:top-20">
+        <aside id="tour-repo-form-summary" className="space-y-4 lg:sticky lg:top-20">
           <div className="rounded-xl border border-border bg-surface p-5">
             <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.15em] text-faint">
               {t('REPOSITORY.SUMMARY')}
@@ -288,6 +294,7 @@ export function RepositoryFormPage() {
 
             <div className="mt-5 space-y-2">
               <button
+                id="tour-repo-form-save"
                 type="button"
                 onClick={() => void handleSubmit()}
                 disabled={isSubmitting}

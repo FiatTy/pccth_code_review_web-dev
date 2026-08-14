@@ -29,6 +29,14 @@ export function useDashboardTour() {
           side: 'bottom', align: 'start',
         },
       },
+      {
+        element: '#tour-recent-activity',
+        popover: {
+          title: t('TOUR.DASHBOARD.RECENT_ACTIVITY_TITLE', 'Recent Activity'),
+          description: t('TOUR.DASHBOARD.RECENT_ACTIVITY_DESC', 'Keep track of your latest code scans and project activities right here.'),
+          side: 'bottom', align: 'start',
+        },
+      },
     ];
 
     const desktopSteps: DriveStep[] = [

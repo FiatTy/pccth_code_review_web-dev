@@ -205,6 +205,7 @@ export function RepositoriesPage() {
         subtitle={t('REPOSITORY.SUBTITLE')}
         actions={
           <button
+            id="tour-repo-new-btn"
             type="button"
             onClick={() => navigate('/addrepository')}
             className="inline-flex h-10 items-center gap-2 rounded-lg bg-primary px-4 text-sm font-semibold text-primary-fg shadow-sm transition hover:bg-primary-hover active:scale-[0.99]"
@@ -215,70 +216,76 @@ export function RepositoriesPage() {
         }
       />
 
-      <RepositoryStatsRow stats={stats} />
-      <RepositoryFilterBar
-        typeTab={typeTab}
-        onTypeTabChange={setTypeTab}
-        viewMode={viewMode}
-        onViewModeChange={setViewMode}
-        search={search}
-        onSearchChange={setSearch}
-        folderFilter={folderFilter}
-        onFolderFilterChange={setFolderFilter}
-        availableFolders={availableFolders}
-        statusFilter={statusFilter}
-        onStatusFilterChange={setStatusFilter}
-      />
-
-      {isPending ? (
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {Array.from({ length: 6 }).map((_, index) => (
-            <SkeletonCard key={index} />
-          ))}
-        </div>
-      ) : isError ? (
-        <div className="flex flex-col items-center justify-center rounded-xl border border-border bg-surface py-16 text-center">
-          <AlertTriangle size={28} className="text-danger" />
-          <p className="mt-3 text-sm text-muted">{t('COMMON.ERROR')}</p>
-          <button
-            type="button"
-            onClick={() => refetch()}
-            className="mt-4 inline-flex items-center gap-2 rounded-lg border border-border px-4 py-2 text-sm font-medium text-fg transition-colors hover:bg-surface-2"
-          >
-            <RefreshCw size={14} className={isFetching ? 'animate-spin' : undefined} />
-            {t('COMMON.RESET')}
-          </button>
-        </div>
-      ) : filtered.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border bg-surface py-16 text-center">
-          <FolderGit2 size={30} className="text-faint" />
-          <h3 className="mt-4 text-sm font-semibold text-fg">{t('REPOSITORY.NO_REPOS_FOUND')}</h3>
-          <p className="mt-1 max-w-sm text-sm text-muted">{t('REPOSITORY.NO_REPOS_FOUND_DESC')}</p>
-        </div>
-      ) : viewMode === 'folder' ? (
-        <RepositoryFolderList
-          groupedByFolder={groupedByFolder}
-          collapsedFolders={collapsedFolders}
-          onToggleFolder={toggleFolder}
-          onExpandAll={expandAll}
-          onCollapseAll={collapseAll}
-          scanningId={scanningId}
-          onScan={(repo) => void handleScan(repo)}
-          onDelete={setPendingDelete}
+      <div id="tour-repo-stats">
+        <RepositoryStatsRow stats={stats} />
+      </div>
+      <div id="tour-repo-filters">
+        <RepositoryFilterBar
+          typeTab={typeTab}
+          onTypeTabChange={setTypeTab}
+          viewMode={viewMode}
+          onViewModeChange={setViewMode}
+          search={search}
+          onSearchChange={setSearch}
+          folderFilter={folderFilter}
+          onFolderFilterChange={setFolderFilter}
+          availableFolders={availableFolders}
+          statusFilter={statusFilter}
+          onStatusFilterChange={setStatusFilter}
         />
-      ) : (
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {filtered.map((repo) => (
-            <RepositoryCard
-              key={repo.projectId}
-              repo={repo}
-              onDelete={setPendingDelete}
-              onScan={(target) => void handleScan(target)}
-              isScanPending={scanningId === repo.projectId}
-            />
-          ))}
-        </div>
-      )}
+      </div>
+
+      <div id="tour-repo-list">
+        {isPending ? (
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {Array.from({ length: 6 }).map((_, index) => (
+              <SkeletonCard key={index} />
+            ))}
+          </div>
+        ) : isError ? (
+          <div className="flex flex-col items-center justify-center rounded-xl border border-border bg-surface py-16 text-center">
+            <AlertTriangle size={28} className="text-danger" />
+            <p className="mt-3 text-sm text-muted">{t('COMMON.ERROR')}</p>
+            <button
+              type="button"
+              onClick={() => refetch()}
+              className="mt-4 inline-flex items-center gap-2 rounded-lg border border-border px-4 py-2 text-sm font-medium text-fg transition-colors hover:bg-surface-2"
+            >
+              <RefreshCw size={14} className={isFetching ? 'animate-spin' : undefined} />
+              {t('COMMON.RESET')}
+            </button>
+          </div>
+        ) : filtered.length === 0 ? (
+          <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border bg-surface py-16 text-center">
+            <FolderGit2 size={30} className="text-faint" />
+            <h3 className="mt-4 text-sm font-semibold text-fg">{t('REPOSITORY.NO_REPOS_FOUND')}</h3>
+            <p className="mt-1 max-w-sm text-sm text-muted">{t('REPOSITORY.NO_REPOS_FOUND_DESC')}</p>
+          </div>
+        ) : viewMode === 'folder' ? (
+          <RepositoryFolderList
+            groupedByFolder={groupedByFolder}
+            collapsedFolders={collapsedFolders}
+            onToggleFolder={toggleFolder}
+            onExpandAll={expandAll}
+            onCollapseAll={collapseAll}
+            scanningId={scanningId}
+            onScan={(repo) => void handleScan(repo)}
+            onDelete={setPendingDelete}
+          />
+        ) : (
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {filtered.map((repo) => (
+              <RepositoryCard
+                key={repo.projectId}
+                repo={repo}
+                onDelete={setPendingDelete}
+                onScan={(target) => void handleScan(target)}
+                isScanPending={scanningId === repo.projectId}
+              />
+            ))}
+          </div>
+        )}
+      </div>
 
       {missingConfigKey ? (
         <MissingScanConfigDialog

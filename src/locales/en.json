@@ -11,6 +11,8 @@
       "SEARCH_DESC": "Quickly find what you need by searching across your entire workspace.",
       "HAMBURGER_TITLE": "Main Menu",
       "HAMBURGER_DESC": "Click here to open the main navigation menu.",
+      "RECENT_ACTIVITY_TITLE": "Recent Activity",
+      "RECENT_ACTIVITY_DESC": "Keep track of your latest code scans and project activities right here.",
       "NOTI_TITLE": "Notifications",
       "NOTI_DESC": "Click on the bell icon to see your latest updates and alerts.",
       "NOTI_OPTIONS_TITLE": "Your Updates",
@@ -22,7 +24,25 @@
     },
     "REPOSITORIES": {
       "HEADER_TITLE": "Repositories Overview",
-      "HEADER_DESC": "Manage your repositories here."
+      "HEADER_DESC": "This page allows you to view and manage all your connected projects.",
+      "NEW_BTN_TITLE": "New Repository",
+      "NEW_BTN_DESC": "Click here to add a new repository to your workspace.",
+      "STATS_TITLE": "Repository Statistics",
+      "STATS_DESC": "Quick overview of your repository statuses—see what's active, scanning, or facing issues.",
+      "FILTERS_TITLE": "Filters & View Modes",
+      "FILTERS_DESC": "Use these filters to quickly find specific repositories by project type, folder, or status.",
+      "LIST_TITLE": "Repository List",
+      "LIST_DESC": "Here is your repository list. From here, you can manually trigger code scans or manage settings."
+    },
+    "REPOSITORY_FORM": {
+      "DETAILS_TITLE": "Repository Details",
+      "DETAILS_DESC": "Provide your repository URL and setup the project information.",
+      "ANALYSIS_TITLE": "Analysis Config",
+      "ANALYSIS_DESC": "Configure SonarQube settings like Project Key to enable code scanning.",
+      "SUMMARY_TITLE": "Configuration Summary",
+      "SUMMARY_DESC": "Review your settings before saving.",
+      "SAVE_TITLE": "Save Repository",
+      "SAVE_DESC": "Click here to save and add this repository to your workspace."
     },
     "SCANHISTORY": {
       "HEADER_TITLE": "Scan History",
