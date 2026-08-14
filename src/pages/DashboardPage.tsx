@@ -219,13 +219,13 @@ export function DashboardPage() {
               {recentScans.map((scan) => (
                 <li
                   key={scan.id}
-                  className="flex items-center justify-between gap-4 px-5 py-4 transition-colors hover:bg-surface-2/40"
+                  className="flex items-center justify-between gap-3 px-5 py-3 transition-colors hover:bg-surface-2/40"
                 >
                   <div className="min-w-0">
                     <p className="truncate text-sm font-medium text-fg">
                       {scan.projectName || '—'}
                     </p>
-                    <p className="mt-1 text-xs text-faint">
+                    <p className="text-xs text-faint">
                       {formatDateTimeShort(scan.startedAt) ?? '—'}
                     </p>
                   </div>
