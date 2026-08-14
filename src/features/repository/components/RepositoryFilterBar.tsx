@@ -39,15 +39,15 @@ export function RepositoryFilterBar({
   ];
 
   return (
-    <div className="mb-5 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+    <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+      <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
         <div className="flex w-full rounded-xl border border-border bg-surface p-1 shadow-2xs sm:w-auto sm:inline-flex">
           {typeTabs.map((tab) => (
             <button
               key={tab.key}
               type="button"
               onClick={() => onTypeTabChange(tab.key)}
-              className={`flex-1 rounded-lg px-3 py-2 text-xs font-semibold transition-all sm:flex-initial sm:px-3.5 sm:py-1.5 sm:text-sm ${
+              className={`flex-1 whitespace-nowrap rounded-lg px-3 py-2 text-xs font-semibold transition-all sm:flex-initial sm:px-3.5 sm:py-1.5 sm:text-sm ${
                 typeTab === tab.key
                   ? 'bg-primary-subtle text-primary shadow-2xs'
                   : 'text-muted hover:text-fg'
@@ -69,8 +69,8 @@ export function RepositoryFilterBar({
         />
       </div>
 
-      <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-        <div className="relative w-full sm:w-auto sm:flex-1 lg:w-56">
+      <div className="flex w-full flex-col gap-3 sm:w-auto sm:flex-row sm:items-center">
+        <div className="relative w-full sm:w-56">
           <Search
             size={15}
             className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-faint"

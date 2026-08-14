@@ -19,7 +19,8 @@ import { DonutChart } from '@/components/charts/DonutChart';
 import { LineChart } from '@/components/charts/LineChart';
 import { StatCard } from '@/components/ui/StatCard';
 import { formatDateTimeShort } from '@/lib/format-date';
-import { ScanGradeChip } from '@/features/scan/components/ScanGradeChip';
+import { ScanStatusChip } from '@/features/scan/components/ScanStatusChip';
+import { QualityGateChip } from '@/features/scan/components/QualityGateChip';
 import { buildDailyTrend } from '@/features/scan/lib/scan-trends';
 import { useDashboardTour } from '@/features/onboarding/hooks/useDashboardTour';
 
@@ -218,14 +219,22 @@ export function DashboardPage() {
           ) : (
             <ul className="divide-y divide-border">
               {recentScans.map((scan) => (
-                <li key={scan.id} className="flex items-center justify-between gap-3 px-5 py-3">
+                <li
+                  key={scan.id}
+                  className="flex items-center justify-between gap-3 px-5 py-3 transition-colors hover:bg-surface-2/40"
+                >
                   <div className="min-w-0">
                     <p className="truncate text-sm font-medium text-fg">
                       {scan.projectName || '—'}
                     </p>
-                    <p className="text-xs text-faint">{formatDateTimeShort(scan.startedAt) ?? '—'}</p>
+                    <p className="text-xs text-faint">
+                      {formatDateTimeShort(scan.startedAt) ?? '—'}
+                    </p>
                   </div>
-                  <ScanGradeChip scan={scan} />
+                  <div className="flex shrink-0 flex-wrap items-center justify-end gap-1.5">
+                    <ScanStatusChip status={scan.status} />
+                    <QualityGateChip scan={scan} />
+                  </div>
                 </li>
               ))}
             </ul>

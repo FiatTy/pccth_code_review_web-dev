@@ -7,6 +7,8 @@ export interface SelectOption {
   label: string;
 }
 
+const AUTO_SEARCH_THRESHOLD = 8;
+
 interface SelectFieldProps {
   value: string;
   onChange: (value: string) => void;
@@ -43,19 +45,20 @@ export function SelectField({
   const searchInputRef = useRef<HTMLInputElement>(null);
 
   const selected = options.find((option) => option.value === value);
+  const isSearchable = searchable ?? options.length >= AUTO_SEARCH_THRESHOLD;
 
   useEffect(() => {
     if (!open) {
       return;
     }
-    if (searchable) {
+    if (isSearchable) {
       setSearchTerm('');
       const timer = window.setTimeout(() => {
         searchInputRef.current?.focus();
       }, 50);
       return () => window.clearTimeout(timer);
     }
-  }, [open, searchable]);
+  }, [open, isSearchable]);
 
   useEffect(() => {
     if (!open) {
@@ -80,7 +83,7 @@ export function SelectField({
   }, [open]);
 
   const filteredOptions = useMemo(() => {
-    if (!searchable || !searchTerm.trim()) {
+    if (!isSearchable || !searchTerm.trim()) {
       return options;
     }
     const keyword = searchTerm.trim().toLowerCase();
@@ -89,7 +92,15 @@ export function SelectField({
         option.label.toLowerCase().includes(keyword) ||
         option.value.toLowerCase().includes(keyword),
     );
-  }, [options, searchable, searchTerm]);
+  }, [options, isSearchable, searchTerm]);
+
+  function handleSearchKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
+    if (event.key === 'Enter' && filteredOptions.length > 0) {
+      event.preventDefault();
+      onChange(filteredOptions[0].value);
+      setOpen(false);
+    }
+  }
 
   return (
     <div ref={rootRef} className="relative">
@@ -116,7 +127,7 @@ export function SelectField({
           role="listbox"
           className="dialog-enter absolute left-0 top-full z-50 mt-1.5 flex max-h-72 w-full min-w-[200px] flex-col overflow-hidden rounded-xl border border-border bg-surface shadow-xl"
         >
-          {searchable ? (
+          {isSearchable ? (
             <div className="sticky top-0 z-10 border-b border-border bg-surface-2/50 p-2">
               <div className="relative flex items-center">
                 <Search size={14} className="pointer-events-none absolute left-2.5 text-faint" />
@@ -125,6 +136,7 @@ export function SelectField({
                   type="text"
                   value={searchTerm}
                   onChange={(event) => setSearchTerm(event.target.value)}
+                  onKeyDown={handleSearchKeyDown}
                   placeholder={searchPlaceholder ?? t('COMMON.SEARCH')}
                   className="h-8 w-full rounded-lg border border-border bg-surface pl-8 pr-7 text-xs text-fg placeholder:text-faint outline-none focus:border-primary focus:ring-2 focus:ring-primary/20"
                 />
