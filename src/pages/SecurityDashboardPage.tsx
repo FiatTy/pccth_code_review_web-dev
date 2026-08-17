@@ -96,7 +96,7 @@ export function SecurityDashboardPage() {
         actions={
           <Link
             to="/issue"
-            className="inline-flex h-10 items-center gap-2 rounded-lg border border-border px-4 text-sm font-medium text-fg transition-colors hover:bg-surface-2"
+            className="brand-gradient-bg inline-flex h-11 items-center gap-2 rounded-xl px-4 text-sm font-semibold text-primary-fg shadow-lg shadow-primary/25 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-primary/35 active:scale-[0.99]"
           >
             {t('SECURITY_DASHBOARD.VIEW_ALL_ISSUES')}
             <ArrowRight size={15} />
