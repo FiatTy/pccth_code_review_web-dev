@@ -28,6 +28,8 @@ import {
 import { useIssueCommentStream } from '@/features/issue/hooks/useIssueCommentStream';
 import { useAssignableUsers } from '@/features/user/hooks/useUsers';
 import type { IssueComment } from '@/features/issue/types';
+import { useIssueDetailTour } from '@/features/onboarding/hooks/useIssueDetailTour';
+
 
 const SEVERITY_BADGE: Record<string, string> = {
   BLOCKER: 'bg-blocker/12 text-blocker',
@@ -49,6 +51,7 @@ const STATUS_BADGE: Record<string, string> = {
 
 
 export function IssueDetailPage() {
+  useIssueDetailTour();
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { issuesId } = useParams<{ issuesId: string }>();
@@ -182,7 +185,7 @@ export function IssueDetailPage() {
 
   return (
     <div className="w-full max-w-full min-w-0 overflow-x-hidden space-y-6">
-      <div className="w-full max-w-full min-w-0">
+      <div id="tour-issuedetail-header" className="w-full max-w-full min-w-0">
         <button
           type="button"
           onClick={() => navigate(-1)}
@@ -218,7 +221,7 @@ export function IssueDetailPage() {
 
       <div className="grid items-start gap-4 lg:grid-cols-3 w-full max-w-full min-w-0">
         <div className="space-y-4 lg:col-span-2 w-full max-w-full min-w-0">
-          <section className="w-full max-w-full min-w-0 overflow-hidden rounded-xl border border-border bg-surface">
+          <section id="tour-issuedetail-analysis" className="w-full max-w-full min-w-0 overflow-hidden rounded-xl border border-border bg-surface">
             <div className="card-header border-b border-border px-5 py-4">
               <h2 className="text-sm font-semibold text-fg">{t('ISSUE_DETAIL.DESC_ANALYSIS')}</h2>
             </div>
@@ -305,7 +308,7 @@ export function IssueDetailPage() {
             </div>
           </section>
 
-          <section className="w-full max-w-full min-w-0 overflow-hidden rounded-xl border border-border bg-surface">
+          <section id="tour-issuedetail-comments" className="w-full max-w-full min-w-0 overflow-hidden rounded-xl border border-border bg-surface">
             <div className="flex items-center gap-2 card-header border-b border-border px-5 py-4">
               <MessageSquare size={15} className="text-primary" />
               <h2 className="text-sm font-semibold text-fg">{t('ISSUE_DETAIL.COMMENTS')}</h2>
@@ -404,7 +407,7 @@ export function IssueDetailPage() {
             </div>
           </div>
 
-          <div className="w-full max-w-full min-w-0 overflow-hidden rounded-xl border border-border bg-surface px-5 py-4">
+          <div id="tour-issuedetail-assignment" className="w-full max-w-full min-w-0 overflow-hidden rounded-xl border border-border bg-surface px-5 py-4">
             <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.15em] text-faint">
               {t('ISSUE_DETAIL.ASSIGNMENT')}
             </p>
@@ -429,7 +432,7 @@ export function IssueDetailPage() {
             </button>
           </div>
 
-          <div className="w-full max-w-full min-w-0 overflow-hidden rounded-xl border border-border bg-surface px-5 py-4">
+          <div id="tour-issuedetail-status" className="w-full max-w-full min-w-0 overflow-hidden rounded-xl border border-border bg-surface px-5 py-4">
             <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.15em] text-faint">
               {t('ISSUE_DETAIL.STATUS_PRIORITY')}
             </p>

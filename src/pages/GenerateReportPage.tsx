@@ -175,73 +175,79 @@ export function GenerateReportPage() {
 
       <div className="grid items-start gap-4 lg:grid-cols-3">
         <div className="space-y-4 lg:col-span-2">
-          <SectionCard
-            eyebrow="01"
-            title={t('GENERATE_REPORT.PROJECTS_TO_INCLUDE')}
-            icon={FolderGit2}
-          >
-            <FormField
-              id="reportProject"
-              label={t('GENERATE_REPORT.SELECT_PROJECT')}
-              error={submitted ? projectError : ''}
+          <div id="tour-genreport-project">
+            <SectionCard
+              eyebrow="01"
+              title={t('GENERATE_REPORT.PROJECTS_TO_INCLUDE')}
+              icon={FolderGit2}
             >
-              <SelectField
+              <FormField
                 id="reportProject"
-                className={FIELD_INPUT_CLASS}
-                value={projectId}
-                onChange={setProjectId}
-                searchable
-                placeholder={t('GENERATE_REPORT.SELECT_PROJECT')}
-                options={repositories.map((repo) => ({
-                  value: repo.projectId,
-                  label: repo.name,
-                }))}
-              />
-            </FormField>
-          </SectionCard>
-
-          <SectionCard eyebrow="02" title={t('GENERATE_REPORT.DATE_RANGE')} icon={CalendarRange}>
-            <div className="grid gap-4 sm:grid-cols-2">
-              <FormField id="dateFrom" label={t('SCAN.START_DATE')}>
-                <DateField
-                  id="dateFrom"
+                label={t('GENERATE_REPORT.SELECT_PROJECT')}
+                error={submitted ? projectError : ''}
+              >
+                <SelectField
+                  id="reportProject"
                   className={FIELD_INPUT_CLASS}
-                  value={dateFrom}
-                  maxDate={dateTo || undefined}
-                  onChange={handleDateFrom}
+                  value={projectId}
+                  onChange={setProjectId}
+                  searchable
+                  placeholder={t('GENERATE_REPORT.SELECT_PROJECT')}
+                  options={repositories.map((repo) => ({
+                    value: repo.projectId,
+                    label: repo.name,
+                  }))}
                 />
               </FormField>
-              <FormField id="dateTo" label={t('SCAN.END_DATE')}>
-                <DateField
-                  id="dateTo"
-                  className={FIELD_INPUT_CLASS}
-                  value={dateTo}
-                  minDate={dateFrom || undefined}
-                  onChange={handleDateTo}
-                />
-              </FormField>
-            </div>
-            {submitted && (dateError || noScanError) ? (
-              <p role="alert" className="mt-3 text-xs text-danger">
-                {dateError || noScanError}
-              </p>
-            ) : null}
-          </SectionCard>
+            </SectionCard>
+          </div>
 
-          <SectionCard eyebrow="03" title={t('GENERATE_REPORT.INCLUDE_SECTIONS')} icon={Layers}>
-            <div className="space-y-3">
-              {SECTION_FIELDS.map((field) => (
-                <Switch
-                  key={field.key}
-                  id={field.key}
-                  align="between"
-                  checked={sections[field.key]}
-                  onChange={(checked) => toggleSection(field.key, checked)}
-                  label={t(field.labelKey)}
-                />
-              ))}
-            </div>
-          </SectionCard>
+          <div id="tour-genreport-date">
+            <SectionCard eyebrow="02" title={t('GENERATE_REPORT.DATE_RANGE')} icon={CalendarRange}>
+              <div className="grid gap-4 sm:grid-cols-2">
+                <FormField id="dateFrom" label={t('SCAN.START_DATE')}>
+                  <DateField
+                    id="dateFrom"
+                    className={FIELD_INPUT_CLASS}
+                    value={dateFrom}
+                    maxDate={dateTo || undefined}
+                    onChange={handleDateFrom}
+                  />
+                </FormField>
+                <FormField id="dateTo" label={t('SCAN.END_DATE')}>
+                  <DateField
+                    id="dateTo"
+                    className={FIELD_INPUT_CLASS}
+                    value={dateTo}
+                    minDate={dateFrom || undefined}
+                    onChange={handleDateTo}
+                  />
+                </FormField>
+              </div>
+              {submitted && (dateError || noScanError) ? (
+                <p role="alert" className="mt-3 text-xs text-danger">
+                  {dateError || noScanError}
+                </p>
+              ) : null}
+            </SectionCard>
+          </div>
+
+          <div id="tour-genreport-sections">
+            <SectionCard eyebrow="03" title={t('GENERATE_REPORT.INCLUDE_SECTIONS')} icon={Layers}>
+              <div className="space-y-3">
+                {SECTION_FIELDS.map((field) => (
+                  <Switch
+                    key={field.key}
+                    id={field.key}
+                    align="between"
+                    checked={sections[field.key]}
+                    onChange={(checked) => toggleSection(field.key, checked)}
+                    label={t(field.labelKey)}
+                  />
+                ))}
+              </div>
+            </SectionCard>
+          </div>
         </div>
 
         <aside className="space-y-4 lg:sticky lg:top-20">
@@ -276,6 +282,7 @@ export function GenerateReportPage() {
 
             <div className="mt-5 space-y-2">
               <button
+                id="tour-genreport-generate-btn"
                 type="button"
                 onClick={() => void handleGenerate()}
                 disabled={generatePdf.isPending}

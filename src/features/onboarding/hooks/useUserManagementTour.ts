@@ -15,8 +15,18 @@ export function useUserManagementTour() {
         side: 'bottom',
         align: 'start',
       },
+    },
+    {
+      element: '#tour-user-add-btn',
+      popover: {
+        title: t('TOUR.USERMANAGEMENT.ADD_BTN_TITLE', 'Add New User'),
+        description: t('TOUR.USERMANAGEMENT.ADD_BTN_DESC', 'Click this button to create and invite a new user to the system.'),
+        side: 'left',
+        align: 'start',
+      },
     }
   ], [t]);
 
   return usePageTour('usermanagement', steps);
 }
+

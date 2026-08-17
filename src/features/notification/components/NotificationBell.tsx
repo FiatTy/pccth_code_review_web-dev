@@ -212,9 +212,9 @@ export function NotificationBell() {
       {isOpen ? (
         <div
           id="tour-notification-dropdown"
-          className="fixed inset-0 z-50 flex flex-col bg-surface shadow-2xl transition-all md:absolute md:right-0 md:top-11 md:inset-auto md:z-50 md:h-auto md:w-[22rem] md:max-w-[calc(100vw-2rem)] md:overflow-hidden md:rounded-xl md:border md:border-border md:shadow-xl md:shadow-black/10"
+          className="fixed inset-0 z-[100] flex h-screen w-screen flex-col bg-surface shadow-2xl transition-all md:absolute md:inset-auto md:right-0 md:top-11 md:z-50 md:h-auto md:w-[22rem] md:max-w-[calc(100vw-2rem)] md:overflow-hidden md:rounded-xl md:border md:border-border md:shadow-xl md:shadow-black/10"
         >
-          <div className="flex h-14 items-center justify-between gap-2 border-b border-border px-4 py-3 md:h-auto">
+          <div className="flex shrink-0 h-14 items-center justify-between gap-2 border-b border-border px-4 py-3 md:h-auto">
             <div className="flex items-center gap-2 min-w-0">
               <button
                 type="button"
@@ -255,7 +255,7 @@ export function NotificationBell() {
             </div>
           </div>
 
-          <div className="flex items-center gap-1.5 overflow-x-auto overscroll-x-contain border-b border-border px-4 py-2.5 scrollbar-none md:px-3 md:py-2">
+          <div className="flex shrink-0 items-center gap-1.5 overflow-x-auto overscroll-x-contain border-b border-border px-4 py-2.5 scrollbar-none md:px-3 md:py-2">
             {TABS.map((tab) => (
               <button
                 key={tab.value}
@@ -272,7 +272,7 @@ export function NotificationBell() {
             ))}
           </div>
 
-          <div className="flex-1 overflow-y-auto overscroll-contain divide-y divide-border/60 md:max-h-80">
+          <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain divide-y divide-border/60 md:max-h-80">
             {isLoading ? (
               <div className="flex items-center justify-center gap-2 px-4 py-16 text-sm text-muted md:py-10 md:text-xs">
                 <Loader2 size={16} className="animate-spin text-primary" />

@@ -149,7 +149,7 @@ export function ScanHistoryPage() {
     <div id="tour-scan-header">
       <PageHeader title={t('SCAN.TITLE')} subtitle={t('SCAN.SUBTITLE')} />
 
-      <div className="mb-6 flex flex-col gap-3.5 rounded-2xl border border-border bg-surface p-5 shadow-sm sm:flex-row sm:flex-wrap sm:items-end">
+      <div id="tour-scan-filters" className="mb-6 flex flex-col gap-3.5 rounded-2xl border border-border bg-surface p-5 shadow-sm sm:flex-row sm:flex-wrap sm:items-end">
         <label className="flex w-full flex-col gap-1 sm:w-auto">
           <span className="font-mono text-[10px] uppercase tracking-wide text-faint">
             {t('SCAN.PROJECT')}
@@ -232,6 +232,7 @@ export function ScanHistoryPage() {
               : t('SCAN.COMPARE_HINT')}
           </span>
           <button
+            id="tour-scan-compare-btn"
             type="button"
             onClick={() => setShowCompare(true)}
             disabled={selectedIds.length < 2}
@@ -274,7 +275,7 @@ export function ScanHistoryPage() {
         <div className="overflow-hidden rounded-2xl border border-border bg-surface shadow-sm">
           {/* Mobile Card List View (< md) */}
           <div className="space-y-3 p-3.5 md:hidden">
-            {pageRows.map((scan) => (
+            {pageRows.map((scan, index) => (
               <div
                 key={scan.id}
                 className="rounded-xl border border-border bg-surface p-4 shadow-2xs space-y-3 transition-colors hover:border-border-strong"
@@ -282,6 +283,7 @@ export function ScanHistoryPage() {
                 <div className="flex items-start justify-between gap-3">
                   <div className="flex items-center gap-2.5 min-w-0">
                     <input
+                      id={index === 0 ? 'tour-scan-checkbox-mobile' : undefined}
                       type="checkbox"
                       aria-label={`${t('SCAN.COL_SELECT')} ${scan.projectName}`}
                       checked={selectedIds.includes(scan.id)}
@@ -336,6 +338,7 @@ export function ScanHistoryPage() {
                     {t('SCAN.COL_LOG')}
                   </Link>
                   <Link
+                    id={index === 0 ? 'tour-scan-result-btn-mobile' : undefined}
                     to={`/scanresult/${scan.id}`}
                     title={t('SCAN.VIEW_RESULT_TOOLTIP')}
                     className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-primary-subtle px-3 text-xs font-semibold text-primary transition-colors hover:bg-primary/20"
@@ -380,13 +383,14 @@ export function ScanHistoryPage() {
                 </tr>
               </thead>
               <tbody>
-                {pageRows.map((scan) => (
+                {pageRows.map((scan, index) => (
                   <tr
                     key={scan.id}
                     className="border-b border-border last:border-0 transition-colors hover:bg-surface-2/40"
                   >
                     <td className="px-4 py-3">
                       <input
+                        id={index === 0 ? 'tour-scan-checkbox' : undefined}
                         type="checkbox"
                         aria-label={`${t('SCAN.COL_SELECT')} ${scan.projectName}`}
                         checked={selectedIds.includes(scan.id)}
@@ -420,6 +424,7 @@ export function ScanHistoryPage() {
                     </td>
                     <td className="px-4 py-3 text-center">
                       <Link
+                        id={index === 0 ? 'tour-scan-result-btn' : undefined}
                         to={`/scanresult/${scan.id}`}
                         title={t('SCAN.VIEW_RESULT_TOOLTIP')}
                         aria-label={t('SCAN.VIEW_RESULT_TOOLTIP')}

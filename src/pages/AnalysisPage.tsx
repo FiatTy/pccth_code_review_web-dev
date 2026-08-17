@@ -52,6 +52,7 @@ export function AnalysisPage() {
 
       <div className="mb-4 grid gap-3 sm:grid-cols-2">
         <Link
+          id="tour-analysis-security"
           to="/security-dashboard"
           className="group rounded-xl border border-border bg-surface p-5 transition-colors hover:border-border-strong"
         >
@@ -71,6 +72,7 @@ export function AnalysisPage() {
         </Link>
 
         <Link
+          id="tour-analysis-debt"
           to="/technical-debt"
           className="group rounded-xl border border-border bg-surface p-5 transition-colors hover:border-border-strong"
         >

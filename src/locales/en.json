@@ -45,8 +45,22 @@
       "SAVE_DESC": "Click here to save and add this repository to your workspace."
     },
     "SCANHISTORY": {
-      "HEADER_TITLE": "Scan History",
-      "HEADER_DESC": "View past code scans."
+      "FILTERS_TITLE": "Filter Scans",
+      "FILTERS_DESC": "Use these filters to find specific scans by project, status, or date range.",
+      "CHECKBOXES_TITLE": "Select for Comparison",
+      "CHECKBOXES_DESC": "You can select 2 or 3 scans to compare their metrics side by side.",
+      "COMPARE_BTN_TITLE": "Compare Scans",
+      "COMPARE_BTN_DESC": "Once you have selected the scans, click this button to open the comparison view.",
+      "RESULT_BTN_TITLE": "View Scan Results",
+      "RESULT_BTN_DESC": "Click here to dive into the detailed report, vulnerabilities, and code smells for this specific scan."
+    },
+    "ANALYSIS": {
+      "HEADER_TITLE": "Analysis Overview",
+      "HEADER_DESC": "Dive deep into code metrics.",
+      "SECURITY_TITLE": "Security Score",
+      "SECURITY_DESC": "Click this card to dive deep into security vulnerabilities, code smells, and hot issues across your projects.",
+      "DEBT_TITLE": "Technical Debt",
+      "DEBT_DESC": "Click this card to explore technical debt details, estimated fix times, and potential costs."
     },
     "ISSUES": {
       "FILTERS_TITLE": "Filter Issues",
@@ -62,13 +76,21 @@
       "VIEW_BTN_TITLE": "View Details",
       "VIEW_BTN_DESC": "If you want to investigate an issue in depth, click this button to view its details and how to fix it."
     },
+    "ISSUEDETAIL": {
+      "HEADER_TITLE": "Issue Overview",
+      "HEADER_DESC": "Here you can see the issue title, type, severity, and status at a glance.",
+      "ANALYSIS_TITLE": "Analysis & Vulnerable Code",
+      "ANALYSIS_DESC": "This section provides a detailed description of the issue, highlights the vulnerable code, and offers AI-generated fixes or recommendations.",
+      "COMMENTS_TITLE": "Discussion",
+      "COMMENTS_DESC": "You can leave comments, ask questions, or discuss this issue with your team members here.",
+      "ASSIGNMENT_TITLE": "Assignee",
+      "ASSIGNMENT_DESC": "See who is currently responsible for this issue, or assign it to a team member to start working on a fix.",
+      "STATUS_TITLE": "Status & Priority",
+      "STATUS_DESC": "Check the current status and priority level of the issue. You can manually update the status here if needed."
+    },
     "ASSIGNMENTS": {
       "HEADER_TITLE": "Assignments",
       "HEADER_DESC": "Check assigned tasks."
-    },
-    "ANALYSIS": {
-      "HEADER_TITLE": "Analysis Overview",
-      "HEADER_DESC": "Dive deep into code metrics."
     },
     "SECURITYDASHBOARD": {
       "HEADER_TITLE": "Security Dashboard",
@@ -79,8 +101,14 @@
       "HEADER_DESC": "Track technical debt over time."
     },
     "GENERATEREPORT": {
-      "HEADER_TITLE": "Generate Report",
-      "HEADER_DESC": "Export scan results to PDF."
+      "PROJECT_TITLE": "Select a Project",
+      "PROJECT_DESC": "Start by selecting the project you want to generate a report for.",
+      "DATE_TITLE": "Choose Date Range",
+      "DATE_DESC": "Select the date range to include code scans completed within this period.",
+      "SECTIONS_TITLE": "Include Sections",
+      "SECTIONS_DESC": "Customize your report by toggling the sections you want to include in the final PDF.",
+      "GENERATE_TITLE": "Generate Report",
+      "GENERATE_DESC": "When you are ready, click this button to generate and download your PDF report."
     },
     "REPORTHISTORY": {
       "HEADER_TITLE": "Report History",
@@ -102,7 +130,9 @@
     },
     "USERMANAGEMENT": {
       "HEADER_TITLE": "User Management",
-      "HEADER_DESC": "Administer system users."
+      "HEADER_DESC": "Manage users in the system",
+      "ADD_BTN_TITLE": "Add New User",
+      "ADD_BTN_DESC": "Click this button to create and invite a new user to the system."
     }
   },
   "NAV": {

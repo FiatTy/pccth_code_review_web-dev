@@ -94,6 +94,19 @@ export function useIssuesTour() {
           description: t('TOUR.ISSUES.VIEW_BTN_DESC', 'Click this button to view the full details of the issue.'),
           side: isDesktop ? 'left' : 'bottom',
           align: 'start',
+          showButtons: ['previous', 'close'],
+        },
+        onHighlighted: () => {
+          const selector = isDesktop ? '#tour-issue-view-btn' : '#tour-issue-view-btn-mobile';
+          const btn = document.querySelector<HTMLButtonElement>(selector);
+          if (btn) {
+            const handleClick = () => {
+              btn.removeEventListener('click', handleClick);
+              const driver = (window as any).currentTourDriver;
+              if (driver) driver.destroy();
+            };
+            btn.addEventListener('click', handleClick);
+          }
         },
       }
     ];

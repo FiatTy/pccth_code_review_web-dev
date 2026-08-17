@@ -8,10 +8,19 @@ export function useAnalysisTour() {
   
   const steps: DriveStep[] = useMemo(() => [
     {
-      element: '#tour-analysis-header',
+      element: '#tour-analysis-security',
       popover: {
-        title: t('TOUR.ANALYSIS.HEADER_TITLE', 'Analysis Overview'),
-        description: t('TOUR.ANALYSIS.HEADER_DESC', 'This page allows you to view and manage analysis.'),
+        title: t('TOUR.ANALYSIS.SECURITY_TITLE', 'Security Score'),
+        description: t('TOUR.ANALYSIS.SECURITY_DESC', 'Click this card to dive deep into security vulnerabilities, code smells, and hot issues across your projects.'),
+        side: 'bottom',
+        align: 'start',
+      },
+    },
+    {
+      element: '#tour-analysis-debt',
+      popover: {
+        title: t('TOUR.ANALYSIS.DEBT_TITLE', 'Technical Debt'),
+        description: t('TOUR.ANALYSIS.DEBT_DESC', 'Click this card to explore technical debt details, estimated fix times, and potential costs.'),
         side: 'bottom',
         align: 'start',
       },
@@ -20,3 +29,4 @@ export function useAnalysisTour() {
 
   return usePageTour('analysis', steps);
 }
+

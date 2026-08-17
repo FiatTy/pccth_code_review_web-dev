@@ -160,7 +160,8 @@ export function RootLayout() {
   }, [mobileOpen]);
 
   return (
-    <div className="flex min-h-screen bg-bg text-fg">
+    <div className="h-screen w-screen overflow-hidden flex flex-col bg-bg text-fg">
+      <div className="flex-1 min-h-0 flex overflow-hidden">
       {mobileOpen ? (
         <button
           type="button"
@@ -173,7 +174,7 @@ export function RootLayout() {
 
       <aside
         id="tour-sidebar"
-        className={`fixed inset-y-0 left-0 z-40 flex w-64 shrink-0 flex-col bg-surface shadow-2xl transition-transform duration-200 lg:sticky lg:top-0 lg:h-screen lg:shadow-none lg:translate-x-0 ${
+        className={`fixed inset-y-0 left-0 z-40 flex w-64 shrink-0 flex-col bg-surface shadow-2xl transition-transform duration-200 lg:static lg:h-full lg:shadow-none lg:translate-x-0 ${
           mobileOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
@@ -260,8 +261,8 @@ export function RootLayout() {
         </div>
       </aside>
 
-      <div className="flex min-w-0 flex-1 flex-col">
-        <header className="app-header app-header--main sticky top-0 z-20 flex h-16 items-center gap-2.5 sm:gap-3.5 px-4 lg:px-6">
+      <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
+        <header className="app-header app-header--main shrink-0 z-20 flex h-16 items-center gap-2.5 sm:gap-3.5 px-4 lg:px-6 bg-surface/95 backdrop-blur">
           <button
             id="tour-hamburger-menu"
             type="button"
@@ -299,11 +300,12 @@ export function RootLayout() {
           </div>
         </header>
 
-        <main className="flex-1 px-4 py-6 lg:px-8">
+        <main className="flex-1 overflow-y-auto px-4 py-6 lg:px-8 relative z-0">
           <div className="mx-auto w-full max-w-7xl">
             <Outlet />
           </div>
         </main>
+      </div>
       </div>
     </div>
   );
