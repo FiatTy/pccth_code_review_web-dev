@@ -237,7 +237,7 @@ export function RepositoriesPage() {
 
       <div id="tour-repo-list">
         {isPending ? (
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 2xl:grid-cols-3">
             {Array.from({ length: 6 }).map((_, index) => (
               <SkeletonCard key={index} />
             ))}
@@ -273,7 +273,7 @@ export function RepositoriesPage() {
             onDelete={setPendingDelete}
           />
         ) : (
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 2xl:grid-cols-3">
             {filtered.map((repo) => (
               <RepositoryCard
                 key={repo.projectId}

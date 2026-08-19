@@ -143,54 +143,55 @@ export function ScanHistoryPage() {
   }
 
   const selectClass =
-    'h-11 rounded-xl border border-border bg-surface px-3.5 text-sm text-fg shadow-sm outline-none transition hover:border-border-strong focus:border-primary focus:ring-4 focus:ring-primary/15';
+    'h-10 rounded-xl border border-border bg-surface px-3.5 text-sm text-fg shadow-sm outline-none transition hover:border-border-strong focus:border-primary focus:ring-4 focus:ring-primary/15';
 
   return (
     <div id="tour-scan-header">
       <PageHeader title={t('SCAN.TITLE')} subtitle={t('SCAN.SUBTITLE')} />
 
-      <div id="tour-scan-filters" className="mb-6 flex flex-col gap-3.5 rounded-2xl border border-border bg-surface p-5 shadow-sm sm:flex-row sm:flex-wrap sm:items-end">
-        <label className="flex w-full flex-col gap-1 sm:w-auto">
-          <span className="font-mono text-[10px] uppercase tracking-wide text-faint">
-            {t('SCAN.PROJECT')}
-          </span>
-          <SelectField
-            value={project}
-            onChange={(next) => {
-              setProject(next);
-              setPage(1);
-            }}
-            searchable
-            className={`${selectClass} w-full sm:w-auto sm:min-w-44`}
-            options={[
-              { value: 'all', label: t('SCAN.ALL_PROJECTS') },
-              ...projects.map((name) => ({ value: name, label: name })),
-            ]}
-          />
-        </label>
+      <div id="tour-scan-filters" className="mb-6 flex w-full flex-col gap-2.5 rounded-2xl border border-border bg-surface p-5 shadow-sm lg:gap-3">
+        {/* Row 1: Filter Controls Grid */}
+        <div className="grid w-full grid-cols-1 gap-2.5 md:grid-cols-2 lg:grid-cols-4 lg:gap-3">
+          <label className="flex w-full flex-col gap-1">
+            <span className="font-mono text-[10px] uppercase tracking-wide text-faint">
+              {t('SCAN.PROJECT')}
+            </span>
+            <SelectField
+              value={project}
+              onChange={(next) => {
+                setProject(next);
+                setPage(1);
+              }}
+              searchable
+              className={`${selectClass} w-full`}
+              options={[
+                { value: 'all', label: t('SCAN.ALL_PROJECTS') },
+                ...projects.map((name) => ({ value: name, label: name })),
+              ]}
+            />
+          </label>
 
-        <label className="flex w-full flex-col gap-1 sm:w-auto">
-          <span className="font-mono text-[10px] uppercase tracking-wide text-faint">
-            {t('SCAN.SCAN_STATUS')}
-          </span>
-          <SelectField
-            value={status}
-            onChange={(next) => {
-              setStatus(next as StatusFilter);
-              setPage(1);
-            }}
-            className={`${selectClass} w-full sm:w-auto sm:min-w-40`}
-            options={[
-              { value: 'all', label: t('SCAN.ALL') },
-              { value: 'SUCCESS', label: t('SCAN.COMPLETED') },
-              { value: 'FAILED', label: t('SCAN.FAILED') },
-              { value: 'PENDING', label: t('SCAN.PENDING') },
-            ]}
-          />
-        </label>
+          <label className="flex w-full flex-col gap-1">
+            <span className="font-mono text-[10px] uppercase tracking-wide text-faint">
+              {t('SCAN.SCAN_STATUS')}
+            </span>
+            <SelectField
+              value={status}
+              onChange={(next) => {
+                setStatus(next as StatusFilter);
+                setPage(1);
+              }}
+              className={`${selectClass} w-full`}
+              options={[
+                { value: 'all', label: t('SCAN.ALL') },
+                { value: 'SUCCESS', label: t('SCAN.COMPLETED') },
+                { value: 'FAILED', label: t('SCAN.FAILED') },
+                { value: 'PENDING', label: t('SCAN.PENDING') },
+              ]}
+            />
+          </label>
 
-        <div className="grid w-full grid-cols-2 gap-3 sm:flex sm:w-auto sm:items-center sm:gap-3">
-          <label className="flex flex-col gap-1">
+          <label className="flex w-full flex-col gap-1">
             <span className="font-mono text-[10px] uppercase tracking-wide text-faint">
               {t('SCAN.START_DATE')}
             </span>
@@ -202,7 +203,7 @@ export function ScanHistoryPage() {
             />
           </label>
 
-          <label className="flex flex-col gap-1">
+          <label className="flex w-full flex-col gap-1">
             <span className="font-mono text-[10px] uppercase tracking-wide text-faint">
               {t('SCAN.END_DATE')}
             </span>
@@ -216,31 +217,34 @@ export function ScanHistoryPage() {
           </label>
         </div>
 
-        <button
-          type="button"
-          onClick={resetFilters}
-          className="inline-flex h-11 w-full items-center justify-center gap-1.5 rounded-xl border border-border bg-surface px-4 text-sm font-medium text-muted shadow-sm transition-all hover:border-border-strong hover:text-fg active:scale-[0.99] sm:w-auto"
-        >
-          <RefreshCw size={14} />
-          {t('SCAN.CLEAR_FILTER')}
-        </button>
-
-        <div className="flex w-full flex-col gap-2 pt-2 border-t border-border/60 sm:ml-auto sm:w-auto sm:flex-row sm:items-center sm:gap-3 sm:border-0 sm:pt-0">
-          <span className="text-xs text-muted sm:text-faint text-center sm:text-left">
-            {selectedIds.length > 0
-              ? t('SCAN.COMPARE_SELECTED', { count: selectedIds.length })
-              : t('SCAN.COMPARE_HINT')}
-          </span>
+        {/* Row 2: Actions Bar */}
+        <div className="flex w-full flex-col items-center gap-2.5 pt-2 md:flex-row md:justify-between">
           <button
-            id="tour-scan-compare-btn"
             type="button"
-            onClick={() => setShowCompare(true)}
-            disabled={selectedIds.length < 2}
-            className="brand-gradient-bg inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold text-primary-fg shadow-lg shadow-primary/25 transition-all hover:-translate-y-0.5 hover:shadow-primary/35 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none disabled:hover:translate-y-0 whitespace-nowrap sm:w-auto"
+            onClick={resetFilters}
+            className="inline-flex h-10 w-full shrink-0 items-center justify-center gap-1.5 rounded-xl border border-border bg-surface px-4 text-sm font-medium text-muted shadow-sm transition-all hover:border-border-strong hover:text-fg active:scale-[0.99] md:w-auto"
           >
-            <GitCompare size={14} className="shrink-0" />
-            <span className="whitespace-nowrap">{t('SCAN.COMPARE_SCANS')}</span>
+            <RefreshCw size={14} />
+            {t('SCAN.CLEAR_FILTER')}
           </button>
+
+          <div className="flex w-full flex-col items-center gap-2.5 md:w-auto md:flex-row md:gap-3">
+            <span className="text-xs text-muted text-center md:text-left">
+              {selectedIds.length > 0
+                ? t('SCAN.COMPARE_SELECTED', { count: selectedIds.length })
+                : t('SCAN.COMPARE_HINT')}
+            </span>
+            <button
+              id="tour-scan-compare-btn"
+              type="button"
+              onClick={() => setShowCompare(true)}
+              disabled={selectedIds.length < 2}
+              className="brand-gradient-bg inline-flex h-10 w-full shrink-0 items-center justify-center gap-2 rounded-xl px-4 text-sm font-semibold text-primary-fg shadow-lg shadow-primary/25 transition-all hover:-translate-y-0.5 hover:shadow-primary/35 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none disabled:hover:translate-y-0 whitespace-nowrap md:w-auto"
+            >
+              <GitCompare size={14} className="shrink-0" />
+              <span className="whitespace-nowrap">{t('SCAN.COMPARE_SCANS')}</span>
+            </button>
+          </div>
         </div>
       </div>
 

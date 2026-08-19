@@ -144,90 +144,96 @@ export function IssuesPage() {
     <div id="tour-issue-header">
       <PageHeader title={t('ISSUE.TITLE_MGT')} subtitle={t('ISSUE.TABLE_CAPTION')} />
 
-      <div id="tour-issue-filters" className="mb-5 flex flex-col gap-3 rounded-xl border border-border bg-surface p-4 sm:flex-row sm:flex-wrap sm:items-center">
-        <SelectField
-          value={type}
-          onChange={(next) => {
-            setType(next);
-            setPage(1);
-          }}
-          className={`${selectClass} w-full sm:w-auto sm:min-w-40`}
-          options={[
-            { value: 'all', label: t('ISSUE.ALL_TYPES') },
-            { value: 'BUG', label: t('ISSUE.BUG') },
-            { value: 'VULNERABILITY', label: t('ISSUE.SECURITY') },
-            { value: 'CODE_SMELL', label: t('ISSUE.CODE_SMELL') },
-          ]}
-        />
-        <SelectField
-          value={severity}
-          onChange={(next) => {
-            setSeverity(next);
-            setPage(1);
-          }}
-          className={`${selectClass} w-full sm:w-auto sm:min-w-40`}
-          options={[
-            { value: 'all', label: t('ISSUE.ALL_SEVERITY') },
-            { value: 'BLOCKER', label: t('ISSUE.BLOCKER') },
-            { value: 'CRITICAL', label: t('ISSUE.CRITICAL') },
-            { value: 'MAJOR', label: t('ISSUE.MAJOR') },
-            { value: 'MINOR', label: t('ISSUE.MINOR') },
-            { value: 'INFO', label: t('ISSUE.INFO') },
-          ]}
-        />
-        <SelectField
-          value={status}
-          onChange={(next) => {
-            setStatus(next);
-            setPage(1);
-          }}
-          className={`${selectClass} w-full sm:w-auto sm:min-w-40`}
-          options={[
-            { value: 'all', label: t('ISSUE.ALL_STATUS') },
-            { value: 'OPEN', label: t('ISSUE.OPEN') },
-            { value: 'IN_PROGRESS', label: t('ISSUE.IN_PROGRESS') },
-            { value: 'DONE', label: t('ISSUE.RESOLVED') },
-            { value: 'REJECT', label: t('ISSUE.CLOSED') },
-          ]}
-        />
-        <SelectField
-          value={project}
-          onChange={(next) => {
-            setProject(next);
-            setPage(1);
-          }}
-          searchable
-          className={`${selectClass} w-full sm:w-auto sm:min-w-44`}
-          options={[
-            { value: 'all', label: t('ISSUE.ALL_PROJECTS') },
-            ...projects.map((name) => ({ value: name, label: name })),
-          ]}
-        />
-
-        <div className="relative w-full sm:ml-auto sm:w-56">
-          <Search
-            size={15}
-            className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-faint"
-          />
-          <input
-            type="search"
-            value={search}
-            onChange={(event) => {
-              setSearch(event.target.value);
+      <div id="tour-issue-filters" className="mb-5 flex flex-col gap-2.5 rounded-xl border border-border bg-surface p-4 2xl:flex-row 2xl:items-center 2xl:gap-3">
+        {/* Row 1 (4 Dropdowns) */}
+        <div className="grid w-full grid-cols-1 gap-2.5 md:grid-cols-2 lg:grid-cols-4 2xl:w-auto 2xl:shrink-0 2xl:flex 2xl:gap-3">
+          <SelectField
+            value={type}
+            onChange={(next) => {
+              setType(next);
               setPage(1);
             }}
-            placeholder={t('ISSUE.SEARCH_PLACEHOLDER')}
-            className="h-10 w-full rounded-lg border border-border bg-surface pl-9 pr-3 text-sm text-fg outline-none transition placeholder:text-faint focus:border-primary focus:ring-2 focus:ring-primary/25"
+            className={`${selectClass} w-full 2xl:w-40`}
+            options={[
+              { value: 'all', label: t('ISSUE.ALL_TYPES') },
+              { value: 'BUG', label: t('ISSUE.BUG') },
+              { value: 'VULNERABILITY', label: t('ISSUE.SECURITY') },
+              { value: 'CODE_SMELL', label: t('ISSUE.CODE_SMELL') },
+            ]}
+          />
+          <SelectField
+            value={severity}
+            onChange={(next) => {
+              setSeverity(next);
+              setPage(1);
+            }}
+            className={`${selectClass} w-full 2xl:w-40`}
+            options={[
+              { value: 'all', label: t('ISSUE.ALL_SEVERITY') },
+              { value: 'BLOCKER', label: t('ISSUE.BLOCKER') },
+              { value: 'CRITICAL', label: t('ISSUE.CRITICAL') },
+              { value: 'MAJOR', label: t('ISSUE.MAJOR') },
+              { value: 'MINOR', label: t('ISSUE.MINOR') },
+              { value: 'INFO', label: t('ISSUE.INFO') },
+            ]}
+          />
+          <SelectField
+            value={status}
+            onChange={(next) => {
+              setStatus(next);
+              setPage(1);
+            }}
+            className={`${selectClass} w-full 2xl:w-40`}
+            options={[
+              { value: 'all', label: t('ISSUE.ALL_STATUS') },
+              { value: 'OPEN', label: t('ISSUE.OPEN') },
+              { value: 'IN_PROGRESS', label: t('ISSUE.IN_PROGRESS') },
+              { value: 'DONE', label: t('ISSUE.RESOLVED') },
+              { value: 'REJECT', label: t('ISSUE.CLOSED') },
+            ]}
+          />
+          <SelectField
+            value={project}
+            onChange={(next) => {
+              setProject(next);
+              setPage(1);
+            }}
+            searchable
+            className={`${selectClass} w-full 2xl:w-44`}
+            options={[
+              { value: 'all', label: t('ISSUE.ALL_PROJECTS') },
+              ...projects.map((name) => ({ value: name, label: name })),
+            ]}
           />
         </div>
-        <button
-          type="button"
-          onClick={resetFilters}
-          className="inline-flex h-10 items-center gap-1.5 rounded-lg border border-border px-3.5 text-sm font-medium text-muted transition-colors hover:bg-surface-2 hover:text-fg"
-        >
-          <RefreshCw size={14} />
-          {t('ISSUE.CLEAR')}
-        </button>
+
+        {/* Row 2 (Search & Actions) */}
+        <div className="flex w-full flex-col gap-2.5 md:flex-row md:items-center 2xl:w-auto 2xl:flex-1 2xl:gap-3">
+          <div className="relative w-full md:flex-1">
+            <Search
+              size={15}
+              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-faint"
+            />
+            <input
+              type="search"
+              value={search}
+              onChange={(event) => {
+                setSearch(event.target.value);
+                setPage(1);
+              }}
+              placeholder={t('ISSUE.SEARCH_PLACEHOLDER')}
+              className="h-10 w-full rounded-lg border border-border bg-surface pl-9 pr-3 text-sm text-fg outline-none transition placeholder:text-faint focus:border-primary focus:ring-2 focus:ring-primary/25"
+            />
+          </div>
+          <button
+            type="button"
+            onClick={resetFilters}
+            className="inline-flex h-10 w-full shrink-0 items-center justify-center gap-1.5 rounded-lg border border-border px-3.5 text-sm font-medium text-muted transition-colors hover:bg-surface-2 hover:text-fg md:w-auto"
+          >
+            <RefreshCw size={14} />
+            {t('ISSUE.CLEAR')}
+          </button>
+        </div>
       </div>
 
       {isPending ? (
