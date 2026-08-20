@@ -144,87 +144,112 @@ export function IssuesPage() {
     <div id="tour-issue-header">
       <PageHeader title={t('ISSUE.TITLE_MGT')} subtitle={t('ISSUE.TABLE_CAPTION')} />
 
-      <div id="tour-issue-filters" className="mb-5 flex flex-col gap-2.5 rounded-xl border border-border bg-surface p-4 2xl:flex-row 2xl:items-center 2xl:gap-3">
+      <div id="tour-issue-filters" className="mb-5 flex flex-col gap-2.5 rounded-xl border border-border bg-surface p-4 2xl:flex-row 2xl:items-end 2xl:gap-3">
         {/* Row 1 (4 Dropdowns) */}
         <div className="grid w-full grid-cols-1 gap-2.5 md:grid-cols-2 lg:grid-cols-4 2xl:w-auto 2xl:shrink-0 2xl:flex 2xl:gap-3">
-          <SelectField
-            value={type}
-            onChange={(next) => {
-              setType(next);
-              setPage(1);
-            }}
-            className={`${selectClass} w-full 2xl:w-40`}
-            options={[
-              { value: 'all', label: t('ISSUE.ALL_TYPES') },
-              { value: 'BUG', label: t('ISSUE.BUG') },
-              { value: 'VULNERABILITY', label: t('ISSUE.SECURITY') },
-              { value: 'CODE_SMELL', label: t('ISSUE.CODE_SMELL') },
-            ]}
-          />
-          <SelectField
-            value={severity}
-            onChange={(next) => {
-              setSeverity(next);
-              setPage(1);
-            }}
-            className={`${selectClass} w-full 2xl:w-40`}
-            options={[
-              { value: 'all', label: t('ISSUE.ALL_SEVERITY') },
-              { value: 'BLOCKER', label: t('ISSUE.BLOCKER') },
-              { value: 'CRITICAL', label: t('ISSUE.CRITICAL') },
-              { value: 'MAJOR', label: t('ISSUE.MAJOR') },
-              { value: 'MINOR', label: t('ISSUE.MINOR') },
-              { value: 'INFO', label: t('ISSUE.INFO') },
-            ]}
-          />
-          <SelectField
-            value={status}
-            onChange={(next) => {
-              setStatus(next);
-              setPage(1);
-            }}
-            className={`${selectClass} w-full 2xl:w-40`}
-            options={[
-              { value: 'all', label: t('ISSUE.ALL_STATUS') },
-              { value: 'OPEN', label: t('ISSUE.OPEN') },
-              { value: 'IN_PROGRESS', label: t('ISSUE.IN_PROGRESS') },
-              { value: 'DONE', label: t('ISSUE.RESOLVED') },
-              { value: 'REJECT', label: t('ISSUE.CLOSED') },
-            ]}
-          />
-          <SelectField
-            value={project}
-            onChange={(next) => {
-              setProject(next);
-              setPage(1);
-            }}
-            searchable
-            className={`${selectClass} w-full 2xl:w-44`}
-            options={[
-              { value: 'all', label: t('ISSUE.ALL_PROJECTS') },
-              ...projects.map((name) => ({ value: name, label: name })),
-            ]}
-          />
+          <label className="flex w-full flex-col gap-1">
+            <span className="font-mono text-[10px] uppercase tracking-wide text-faint">
+              TYPE:
+            </span>
+            <SelectField
+              value={type}
+              onChange={(next) => {
+                setType(next);
+                setPage(1);
+              }}
+              className={`${selectClass} w-full 2xl:w-40`}
+              options={[
+                { value: 'all', label: t('ISSUE.ALL_TYPES') },
+                { value: 'BUG', label: t('ISSUE.BUG') },
+                { value: 'VULNERABILITY', label: t('ISSUE.SECURITY') },
+                { value: 'CODE_SMELL', label: t('ISSUE.CODE_SMELL') },
+              ]}
+            />
+          </label>
+          <label className="flex w-full flex-col gap-1">
+            <span className="font-mono text-[10px] uppercase tracking-wide text-faint">
+              SEVERITY:
+            </span>
+            <SelectField
+              value={severity}
+              onChange={(next) => {
+                setSeverity(next);
+                setPage(1);
+              }}
+              className={`${selectClass} w-full 2xl:w-40`}
+              options={[
+                { value: 'all', label: t('ISSUE.ALL_SEVERITY') },
+                { value: 'BLOCKER', label: t('ISSUE.BLOCKER') },
+                { value: 'CRITICAL', label: t('ISSUE.CRITICAL') },
+                { value: 'MAJOR', label: t('ISSUE.MAJOR') },
+                { value: 'MINOR', label: t('ISSUE.MINOR') },
+                { value: 'INFO', label: t('ISSUE.INFO') },
+              ]}
+            />
+          </label>
+          <label className="flex w-full flex-col gap-1">
+            <span className="font-mono text-[10px] uppercase tracking-wide text-faint">
+              STATUS:
+            </span>
+            <SelectField
+              value={status}
+              onChange={(next) => {
+                setStatus(next);
+                setPage(1);
+              }}
+              className={`${selectClass} w-full 2xl:w-40`}
+              options={[
+                { value: 'all', label: t('ISSUE.ALL_STATUS') },
+                { value: 'OPEN', label: t('ISSUE.OPEN') },
+                { value: 'IN_PROGRESS', label: t('ISSUE.IN_PROGRESS') },
+                { value: 'DONE', label: t('ISSUE.RESOLVED') },
+                { value: 'REJECT', label: t('ISSUE.CLOSED') },
+              ]}
+            />
+          </label>
+          <label className="flex w-full flex-col gap-1">
+            <span className="font-mono text-[10px] uppercase tracking-wide text-faint">
+              PROJECT:
+            </span>
+            <SelectField
+              value={project}
+              onChange={(next) => {
+                setProject(next);
+                setPage(1);
+              }}
+              searchable
+              className={`${selectClass} w-full 2xl:w-44`}
+              options={[
+                { value: 'all', label: t('ISSUE.ALL_PROJECTS') },
+                ...projects.map((name) => ({ value: name, label: name })),
+              ]}
+            />
+          </label>
         </div>
 
         {/* Row 2 (Search & Actions) */}
-        <div className="flex w-full flex-col gap-2.5 md:flex-row md:items-center 2xl:w-auto 2xl:flex-1 2xl:gap-3">
-          <div className="relative w-full md:flex-1">
-            <Search
-              size={15}
-              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-faint"
-            />
-            <input
-              type="search"
-              value={search}
-              onChange={(event) => {
-                setSearch(event.target.value);
-                setPage(1);
-              }}
-              placeholder={t('ISSUE.SEARCH_PLACEHOLDER')}
-              className="h-10 w-full rounded-lg border border-border bg-surface pl-9 pr-3 text-sm text-fg outline-none transition placeholder:text-faint focus:border-primary focus:ring-2 focus:ring-primary/25"
-            />
-          </div>
+        <div className="flex w-full flex-col gap-2.5 md:flex-row md:items-end 2xl:w-auto 2xl:flex-1 2xl:gap-3">
+          <label className="flex w-full flex-col gap-1 md:flex-1">
+            <span className="font-mono text-[10px] uppercase tracking-wide text-faint">
+              SEARCH:
+            </span>
+            <div className="relative w-full">
+              <Search
+                size={15}
+                className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-faint"
+              />
+              <input
+                type="search"
+                value={search}
+                onChange={(event) => {
+                  setSearch(event.target.value);
+                  setPage(1);
+                }}
+                placeholder={t('ISSUE.SEARCH_PLACEHOLDER')}
+                className="h-10 w-full rounded-lg border border-border bg-surface pl-9 pr-3 text-sm text-fg outline-none transition placeholder:text-faint focus:border-primary focus:ring-2 focus:ring-primary/25"
+              />
+            </div>
+          </label>
           <button
             type="button"
             onClick={resetFilters}
