@@ -1,6 +1,8 @@
 import { useSonarQubeConfigTour } from '@/features/onboarding/hooks/useSonarQubeConfigTour';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { useSearchParams } from 'react-router';
+import { useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import {
   Plug,
@@ -10,6 +12,8 @@ import {
   type LucideIcon,
 } from 'lucide-react';
 import { SonarServerSection } from '@/features/setting/components/SonarServerSection';
+import { GitConnectionSection } from '@/features/setting/components/GitConnectionSection';
+import { gitIdentityQueryKey } from '@/features/setting/hooks/useGitIdentity';
 import { SonarScannerSection } from '@/features/setting/components/SonarScannerSection';
 import { SonarQualityGateSection } from '@/features/setting/components/SonarQualityGateSection';
 import { SonarConnectionPanel } from '@/features/setting/components/SonarConnectionPanel';
@@ -24,6 +28,7 @@ import {
 import { useTestSonarConnection } from '@/features/setting/hooks/useTestSonarConnection';
 import {
   DEFAULT_FORM,
+  isGitTokenValid,
   toFormState,
   toPayload,
   TOKEN_MIN_LENGTH,
@@ -72,6 +77,8 @@ export function SonarQubeConfigPage() {
   const { t } = useTranslation();
   const { user } = useAuth();
   const { showToast } = useToast();
+  const queryClient = useQueryClient();
+  const [searchParams, setSearchParams] = useSearchParams();
   const configQuery = useSonarQubeConfig();
   const updateConfig = useUpdateSonarQubeConfig();
   const testConnection = useTestSonarConnection();
@@ -80,9 +87,10 @@ export function SonarQubeConfigPage() {
   const [savedForm, setSavedForm] = useState<SonarQubeFormState>(DEFAULT_FORM);
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [showToken, setShowToken] = useState(false);
-  const [showGitToken, setShowGitToken] = useState(false);
   const [connectionState, setConnectionState] = useState<ConnectionState>('unknown');
   const hydrated = useRef(false);
+  const gitCallbackHandled = useRef(false);
+  const gitCallbackResult = searchParams.get('git');
 
   useEffect(() => {
     if (hydrated.current || !configQuery.data) {
@@ -94,10 +102,38 @@ export function SonarQubeConfigPage() {
     setSavedForm(next);
   }, [configQuery.data]);
 
+  useEffect(() => {
+    if (!gitCallbackResult || gitCallbackHandled.current) {
+      return;
+    }
+    gitCallbackHandled.current = true;
+    const connected = gitCallbackResult === 'connected';
+    showToast({
+      tone: connected ? 'success' : 'error',
+      title: t(
+        connected
+          ? 'SONARQUBE_CONFIG.GIT_CONNECT_SUCCESS_TITLE'
+          : 'SONARQUBE_CONFIG.GIT_CONNECT_FAILED_TITLE',
+      ),
+      description: t(
+        connected
+          ? 'SONARQUBE_CONFIG.GIT_CONNECT_SUCCESS_TEXT'
+          : 'SONARQUBE_CONFIG.GIT_CONNECT_FAILED_TEXT',
+      ),
+    });
+    void queryClient.invalidateQueries({ queryKey: gitIdentityQueryKey('gitlab') });
+    setSearchParams(
+      (params) => {
+        params.delete('git');
+        return params;
+      },
+      { replace: true },
+    );
+  }, [gitCallbackResult, queryClient, setSearchParams, showToast, t]);
+
   const errors = useMemo(() => {
     const serverUrl = form.serverUrl.trim();
     const authToken = form.authToken.trim();
-    const gitAccessToken = form.gitAccessToken.trim();
     return {
       serverUrl: !serverUrl
         ? t('SONARQUBE_CONFIG.URL_REQUIRED')
@@ -109,11 +145,9 @@ export function SonarQubeConfigPage() {
         : authToken.length < TOKEN_MIN_LENGTH
           ? t('SONARQUBE_CONFIG.TOKEN_MIN_LENGTH')
           : '',
-      gitAccessToken: !gitAccessToken
-        ? t('SONARQUBE_CONFIG.GIT_TOKEN_REQUIRED')
-        : gitAccessToken.length < TOKEN_MIN_LENGTH
-          ? t('SONARQUBE_CONFIG.TOKEN_MIN_LENGTH')
-          : '',
+      gitAccessToken: isGitTokenValid(form.gitAccessToken)
+        ? ''
+        : t('SONARQUBE_CONFIG.TOKEN_MIN_LENGTH'),
     };
   }, [form.serverUrl, form.authToken, form.gitAccessToken, t]);
 
@@ -263,7 +297,7 @@ export function SonarQubeConfigPage() {
         <PageHeader title={t('SONARQUBE_CONFIG.TITLE')} subtitle={t('SONARQUBE_CONFIG.SUBTITLE')} />
         <div className="grid gap-4 lg:grid-cols-3">
           <div className="space-y-4 lg:col-span-2">
-            {[220, 260, 200].map((height) => (
+            {[220, 190, 260, 200].map((height) => (
               <div
                 key={height}
                 className="animate-pulse rounded-xl border border-border bg-surface"
@@ -306,9 +340,11 @@ export function SonarQubeConfigPage() {
               control={formControl}
               showToken={showToken}
               setShowToken={setShowToken}
-              showGitToken={showGitToken}
-              setShowGitToken={setShowGitToken}
             />
+          </div>
+
+          <div id="tour-sonar-git">
+            <GitConnectionSection control={formControl} />
           </div>
 
           <div id="tour-sonar-scanner">

@@ -24,6 +24,7 @@ import { useToast } from '@/lib/toast/toast-context';
 import { useDeleteRepository, useRepositories } from '@/features/repository/hooks/useRepositories';
 import { useStartScan } from '@/features/repository/hooks/useRepository';
 import { useSonarQubeConfig } from '@/features/setting/hooks/useSonarQubeConfig';
+import { useGitIdentity } from '@/features/setting/hooks/useGitIdentity';
 import type {
   Repository,
   RepositoryStatusFilter,
@@ -45,6 +46,7 @@ export function RepositoriesPage() {
   const { data: repositories, isPending, isError, refetch, isFetching } = useRepositories();
   const deleteRepository = useDeleteRepository();
   const configQuery = useSonarQubeConfig();
+  const gitIdentity = useGitIdentity('gitlab');
   const startScan = useStartScan();
 
   const [typeTab, setTypeTab] = useState<RepositoryTypeTab>('all');
@@ -91,7 +93,7 @@ export function RepositoriesPage() {
       return;
     }
     const gitToken = config.gitAccessToken?.trim() || null;
-    if (!gitToken) {
+    if (!gitToken && !gitIdentity.data?.connected) {
       setMissingConfigKey('GIT');
       return;
     }

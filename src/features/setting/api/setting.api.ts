@@ -1,5 +1,7 @@
 import { apiClient } from '@/lib/api-client';
 import type {
+  GitIdentityStatus,
+  GitProvider,
   NotificationSettings,
   NotificationSettingsPayload,
   SonarQubeConfig,
@@ -37,4 +39,16 @@ export async function testSonarConnection(
 ): Promise<TestConnectionResponse> {
   const { data } = await apiClient.post<TestConnectionResponse>('/sonar/test-connect', request);
   return data;
+}
+
+export async function getGitIdentity(provider: GitProvider): Promise<GitIdentityStatus> {
+  const { data } = await apiClient.get<GitIdentityStatus>(`/api/git-identities/${provider}`);
+  return data;
+}
+
+export async function getGitAuthorizeUrl(provider: GitProvider): Promise<string> {
+  const { data } = await apiClient.get<{ url: string }>(
+    `/api/git-identities/${provider}/authorize-url`,
+  );
+  return data.url;
 }

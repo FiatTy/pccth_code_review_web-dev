@@ -76,3 +76,10 @@ export interface TestConnectionRequest {
 export interface TestConnectionResponse {
   connected: boolean;
 }
+
+export type GitProvider = 'gitlab';
+
+export interface GitIdentityStatus {
+  connected: boolean;
+  username: string | null;
+}

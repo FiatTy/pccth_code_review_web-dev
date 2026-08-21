@@ -9,14 +9,10 @@ export function SonarServerSection({
   control,
   showToken,
   setShowToken,
-  showGitToken,
-  setShowGitToken,
 }: {
   control: SonarFormControl;
   showToken: boolean;
   setShowToken: Dispatch<SetStateAction<boolean>>;
-  showGitToken: boolean;
-  setShowGitToken: Dispatch<SetStateAction<boolean>>;
 }) {
   const { t } = useTranslation();
   const { form, errors, touched, update, markTouched } = control;
@@ -65,32 +61,6 @@ export function SonarServerSection({
               className="absolute right-1 top-1 inline-flex h-8 w-8 items-center justify-center rounded-md text-faint transition-colors hover:bg-surface-2 hover:text-fg"
             >
               {showToken ? <EyeOff size={15} /> : <Eye size={15} />}
-            </button>
-          </div>
-        </FormField>
-
-        <FormField
-          id="gitAccessToken"
-          label={t('SONARQUBE_CONFIG.GIT_TOKEN')}
-          error={touched.gitAccessToken ? errors.gitAccessToken : ''}
-        >
-          <div className="relative">
-            <input
-              id="gitAccessToken"
-              type={showGitToken ? 'text' : 'password'}
-              maxLength={255}
-              className={`${FIELD_INPUT_CLASS} pr-11 font-mono`}
-              value={form.gitAccessToken}
-              onChange={(event) => update({ gitAccessToken: event.target.value })}
-              onBlur={() => markTouched('gitAccessToken')}
-            />
-            <button
-              type="button"
-              aria-label={t(showGitToken ? 'SONARQUBE_CONFIG.HIDE' : 'SONARQUBE_CONFIG.SHOW')}
-              onClick={() => setShowGitToken((current) => !current)}
-              className="absolute right-1 top-1 inline-flex h-8 w-8 items-center justify-center rounded-md text-faint transition-colors hover:bg-surface-2 hover:text-fg"
-            >
-              {showGitToken ? <EyeOff size={15} /> : <Eye size={15} />}
             </button>
           </div>
         </FormField>

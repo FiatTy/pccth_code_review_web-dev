@@ -19,7 +19,7 @@ export function SonarQualityGateSection({
 
   return (
     <SectionCard
-      eyebrow="03"
+      eyebrow="04"
       title={t('SONARQUBE_CONFIG.QUALITY_GATES')}
       description={t('SONARQUBE_CONFIG.QUALITY_GATES_HINT')}
     >

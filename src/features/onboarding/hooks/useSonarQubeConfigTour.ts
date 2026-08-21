@@ -17,6 +17,15 @@ export function useSonarQubeConfigTour() {
       },
     },
     {
+      element: '#tour-sonar-git',
+      popover: {
+        title: t('TOUR.SONARQUBECONFIG.GIT_TITLE', 'Git Connection'),
+        description: t('TOUR.SONARQUBECONFIG.GIT_DESC', 'Connect your GitLab account once so scans can clone private repositories.'),
+        side: 'bottom',
+        align: 'start',
+      },
+    },
+    {
       element: '#tour-sonar-scanner',
       popover: {
         title: t('TOUR.SONARQUBECONFIG.SCANNER_TITLE', 'Scanner Setup'),

@@ -16,7 +16,7 @@ export function SonarScannerSection({
 
   return (
     <SectionCard
-      eyebrow="02"
+      eyebrow="03"
       title={t('SONARQUBE_CONFIG.SCANNER_SETTINGS')}
       description={t('SONARQUBE_CONFIG.SCANNER_SETTINGS_HINT')}
     >

@@ -86,6 +86,11 @@ export function toFormState(config: SonarQubeConfig): SonarQubeFormState {
   };
 }
 
+export function isGitTokenValid(value: string): boolean {
+  const trimmed = value.trim();
+  return trimmed.length === 0 || trimmed.length >= TOKEN_MIN_LENGTH;
+}
+
 export function trimForm(form: SonarQubeFormState): SonarQubeFormState {
   return {
     ...form,

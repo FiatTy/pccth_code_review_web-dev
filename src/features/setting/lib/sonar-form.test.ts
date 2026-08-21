@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   DEFAULT_EXCLUSIONS,
+  isGitTokenValid,
   readNumber,
   toFormState,
   trimForm,
@@ -40,6 +41,21 @@ describe('toFormState', () => {
 
   it('keeps a zero threshold instead of treating it as missing', () => {
     expect(toFormState(config({ qgMaxBugs: 0 })).qgMaxBugs).toBe(0);
+  });
+});
+
+describe('isGitTokenValid', () => {
+  it('accepts an empty field now that connecting GitLab replaces the manual token', () => {
+    expect(isGitTokenValid('')).toBe(true);
+    expect(isGitTokenValid('   ')).toBe(true);
+  });
+
+  it('still rejects a token too short to be real', () => {
+    expect(isGitTokenValid('xxxx')).toBe(false);
+  });
+
+  it('accepts a token once it reaches the minimum length', () => {
+    expect(isGitTokenValid('glpat-1234')).toBe(true);
   });
 });
 
