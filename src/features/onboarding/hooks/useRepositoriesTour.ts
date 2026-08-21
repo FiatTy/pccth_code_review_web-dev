@@ -16,6 +16,7 @@ export function useRepositoriesTour() {
         align: 'end',
         showButtons: ['previous', 'close'],
       },
+      disableActiveInteraction: false,
       onHighlighted: () => {
         const btn = document.querySelector<HTMLButtonElement>('#tour-repo-new-btn');
         if (btn) {

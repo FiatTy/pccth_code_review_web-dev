@@ -27,6 +27,7 @@ export function useIssuesTour() {
           align: 'start',
           showButtons: ['previous', 'close'],
         },
+        disableActiveInteraction: false,
         onHighlighted: () => {
           const selector = isDesktop ? '#tour-issue-checkboxes input[type="checkbox"]' : '#tour-issue-checkboxes-mobile';
           const checkbox = document.querySelector<HTMLInputElement>(selector);
@@ -51,6 +52,7 @@ export function useIssuesTour() {
           align: 'end',
           showButtons: ['previous', 'close'],
         },
+        disableActiveInteraction: false,
         onHighlighted: () => {
           const btn = document.querySelector<HTMLButtonElement>('#tour-issue-bulk-assign-btn');
           if (btn) {
@@ -96,6 +98,7 @@ export function useIssuesTour() {
           align: 'start',
           showButtons: ['previous', 'close'],
         },
+        disableActiveInteraction: false,
         onHighlighted: () => {
           const selector = isDesktop ? '#tour-issue-view-btn' : '#tour-issue-view-btn-mobile';
           const btn = document.querySelector<HTMLButtonElement>(selector);
