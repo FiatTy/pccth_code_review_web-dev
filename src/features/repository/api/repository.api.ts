@@ -156,14 +156,12 @@ export async function updateRepository(
 export function buildScanRequest(
   config: SonarQubeConfig | undefined,
   branch: string,
-  gitToken?: string | null,
   serverUrl?: string | null,
 ): StartScanRequest {
   return {
     branch,
     sonarToken: config?.authToken || '',
     serverUrl: serverUrl && serverUrl.trim() !== '' ? serverUrl.trim() : null,
-    gitToken: gitToken && gitToken.trim() !== '' ? gitToken.trim() : null,
     angularSettings: {
       runNpm: config?.angularRunNpm || false,
       coverage: config?.angularCoverage || false,

@@ -46,7 +46,8 @@ export function RepositoriesPage() {
   const { data: repositories, isPending, isError, refetch, isFetching } = useRepositories();
   const deleteRepository = useDeleteRepository();
   const configQuery = useSonarQubeConfig();
-  const gitIdentity = useGitIdentity('gitlab');
+  const gitlabIdentity = useGitIdentity('gitlab');
+  const githubIdentity = useGitIdentity('github');
   const startScan = useStartScan();
 
   const [typeTab, setTypeTab] = useState<RepositoryTypeTab>('all');
@@ -92,8 +93,8 @@ export function RepositoriesPage() {
       setMissingConfigKey('SONAR');
       return;
     }
-    const gitToken = config.gitAccessToken?.trim() || null;
-    if (!gitToken && !gitIdentity.data?.connected) {
+    const usingManualToken = Boolean(config.gitTokenEnabled && config.gitAccessToken?.trim());
+    if (!usingManualToken && !gitlabIdentity.data?.connected && !githubIdentity.data?.connected) {
       setMissingConfigKey('GIT');
       return;
     }
@@ -104,7 +105,6 @@ export function RepositoriesPage() {
         projectId: repo.projectId,
         branch: SCAN_BRANCH,
         config,
-        gitToken,
         serverUrl: config.serverUrl,
       });
       showToast({

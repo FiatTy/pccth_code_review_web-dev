@@ -207,7 +207,6 @@ export function RepositoryFormPage() {
         projectId: savedId,
         branch: SCAN_BRANCH,
         config,
-        gitToken: config.gitAccessToken,
         serverUrl: config.serverUrl,
       });
     } catch (error) {

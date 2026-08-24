@@ -7,6 +7,7 @@ export interface SonarQubeConfig {
   authToken?: string;
   organization: string;
   gitAccessToken?: string;
+  gitTokenEnabled?: boolean;
   angularRunNpm: boolean;
   angularCoverage: boolean;
   angularTsFiles: boolean;
@@ -32,6 +33,7 @@ export interface SonarQubeConfigPayload {
   authToken: string;
   organization: string;
   gitAccessToken: string;
+  gitTokenEnabled: boolean;
   angularRunNpm: boolean;
   angularCoverage: boolean;
   angularTsFiles: boolean;
@@ -77,9 +79,10 @@ export interface TestConnectionResponse {
   connected: boolean;
 }
 
-export type GitProvider = 'gitlab';
+export type GitProvider = 'gitlab' | 'github';
 
 export interface GitIdentityStatus {
   connected: boolean;
   username: string | null;
+  configured: boolean;
 }

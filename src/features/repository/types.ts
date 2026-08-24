@@ -26,7 +26,6 @@ export interface StartScanRequest {
   branch: string;
   sonarToken: string;
   serverUrl: string | null;
-  gitToken: string | null;
   angularSettings: {
     runNpm: boolean;
     coverage: boolean;

@@ -91,6 +91,7 @@ export function SonarQubeConfigPage() {
   const hydrated = useRef(false);
   const gitCallbackHandled = useRef(false);
   const gitCallbackResult = searchParams.get('git');
+  const gitCallbackProvider = searchParams.get('provider');
 
   useEffect(() => {
     if (hydrated.current || !configQuery.data) {
@@ -121,15 +122,18 @@ export function SonarQubeConfigPage() {
           : 'SONARQUBE_CONFIG.GIT_CONNECT_FAILED_TEXT',
       ),
     });
-    void queryClient.invalidateQueries({ queryKey: gitIdentityQueryKey('gitlab') });
+    void queryClient.invalidateQueries({
+      queryKey: gitIdentityQueryKey(gitCallbackProvider === 'github' ? 'github' : 'gitlab'),
+    });
     setSearchParams(
       (params) => {
         params.delete('git');
+        params.delete('provider');
         return params;
       },
       { replace: true },
     );
-  }, [gitCallbackResult, queryClient, setSearchParams, showToast, t]);
+  }, [gitCallbackProvider, gitCallbackResult, queryClient, setSearchParams, showToast, t]);
 
   const errors = useMemo(() => {
     const serverUrl = form.serverUrl.trim();
@@ -145,11 +149,11 @@ export function SonarQubeConfigPage() {
         : authToken.length < TOKEN_MIN_LENGTH
           ? t('SONARQUBE_CONFIG.TOKEN_MIN_LENGTH')
           : '',
-      gitAccessToken: isGitTokenValid(form.gitAccessToken)
+      gitAccessToken: isGitTokenValid(form.gitAccessToken, form.gitTokenEnabled)
         ? ''
-        : t('SONARQUBE_CONFIG.TOKEN_MIN_LENGTH'),
+        : t('SONARQUBE_CONFIG.GIT_TOKEN_REQUIRED'),
     };
-  }, [form.serverUrl, form.authToken, form.gitAccessToken, t]);
+  }, [form.serverUrl, form.authToken, form.gitAccessToken, form.gitTokenEnabled, t]);
 
   const isValid = !errors.serverUrl && !errors.authToken && !errors.gitAccessToken;
   const isDirty = JSON.stringify(form) !== JSON.stringify(savedForm);

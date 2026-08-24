@@ -55,7 +55,6 @@ interface StartScanVariables {
   projectId: string;
   branch: string;
   config?: SonarQubeConfig;
-  gitToken?: string | null;
   serverUrl?: string | null;
 }
 
@@ -63,8 +62,8 @@ export function useStartScan() {
   const queryClient = useQueryClient();
 
   return useMutation<void, unknown, StartScanVariables>({
-    mutationFn: ({ projectId, branch, config, gitToken, serverUrl }) =>
-      startScan(projectId, buildScanRequest(config, branch, gitToken, serverUrl)),
+    mutationFn: ({ projectId, branch, config, serverUrl }) =>
+      startScan(projectId, buildScanRequest(config, branch, serverUrl)),
     onSuccess: (_result, variables) => {
       markMyTriggeredScan(variables.projectId);
       return queryClient.invalidateQueries({ queryKey: repositoriesQueryKey });

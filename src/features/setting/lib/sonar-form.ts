@@ -13,6 +13,7 @@ export interface SonarQubeFormState {
   authToken: string;
   organization: string;
   gitAccessToken: string;
+  gitTokenEnabled: boolean;
   angularRunNpm: boolean;
   angularCoverage: boolean;
   angularTsFiles: boolean;
@@ -45,6 +46,7 @@ export const DEFAULT_FORM: SonarQubeFormState = {
   authToken: '',
   organization: '',
   gitAccessToken: '',
+  gitTokenEnabled: false,
   angularRunNpm: false,
   angularCoverage: false,
   angularTsFiles: false,
@@ -68,6 +70,7 @@ export function toFormState(config: SonarQubeConfig): SonarQubeFormState {
     authToken: config.authToken || '',
     organization: config.organization || '',
     gitAccessToken: config.gitAccessToken || '',
+    gitTokenEnabled: Boolean(config.gitTokenEnabled),
     angularRunNpm: Boolean(config.angularRunNpm),
     angularCoverage: Boolean(config.angularCoverage),
     angularTsFiles: Boolean(config.angularTsFiles),
@@ -86,9 +89,8 @@ export function toFormState(config: SonarQubeConfig): SonarQubeFormState {
   };
 }
 
-export function isGitTokenValid(value: string): boolean {
-  const trimmed = value.trim();
-  return trimmed.length === 0 || trimmed.length >= TOKEN_MIN_LENGTH;
+export function isGitTokenValid(value: string, enabled: boolean): boolean {
+  return !enabled || value.trim().length >= TOKEN_MIN_LENGTH;
 }
 
 export function trimForm(form: SonarQubeFormState): SonarQubeFormState {
