@@ -1,9 +1,8 @@
 import { useEffect, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { createTour } from '../lib/driver';
+import { isTourCompleted, markTourAsCompleted } from '../lib/tourStorage';
 import type { DriveStep } from 'driver.js';
-
-const HAS_SEEN_DASHBOARD_TOUR_KEY = 'has_seen_dashboard_tour';
 
 export function useDashboardTour() {
   const { t } = useTranslation();
@@ -219,7 +218,7 @@ export function useDashboardTour() {
     const steps = isDesktop ? desktopSteps : mobileSteps;
 
     driverObj = createTour(steps, () => {
-      localStorage.setItem(HAS_SEEN_DASHBOARD_TOUR_KEY, 'true');
+      markTourAsCompleted('dashboard');
       document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
     });
 
@@ -227,7 +226,7 @@ export function useDashboardTour() {
   }, [t]);
 
   useEffect(() => {
-    const hasSeenTour = localStorage.getItem(HAS_SEEN_DASHBOARD_TOUR_KEY);
+    const hasSeenTour = isTourCompleted('dashboard');
     if (!hasSeenTour) {
       const timer = setTimeout(() => {
         startTour();

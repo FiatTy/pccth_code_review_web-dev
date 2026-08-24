@@ -1,5 +1,6 @@
 import { useEffect, useCallback, useRef } from 'react';
 import { createTour } from '../lib/driver';
+import { isTourCompleted, markTourAsCompleted } from '../lib/tourStorage';
 import type { DriveStep } from 'driver.js';
 
 export function usePageTour(
@@ -23,7 +24,7 @@ export function usePageTour(
     }
 
     const driverObj = createTour(steps, (element, step, options) => {
-      localStorage.setItem(`has_seen_${tourKey}_tour`, 'true');
+      markTourAsCompleted(tourKey);
       if (onComplete) {
         onComplete(element, step, options);
       }
@@ -36,10 +37,10 @@ export function usePageTour(
     } else {
       driverObj.drive();
     }
-  }, [steps, tourKey]);
+  }, [onComplete, steps, tourKey]);
 
   useEffect(() => {
-    const hasSeenTour = localStorage.getItem(`has_seen_${tourKey}_tour`);
+    const hasSeenTour = isTourCompleted(tourKey);
     const hasResumeState = localStorage.getItem(`resume_tour_${tourKey}`);
     
     if ((!hasSeenTour || hasResumeState) && steps.length > 0) {

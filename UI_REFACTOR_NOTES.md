@@ -20,14 +20,30 @@
 
 ---
 
-## 2. Onboarding Tours (Driver.js)
+## 2. Onboarding Tours (Driver.js & Storage Architecture)
 
-ระบบแนะนำการใช้งาน (Product Tours) มีการปรับจูนเทคนิคสำคัญเพื่อให้ User Experience ลื่นไหล:
+ระบบแนะนำการใช้งาน (Product Tours) มีการปรับจูนเทคนิคสำคัญเพื่อให้ User Experience ลื่นไหล และจัดการข้อมูลใน LocalStorage ได้อย่างสะอาด:
 
 - **Organic Chaining (การบังคับให้ผู้ใช้คลิกจริง):** 
   - ในกรณีที่ต้องพาผู้ใช้ข้ามหน้า (เช่น จาก `/issue` ไปยัง `/issuedetail`) เราหลีกเลี่ยงการใช้ปุ่ม "Next" ของ Driver.js
-  - **วิธีทำ:** ใน Step สุดท้ายก่อนเปลี่ยนหน้า เราตั้งค่า `showButtons: ['previous', 'close']` (ซ่อนปุ่ม Next) เพื่อบังคับให้ผู้ใช้ต้องนำเมาส์ไป **คลิกที่ปุ่ม View Details บน UI จริงๆ** 
+  - **วิธีทำ:** ใน Step สุดท้ายก่อนเปลี่ยนหน้า เราตั้งค่า `showButtons: ['previous', 'close']` (ซ่อนปุ่ม Next) และตั้ง `disableActiveInteraction: false` เพื่อบังคับให้ผู้ใช้ต้องนำเมาส์ไป **คลิกที่ปุ่ม View Details บน UI จริงๆ** 
   - เมื่อผู้ใช้คลิกเปลี่ยนหน้า React Router จะ Unmount หน้าเดิม (ทำลาย Tour เก่า) และ Component ในหน้าใหม่จะเรียก `usePageTour()` เพื่อเริ่ม Tour ถัดไปแบบอัตโนมัติ
+
+- **Unified LocalStorage Architecture (`app_tour_state`):**
+  - ไม่สร้างคีย์แยกย่อย เช่น `has_seen_dashboard_tour`, `has_seen_issues_tour` อีกต่อไป
+  - รวมสถานะทั้งหมดไว้ในคีย์เดียว `app_tour_state` ตามโครงสร้าง:
+    ```typescript
+    interface TourState {
+      completedTours: string[]; // e.g. ['dashboard', 'repositories', 'issues', 'scanhistory']
+      hasCompletedMainTour: boolean;
+      version: number;
+    }
+    ```
+  - จัดการผ่าน Helper Functions ใน [`tourStorage.ts`](file:///N:/---code---/PCC/PRO%201%20Code_Review/wed/src/features/onboarding/lib/tourStorage.ts) และ React Hook [`useTourStore.ts`](file:///N:/---code---/PCC/PRO%201%20Code_Review/wed/src/features/onboarding/hooks/useTourStore.ts):
+    - `isTourCompleted(tourId)`
+    - `markTourAsCompleted(tourId)`
+    - `resetAllTours()`
+    - `migrateLegacyTourKeys()`: ระบบย้ายและลบ Key เก่า (`has_seen_*`) อัตโนมัติเมื่อเปิดเว็บ
 
 ---
 

@@ -46,16 +46,16 @@ describe('toFormState', () => {
 
 describe('isGitTokenValid', () => {
   it('accepts an empty field now that connecting GitLab replaces the manual token', () => {
-    expect(isGitTokenValid('')).toBe(true);
-    expect(isGitTokenValid('   ')).toBe(true);
+    expect(isGitTokenValid('', false)).toBe(true);
+    expect(isGitTokenValid('   ', false)).toBe(true);
   });
 
   it('still rejects a token too short to be real', () => {
-    expect(isGitTokenValid('xxxx')).toBe(false);
+    expect(isGitTokenValid('xxxx', true)).toBe(false);
   });
 
   it('accepts a token once it reaches the minimum length', () => {
-    expect(isGitTokenValid('glpat-1234')).toBe(true);
+    expect(isGitTokenValid('glpat-1234', true)).toBe(true);
   });
 });
 
