@@ -65,6 +65,7 @@ export function useDashboardTour() {
           side: 'bottom', align: 'end',
           showButtons: ['previous', 'close'],
         },
+        disableActiveInteraction: false,
         onHighlighted: () => {
           const btn = document.querySelector<HTMLButtonElement>('#tour-notification-bell button');
           if (btn) {
@@ -92,6 +93,7 @@ export function useDashboardTour() {
           side: 'bottom', align: 'end',
           showButtons: ['previous', 'close'],
         },
+        disableActiveInteraction: false,
         onHighlighted: () => {
           const btn = document.querySelector<HTMLButtonElement>('#tour-profile-menu-desktop button');
           if (btn) {
@@ -123,6 +125,7 @@ export function useDashboardTour() {
           side: 'bottom', align: 'start',
           showButtons: ['previous', 'close'],
         },
+        disableActiveInteraction: false,
         onHighlighted: () => {
           const btn = document.querySelector<HTMLButtonElement>('#tour-hamburger-menu');
           if (btn) {
@@ -150,6 +153,7 @@ export function useDashboardTour() {
           side: 'top', align: 'start',
           showButtons: ['previous', 'close'],
         },
+        disableActiveInteraction: false,
         onHighlighted: () => {
           const btn = document.querySelector<HTMLButtonElement>('#tour-profile-menu-mobile button');
           if (btn) {
@@ -190,6 +194,7 @@ export function useDashboardTour() {
           side: 'bottom', align: 'end',
           showButtons: ['previous', 'close'],
         },
+        disableActiveInteraction: false,
         onHighlighted: () => {
           const btn = document.querySelector<HTMLButtonElement>('#tour-notification-bell button');
           if (btn) {
