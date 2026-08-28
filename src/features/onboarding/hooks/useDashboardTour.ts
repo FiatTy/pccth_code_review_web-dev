@@ -222,6 +222,14 @@ export function useDashboardTour() {
       document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
     });
 
+    // Ensure page is scrolled to the top/first element immediately
+    const firstEl = document.querySelector(steps[0]?.element as string);
+    if (firstEl) {
+      firstEl.scrollIntoView({ behavior: 'instant', block: 'center', inline: 'nearest' });
+    } else {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    }
+
     driverObj.drive();
   }, [t]);
 
@@ -230,7 +238,7 @@ export function useDashboardTour() {
     if (!hasSeenTour) {
       const timer = setTimeout(() => {
         startTour();
-      }, 1000);
+      }, 300);
       return () => clearTimeout(timer);
     }
   }, [startTour]);

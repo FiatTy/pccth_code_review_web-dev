@@ -44,6 +44,26 @@ export function useScanHistoryTour() {
           side: isDesktop ? 'left' : 'bottom',
           align: 'start',
         },
+        onHighlightStarted: () => {
+          const selector = isDesktop ? '#tour-scan-result-btn' : '#tour-scan-result-btn-mobile';
+          const btn = document.querySelector<HTMLElement>(selector);
+          if (btn) {
+            btn.scrollIntoView({ behavior: 'instant', block: 'nearest', inline: 'nearest' });
+          }
+        },
+        onHighlighted: () => {
+          const selector = isDesktop ? '#tour-scan-result-btn' : '#tour-scan-result-btn-mobile';
+          const btn = document.querySelector<HTMLElement>(selector);
+          if (btn) {
+            btn.scrollIntoView({ behavior: 'instant', block: 'nearest', inline: 'nearest' });
+            const driver = (window as any).currentTourDriver;
+            if (driver) {
+              setTimeout(() => {
+                driver.refresh();
+              }, 50);
+            }
+          }
+        },
       }
     ];
   }, [t]);

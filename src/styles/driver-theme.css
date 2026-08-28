@@ -23,3 +23,8 @@
   background-color: var(--surface-2) !important;
   color: var(--fg) !important;
 }
+
+/* Allow horizontal table scroll so buttons on the right side of the table can be scrolled into view */
+.driver-active-element-parent-no-scroll {
+  overflow-x: auto !important;
+}

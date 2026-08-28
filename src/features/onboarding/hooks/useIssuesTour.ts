@@ -99,13 +99,26 @@ export function useIssuesTour() {
           showButtons: ['previous', 'close'],
         },
         disableActiveInteraction: false,
+        onHighlightStarted: () => {
+          const selector = isDesktop ? '#tour-issue-view-btn' : '#tour-issue-view-btn-mobile';
+          const btn = document.querySelector<HTMLElement>(selector);
+          if (btn) {
+            btn.scrollIntoView({ behavior: 'instant', block: 'nearest', inline: 'nearest' });
+          }
+        },
         onHighlighted: () => {
           const selector = isDesktop ? '#tour-issue-view-btn' : '#tour-issue-view-btn-mobile';
           const btn = document.querySelector<HTMLButtonElement>(selector);
           if (btn) {
+            btn.scrollIntoView({ behavior: 'instant', block: 'nearest', inline: 'nearest' });
+            const driver = (window as any).currentTourDriver;
+            if (driver) {
+              setTimeout(() => {
+                driver.refresh();
+              }, 50);
+            }
             const handleClick = () => {
               btn.removeEventListener('click', handleClick);
-              const driver = (window as any).currentTourDriver;
               if (driver) driver.destroy();
             };
             btn.addEventListener('click', handleClick);

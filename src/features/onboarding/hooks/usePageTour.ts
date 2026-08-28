@@ -32,6 +32,19 @@ export function usePageTour(
     driverRef.current = driverObj;
     (window as any).currentTourDriver = driverObj;
 
+    // Ensure page/element is scrolled into view immediately even if user scrolled beforehand
+    const targetElementSelector = steps[startIndex]?.element || steps[0]?.element;
+    if (typeof targetElementSelector === 'string') {
+      const targetEl = document.querySelector(targetElementSelector);
+      if (targetEl) {
+        targetEl.scrollIntoView({ behavior: 'instant', block: 'center', inline: 'nearest' });
+      } else {
+        window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      }
+    } else {
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    }
+
     if (startIndex > 0 && startIndex < steps.length) {
       driverObj.drive(startIndex);
     } else {
@@ -46,7 +59,7 @@ export function usePageTour(
     if ((!hasSeenTour || hasResumeState) && steps.length > 0) {
       const timer = setTimeout(() => {
         startTour();
-      }, 1000);
+      }, 300);
       return () => {
         clearTimeout(timer);
         if (driverRef.current) {

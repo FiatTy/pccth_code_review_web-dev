@@ -5,7 +5,9 @@ import '@/styles/driver-theme.css'; // We will create this for Tailwind compatib
 export function createTour(steps: DriveStep[], onComplete: (element?: Element, step?: DriveStep, options?: { state: any }) => void) {
   const driverObj = driver({
     showProgress: true,
-    disableActiveInteraction: true,
+    allowClose: false,
+    smoothScroll: true,
+    overlayClickBehavior: () => {},
     steps,
     onDestroyed: (element, step, options) => {
       onComplete(element, step, options);
