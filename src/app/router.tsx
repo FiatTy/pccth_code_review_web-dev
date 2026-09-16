@@ -19,6 +19,8 @@ const ResetPasswordPage = lazyRoute('ResetPasswordPage', () => import('@/pages/R
 const VerifyEmailPage = lazyRoute('VerifyEmailPage', () => import('@/pages/VerifyEmailPage'));
 const VerifySuccessPage = lazyRoute('VerifySuccessPage', () => import('@/pages/VerifySuccessPage'));
 const VerifyFailedPage = lazyRoute('VerifyFailedPage', () => import('@/pages/VerifyFailedPage'));
+const OAuthLoginPage = lazyRoute('OAuthLoginPage', () => import('@/pages/OAuthLoginPage'));
+const OAuthConsentPage = lazyRoute('OAuthConsentPage', () => import('@/pages/OAuthConsentPage'));
 const DashboardPage = lazyRoute('DashboardPage', () => import('@/pages/DashboardPage'));
 const RepositoriesPage = lazyRoute('RepositoriesPage', () => import('@/pages/RepositoriesPage'));
 const RepositoryFormPage = lazyRoute('RepositoryFormPage', () => import('@/pages/RepositoryFormPage'));
@@ -38,6 +40,7 @@ const SonarQubeConfigPage = lazyRoute('SonarQubeConfigPage', () => import('@/pag
 const NotificationSettingsPage = lazyRoute('NotificationSettingsPage', () => import('@/pages/NotificationSettingsPage'));
 const ComponentsPage = lazyRoute('ComponentsPage', () => import('@/pages/ComponentsPage'));
 const UserManagementPage = lazyRoute('UserManagementPage', () => import('@/pages/UserManagementPage'));
+const McpManagementPage = lazyRoute('McpManagementPage', () => import('@/pages/McpManagementPage'));
 
 const basename = BASE_URL.replace(/\/$/, '');
 
@@ -54,6 +57,8 @@ export const router = createBrowserRouter(
         { path: '/verify-email', element: <VerifyEmailPage /> },
         { path: '/verify-success', element: <VerifySuccessPage /> },
         { path: '/verify-failed', element: <VerifyFailedPage /> },
+        { path: '/oauth/login', element: <OAuthLoginPage /> },
+        { path: '/oauth/consent', element: <OAuthConsentPage /> },
         {
           element: <ProtectedRoute />,
           children: [
@@ -112,6 +117,10 @@ export const router = createBrowserRouter(
                         {
                           path: '/usermanagement',
                           element: <UserManagementPage />,
+                        },
+                        {
+                          path: '/mcpmanagement',
+                          element: <McpManagementPage />,
                         },
                       ],
                     },

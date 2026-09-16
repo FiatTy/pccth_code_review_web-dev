@@ -38,7 +38,8 @@ function isAuthEndpoint(url: string): boolean {
     url.includes('/user/login') ||
     url.includes('/user/register') ||
     url.includes('/user/refresh') ||
-    url.includes('/user/logout')
+    url.includes('/user/logout') ||
+    url.includes('/oauth/')
   );
 }
 
