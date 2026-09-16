@@ -11,8 +11,8 @@ interface AuthShellProps {
   asideEyebrow: string;
   asideTitleHtml: string;
   asideText: string;
-  formTitle: string;
-  formSubtitle?: string;
+  formTitle: ReactNode;
+  formSubtitle?: ReactNode;
   children: ReactNode;
   footer?: ReactNode;
 }
@@ -79,7 +79,7 @@ export function AuthShell({
             className="mt-5 text-4xl font-semibold leading-[1.1] tracking-tight text-white"
             dangerouslySetInnerHTML={{ __html: asideTitleHtml }}
           />
-          <p className="mt-4 text-[15px] leading-relaxed text-white/70">{asideText}</p>
+          <p className="mt-4 min-h-[46px] text-[15px] leading-relaxed text-white/70">{asideText}</p>
 
           <div className="mt-9">
             <ScanLogPanel branch="main" />
@@ -109,7 +109,7 @@ export function AuthShell({
         </div>
 
         <div className="relative z-10 flex flex-1 items-center justify-center px-6 pb-12 lg:px-10">
-          <div className="w-full max-w-md">
+          <div className="w-full sm:w-[430px] max-w-[430px]">
             <div className="mb-7 flex items-center justify-center gap-2.5 lg:hidden">
               <img
                 src={logoUrl}
@@ -127,15 +127,17 @@ export function AuthShell({
               </div>
             </div>
 
-            <div className="auth-card relative overflow-hidden rounded-2xl border border-border bg-surface p-7 sm:p-9">
+            <div className="auth-card relative overflow-hidden rounded-2xl border border-border bg-surface p-7 sm:p-9 transition-all duration-200">
               <span aria-hidden className="auth-card-accent absolute inset-x-0 top-0 h-[3px]" />
 
               <div className="mb-8">
-                <h1 className="text-[26px] font-semibold leading-tight tracking-tight text-fg">
+                <div className="text-[25px] font-semibold leading-snug tracking-tight text-fg">
                   {formTitle}
-                </h1>
+                </div>
                 {formSubtitle ? (
-                  <p className="mt-2 text-sm leading-relaxed text-muted">{formSubtitle}</p>
+                  <div className="mt-2.5 min-h-[48px] flex items-center justify-center text-sm leading-relaxed text-muted text-center">
+                    {formSubtitle}
+                  </div>
                 ) : null}
               </div>
 
