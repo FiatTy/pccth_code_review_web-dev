@@ -89,15 +89,9 @@ export function LandingPage() {
             </div>
             <Link
               to="/login"
-              className="inline-flex rounded-full px-2.5 py-1.5 text-xs font-medium text-muted transition-colors hover:text-fg sm:px-4 sm:py-2 sm:text-sm"
+              className="brand-gradient-bg group inline-flex items-center gap-1.5 rounded-full px-3.5 py-1.5 text-xs font-semibold text-primary-fg shadow-md shadow-primary/25 transition-all duration-200 hover:-translate-y-px hover:shadow-primary/40 active:scale-[0.98] sm:px-4 sm:py-2 sm:text-sm"
             >
               <StableLabel i18nKey="AUTH.LOGIN" />
-            </Link>
-            <Link
-              to="/register"
-              className="brand-gradient-bg group inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold text-primary-fg shadow-lg shadow-primary/25 transition-all duration-200 hover:-translate-y-px hover:shadow-primary/40 active:scale-[0.98] sm:px-4 sm:py-2 sm:text-sm"
-            >
-              <StableLabel i18nKey="AUTH.REGISTER" />
               <ArrowRight size={14} className="transition-transform group-hover:translate-x-0.5 sm:w-[15px] sm:h-[15px]" />
             </Link>
           </div>
@@ -149,7 +143,7 @@ export function LandingPage() {
             <Reveal delay={270}>
               <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
                 <Link
-                  to="/register"
+                  to="/login"
                   className="brand-gradient-bg group inline-flex items-center gap-2 rounded-xl px-6 py-3 text-[15px] font-semibold text-primary-fg shadow-lg shadow-primary/25 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-primary/35 active:scale-[0.99]"
                 >
                   <StableLabel i18nKey="LANDING.GET_STARTED" />
@@ -268,7 +262,7 @@ export function LandingPage() {
               {t('LANDING.CTA_DESC')}
             </p>
             <Link
-              to="/register"
+              to="/login"
               className="group mt-8 inline-flex items-center gap-2 rounded-xl bg-white px-6 py-3 text-[15px] font-semibold text-primary shadow-lg shadow-black/10 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl active:scale-[0.99]"
             >
               {t('LANDING.GET_STARTED')}

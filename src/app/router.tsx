@@ -13,8 +13,6 @@ function lazyRoute<K extends string>(name: K, load: () => Promise<{ [P in K]: Co
 }
 
 const RealtimeBoundary = lazyRoute('RealtimeBoundary', () => import('@/app/guards/RealtimeBoundary'));
-const RegisterPage = lazyRoute('RegisterPage', () => import('@/pages/RegisterPage'));
-const ForgotPasswordPage = lazyRoute('ForgotPasswordPage', () => import('@/pages/ForgotPasswordPage'));
 const ResetPasswordPage = lazyRoute('ResetPasswordPage', () => import('@/pages/ResetPasswordPage'));
 const VerifyEmailPage = lazyRoute('VerifyEmailPage', () => import('@/pages/VerifyEmailPage'));
 const VerifySuccessPage = lazyRoute('VerifySuccessPage', () => import('@/pages/VerifySuccessPage'));
@@ -48,9 +46,9 @@ export const router = createBrowserRouter(
       children: [
         { path: '/', element: <LandingPage /> },
         { path: '/login', element: <LoginPage /> },
-        { path: '/register', element: <RegisterPage /> },
+        { path: '/register', element: <Navigate to="/login" replace /> },
         { path: '/reset-password', element: <ResetPasswordPage /> },
-        { path: '/forgot-password', element: <ForgotPasswordPage /> },
+        { path: '/forgot-password', element: <Navigate to="/login" replace /> },
         { path: '/verify-email', element: <VerifyEmailPage /> },
         { path: '/verify-success', element: <VerifySuccessPage /> },
         { path: '/verify-failed', element: <VerifyFailedPage /> },

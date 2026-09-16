@@ -1,129 +1,95 @@
-import { useState, type FormEvent } from 'react';
-import { Link, Navigate, useNavigate } from 'react-router';
+import { Link, Navigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { Eye, EyeOff, Lock, Mail } from 'lucide-react';
-import { AuthShell } from '@/features/auth/components/AuthShell';
-import { AuthField } from '@/features/auth/components/AuthField';
-import { AuthSubmitButton } from '@/features/auth/components/AuthSubmitButton';
-import { AuthAlert } from '@/features/auth/components/AuthAlert';
-import { useLogin } from '@/features/auth/hooks/useLogin';
+import { BrandMark } from '@/components/common/BrandMark';
+import { LanguageSwitcher } from '@/components/common/LanguageSwitcher';
+import { ThemeToggle } from '@/components/common/ThemeToggle';
+import { MicrosoftLogo } from '@/features/auth/components/MicrosoftLogo';
 import { useAuth } from '@/lib/auth/auth-context';
-
-const EMAIL_PATTERN = /^[^@\s]+@[^@\s]+\.[a-zA-Z]{2,}$/;
+import { useToast } from '@/lib/toast/toast-context';
 
 export function LoginPage() {
   const { t } = useTranslation();
-  const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
-  const login = useLogin();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
+  const { showToast } = useToast();
 
   if (isAuthenticated) {
     return <Navigate to="/dashboard" replace />;
   }
 
-  const trimmedEmail = email.trim();
-  const emailError = !trimmedEmail
-    ? 'LOGIN.EMAIL_REQUIRED'
-    : !EMAIL_PATTERN.test(trimmedEmail)
-      ? 'LOGIN.EMAIL_PATTERN'
-      : null;
-  const passwordError = !password ? 'LOGIN.PASSWORD_REQUIRED' : null;
-
-  const showEmailError = submitted && emailError;
-  const showPasswordError = submitted && passwordError;
-
-  function clearServerError() {
-    if (login.isError) {
-      login.reset();
-    }
-  }
-
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setSubmitted(true);
-    if (emailError || passwordError) {
-      return;
-    }
-    login.mutate(
-      { email: trimmedEmail, password },
-      { onSuccess: () => navigate('/dashboard', { replace: true }) },
-    );
+  function handleM365Login() {
+    showToast({
+      tone: 'info',
+      title: t('LOGIN.M365_MOCK_TOAST', 'กำลังพัฒนาระบบเชื่อมต่อ Microsoft 365'),
+      description: 'UI Mockup - Microsoft 365 OAuth flow',
+    });
   }
 
   return (
-    <AuthShell
-      asideEyebrow={t('AUTH.ASIDE_EYEBROW')}
-      asideTitleHtml={t('LOGIN.WELCOME_TITLE')}
-      asideText={t('AUTH.ASIDE_TAGLINE')}
-      formTitle={t('AUTH.LOGIN')}
-      formSubtitle={t('LOGIN.SUBTITLE')}
-      footer={
-        <div className="space-y-2.5 border-t border-border pt-6 text-sm text-muted">
-          <p>
-            {t('LOGIN.FORGOT_PASSWORD')}{' '}
-            <Link to="/forgot-password" className="font-medium text-primary hover:underline">
-              {t('AUTH.RESET_PASSWORD')}
-            </Link>
-          </p>
-          <p>
-            {t('LOGIN.DONT_HAVE_ACCOUNT')}{' '}
-            <Link to="/register" className="font-medium text-primary hover:underline">
-              {t('AUTH.REGISTER')}
-            </Link>
-          </p>
+    <div className="relative flex min-h-screen items-center justify-center p-4 sm:p-6 bg-gradient-to-br from-slate-50 via-teal-50/20 to-slate-100 dark:from-slate-950 dark:via-teal-950/20 dark:to-slate-900 overflow-hidden">
+      {/* Subtle ambient lighting decorations */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -top-40 left-1/2 -translate-x-1/2 h-96 w-[700px] rounded-full opacity-40 blur-3xl"
+        style={{
+          background:
+            'radial-gradient(circle, color-mix(in oklab, var(--primary) 20%, transparent), transparent 70%)',
+        }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -bottom-40 left-1/2 -translate-x-1/2 h-96 w-[600px] rounded-full opacity-30 blur-3xl"
+        style={{
+          background:
+            'radial-gradient(circle, color-mix(in oklab, var(--primary) 15%, transparent), transparent 70%)',
+        }}
+      />
+
+      {/* Minimalist Web UI Login Card */}
+      <div className="relative z-10 w-full max-w-md overflow-hidden rounded-2xl border border-border/80 bg-surface/95 p-7 shadow-xl shadow-teal-950/5 backdrop-blur-md sm:p-9 transition-all">
+        {/* Top subtle brand accent line */}
+        <span
+          aria-hidden
+          className="absolute inset-x-0 top-0 h-[3px] bg-gradient-to-r from-primary/50 via-primary to-primary/50"
+        />
+
+        {/* Top Right: Language Switcher and Theme Toggle */}
+        <div className="mb-6 flex items-center justify-end gap-2">
+          <LanguageSwitcher />
+          <ThemeToggle />
         </div>
-      }
-    >
-      <form onSubmit={handleSubmit} noValidate className="space-y-5">
-        {login.isError ? <AuthAlert>{t('LOGIN.ERROR_GENERIC')}</AuthAlert> : null}
 
-        <AuthField
-          id="email"
-          label={t('AUTH.EMAIL')}
-          icon={Mail}
-          type="email"
-          inputMode="email"
-          autoComplete="email"
-          value={email}
-          onChange={(value) => {
-            setEmail(value);
-            clearServerError();
-          }}
-          placeholder={t('LOGIN.EMAIL_PLACEHOLDER')}
-          error={showEmailError ? t(emailError) : null}
-        />
+        {/* Centered Brand & Text Header */}
+        <div className="mb-8 flex flex-col items-center text-center">
+          <div className="mb-5 flex items-center justify-center">
+            <BrandMark size={36} />
+          </div>
+          <h1 className="text-base font-semibold leading-relaxed text-fg sm:text-lg">
+            {t('LOGIN.M365_ORG_TITLE', 'เข้าสู่ระบบด้วยบัญชี Microsoft 365 ขององค์กร')}
+          </h1>
+        </div>
 
-        <AuthField
-          id="password"
-          label={t('AUTH.PASSWORD')}
-          icon={Lock}
-          type={showPassword ? 'text' : 'password'}
-          autoComplete="current-password"
-          value={password}
-          onChange={(value) => {
-            setPassword(value);
-            clearServerError();
-          }}
-          placeholder={t('LOGIN.PASSWORD_PLACEHOLDER')}
-          error={showPasswordError ? t(passwordError) : null}
-          trailing={
-            <button
-              type="button"
-              onClick={() => setShowPassword((value) => !value)}
-              aria-label={showPassword ? t('SONARQUBE_CONFIG.HIDE') : t('SONARQUBE_CONFIG.SHOW')}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 rounded-md p-1 text-faint transition-colors hover:text-fg"
-            >
-              {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-            </button>
-          }
-        />
+        {/* Primary Teal Microsoft 365 Login Button */}
+        <button
+          type="button"
+          onClick={handleM365Login}
+          className="group relative flex w-full items-center justify-center gap-3 rounded-xl bg-primary py-3.5 px-5 font-semibold text-primary-fg shadow-lg shadow-primary/25 transition-all duration-200 hover:-translate-y-0.5 hover:bg-primary-hover hover:shadow-primary/35 active:scale-[0.99] active:translate-y-0 focus:outline-none focus:ring-2 focus:ring-primary/40 focus:ring-offset-2 focus:ring-offset-surface cursor-pointer"
+        >
+          <MicrosoftLogo size={20} />
+          <span className="text-[15px] font-medium tracking-normal text-white">
+            {t('LOGIN.M365_BUTTON', 'เข้าสู่ระบบด้วย Microsoft 365')}
+          </span>
+        </button>
 
-        <AuthSubmitButton pending={login.isPending}>{t('AUTH.LOGIN_BUTTON')}</AuthSubmitButton>
-      </form>
-    </AuthShell>
+        {/* Bottom text link: Back to home */}
+        <div className="mt-8 text-center">
+          <Link
+            to="/"
+            className="inline-flex items-center gap-1.5 text-sm font-medium text-muted transition-colors duration-200 hover:text-fg"
+          >
+            {t('AUTH.BACK_HOME_ARROW', '← กลับหน้าแรก')}
+          </Link>
+        </div>
+      </div>
+    </div>
   );
 }

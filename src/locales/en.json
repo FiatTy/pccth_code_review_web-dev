@@ -167,6 +167,7 @@
     "REGISTER": "Register",
     "RESET_PASSWORD": "Reset Password",
     "BACK_HOME": "Back to home",
+    "BACK_HOME_ARROW": "← Back to home",
     "ASIDE_EYEBROW": "Automated code review",
     "ASIDE_TAGLINE": "Continuous quality and security analysis for every repository.",
     "EMAIL": "Email",
@@ -485,6 +486,9 @@
     "ALREADY_HAVE_ACCOUNT": "Already have an account?"
   },
   "LOGIN": {
+    "M365_ORG_TITLE": "Sign in with your organization's Microsoft 365 account",
+    "M365_BUTTON": "Sign in with Microsoft 365",
+    "M365_MOCK_TOAST": "Microsoft 365 authentication is currently in development",
     "WELCOME_TITLE": "Hello,<br> welcome Back !",
     "EMAIL_PLACEHOLDER": "Enter your email",
     "EMAIL_REQUIRED": "Email is required",
