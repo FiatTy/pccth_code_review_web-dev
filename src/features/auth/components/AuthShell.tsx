@@ -29,9 +29,9 @@ export function AuthShell({
   const { t } = useTranslation();
 
   return (
-    <div className="grid min-h-screen bg-bg lg:grid-cols-[1.05fr_1fr]">
+    <div className="grid min-h-screen bg-bg lg:grid-cols-[40%_60%]">
       <aside
-        className="relative hidden overflow-hidden px-12 py-12 lg:flex lg:flex-col lg:justify-between xl:px-16"
+        className="relative hidden overflow-hidden px-8 py-10 lg:flex lg:flex-col lg:justify-between xl:px-12 2xl:px-16"
         style={{
           background: 'linear-gradient(155deg, #082e2a 0%, #0c4a44 48%, #0d9488 130%)',
         }}
@@ -54,18 +54,18 @@ export function AuthShell({
           }}
         />
 
-        <div className="relative z-10 flex items-center gap-3">
+        <div className="relative z-10 flex items-center gap-3.5">
           <img
             src={logoUrl}
-            alt=""
-            width={34}
-            height={34}
-            className="object-contain"
-            style={{ width: 34, height: 34 }}
+            alt="PCCTH Logo"
+            width={52}
+            height={52}
+            className="shrink-0 object-contain drop-shadow-sm"
+            style={{ width: 52, height: 52 }}
           />
-          <div className="flex flex-col leading-none">
-            <span className="text-[15px] font-semibold tracking-tight text-white">Code Review</span>
-            <span className="font-mono text-[9px] uppercase tracking-[0.22em] text-white/55">
+          <div className="flex flex-col leading-tight">
+            <span className="text-xl font-bold tracking-tight text-white">Code Review</span>
+            <span className="font-mono text-[11px] font-medium uppercase tracking-[0.24em] text-white/70">
               PCCTH
             </span>
           </div>
@@ -110,18 +110,18 @@ export function AuthShell({
 
         <div className="relative z-10 flex flex-1 items-center justify-center px-6 pb-12 lg:px-10">
           <div className="w-full sm:w-[430px] max-w-[430px]">
-            <div className="mb-7 flex items-center justify-center gap-2.5 lg:hidden">
+            <div className="mb-7 flex items-center justify-center gap-3 lg:hidden">
               <img
                 src={logoUrl}
-                alt=""
-                width={30}
-                height={30}
-                className="object-contain"
-                style={{ width: 30, height: 30 }}
+                alt="PCCTH Logo"
+                width={42}
+                height={42}
+                className="shrink-0 object-contain"
+                style={{ width: 42, height: 42 }}
               />
-              <div className="flex flex-col leading-none">
-                <span className="text-sm font-semibold tracking-tight text-fg">Code Review</span>
-                <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-faint">
+              <div className="flex flex-col leading-tight">
+                <span className="text-base font-bold tracking-tight text-fg">Code Review</span>
+                <span className="font-mono text-[10px] font-medium uppercase tracking-[0.22em] text-faint">
                   PCCTH
                 </span>
               </div>

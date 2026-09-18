@@ -304,6 +304,40 @@
     animation: auth-angle-spin 2.4s linear infinite;
   }
 
+  /* Refined dark-mode styling for auth-submit: soft elegant glow instead of harsh corner glare */
+  .dark .auth-submit {
+    background: linear-gradient(
+      135deg,
+      #0d9488,
+      #084c45
+    );
+  }
+
+  .dark .auth-submit:hover:not(:disabled) {
+    background: linear-gradient(
+      135deg,
+      #14b8a6,
+      #0b5a52
+    );
+  }
+
+  .dark .auth-submit::before {
+    background: conic-gradient(
+      from var(--auth-angle),
+      color-mix(in oklab, var(--accent) 65%, transparent),
+      var(--primary),
+      color-mix(in oklab, var(--primary) 75%, #0d9488),
+      color-mix(in oklab, var(--accent) 65%, transparent),
+      var(--primary),
+      color-mix(in oklab, var(--accent) 65%, transparent)
+    );
+    filter: drop-shadow(0 0 3px color-mix(in oklab, var(--primary) 20%, transparent));
+  }
+
+  .dark .auth-submit:hover:not(:disabled)::before {
+    opacity: 0.5;
+  }
+
   .field-shake {
     animation: field-shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
   }
